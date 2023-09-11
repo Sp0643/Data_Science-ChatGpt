@@ -50,7 +50,27 @@ Keep in mind that this code assumes a standard working week from Monday to Frida
 
 
 
-@code 2
+@code 3
 
 
+
+I understand your requirement now. You want to find the date of the last Friday regardless of the current day of the week. Here's a Python code that does that:
+
+```python
+import datetime
+
+# Get the current date
+current_date = datetime.datetime.now()
+
+# Calculate the days to subtract to get to the last Friday (0 = Monday, 1 = Tuesday, ..., 6 = Sunday)
+days_to_subtract = (current_date.weekday() - 4) % 7
+
+# Calculate the last Friday's date
+last_friday = current_date - datetime.timedelta(days=days_to_subtract)
+
+# Print the date of the last Friday
+print("Date of the last Friday:", last_friday.strftime("%Y-%m-%d"))
+```
+
+This code calculates the number of days to subtract from the current date to reach the last Friday and then calculates the date of the last Friday accordingly.
 
