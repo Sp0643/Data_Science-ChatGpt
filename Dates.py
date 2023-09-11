@@ -74,3 +74,29 @@ print("Date of the last Friday:", last_friday.strftime("%Y-%m-%d"))
 
 This code calculates the number of days to subtract from the current date to reach the last Friday and then calculates the date of the last Friday accordingly.
 
+
+
+
+@code 4
+
+
+Sure, you can achieve this in Python by using the `datetime` module. Here's a code snippet that will give you the last working day:
+
+```python
+import datetime
+
+def find_last_working_day(today):
+    while True:
+        today -= datetime.timedelta(days=1)
+        if today.weekday() < 5:  # Monday to Friday (0 to 4 are weekdays)
+            return today
+
+# Get the current date
+current_date = datetime.date(2023, 9, 11)  # Change this to the current date
+
+# Find the last working day
+last_working_day = find_last_working_day(current_date)
+print("Last working day:", last_working_day)
+```
+
+This code defines a function `find_last_working_day` that takes a date and iterates backward until it finds a weekday (Monday to Friday). You can change the `current_date` variable to any date you want, and it will return the last working day for that date.
