@@ -1,4 +1,4 @@
-kiCertainly! You can achieve this by writing a Python code that determines the last working day based on the current day of the week. Here's a sample code to do that:
+mikiCertainly! You can achieve this by writing a Python code that determines the last working day based on the current day of the week. Here's a sample code to do that:
 
 ```python
 import datetime
@@ -159,3 +159,50 @@ driver.quit()
 In this code, replace `'/path/to/your/download/folder/'` with the path to the folder where you want to save the downloaded files, and adjust the URL and element location code to match your specific webpage.
 
 This code first checks if the file you want to download already exists in the specified folder. If it doesn't, it initiates the download. This way, you can avoid downloading duplicate files.
+
+
+
+To create a new column in your dataset based on existing columns and apply different logic depending on the values in those columns, you can use a programming language like Python and its popular data manipulation library, pandas. Here's a general outline of the steps you can follow:
+
+1. Import the necessary libraries:
+```python
+import pandas as pd
+```
+
+2. Load your dataset into a pandas DataFrame:
+```python
+# Replace 'your_dataset.csv' with your dataset file path
+df = pd.read_csv('your_dataset.csv')
+```
+
+3. Define your logic for the new column. You mentioned two scenarios:
+   - Renaming elements based on one column.
+   - Applying conditions and fetching information from a third column.
+
+Let's assume you have a DataFrame with columns 'Column1', 'Column2', and 'Column3'. You can create a new column 'NewColumn' like this:
+
+```python
+# Define a function to apply custom logic
+def custom_logic(row):
+    if row['Column1'] == 'ValueToRename':
+        return 'NewName'
+    elif row['Column2'] == 'SomeCondition' and row['Column3'] > 5:
+        return 'Result1'
+    else:
+        return 'Result2'
+
+# Apply the custom_logic function to create the new column
+df['NewColumn'] = df.apply(custom_logic, axis=1)
+```
+
+In this example, 'custom_logic' is a function that checks conditions based on 'Column1', 'Column2', and 'Column3' and returns the appropriate value for 'NewColumn'.
+
+4. After applying this logic, your DataFrame will have a new column 'NewColumn' that contains the values based on your specified conditions.
+
+5. You can save the updated DataFrame back to a file if needed:
+```python
+# Save the DataFrame to a new CSV file
+df.to_csv('updated_dataset.csv', index=False)
+```
+
+Replace the column names, conditions, and logic in the example above with your actual dataset and requirements. This should give you a starting point to create a new column based on existing columns with custom logic.
