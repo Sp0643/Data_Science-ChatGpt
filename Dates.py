@@ -206,3 +206,32 @@ df.to_csv('updated_dataset.csv', index=False)
 ```
 
 Replace the column names, conditions, and logic in the example above with your actual dataset and requirements. This should give you a starting point to create a new column based on existing columns with custom logic.
+
+
+
+To create a new column in a DataFrame using existing columns and apply different logic based on conditions, you can use Python libraries like Pandas. Here's an example of how you can do it:
+
+Assuming you have a DataFrame `df` and want to create a new column `new_column` based on your logic:
+
+```python
+import pandas as pd
+
+# Define your logic using conditions
+condition1 = (df['column1'] == 'case1')
+condition2 = (df['column1'] == 'case2')
+condition3 = (df['column1'] == 'case3')
+condition4 = (df['column1'] == 'case4') & (df['column4'] == df['column7'])
+
+# Apply logic and assign values to the new column
+df.loc[condition1, 'new_column'] = 'value_for_case1'
+df.loc[condition2, 'new_column'] = 'value_for_case2'
+df.loc[condition3, 'new_column'] = 'value_for_case3'
+df.loc[condition4, 'new_column'] = df.loc[condition4, 'column9']
+
+# For cases that don't match any condition, you can set a default value
+df['new_column'].fillna('default_value', inplace=True)
+```
+
+This code defines four conditions based on the values in `column1`, and for the fourth condition, it checks if `column4` and `column7` are equal. It then assigns values to the new column based on these conditions, with a default value for cases that don't match any condition.
+
+You can adjust the conditions and values as needed for your specific DataFrame and logic.
