@@ -329,3 +329,56 @@ print(filtered_df)
 In this example, we first convert the 'TimestampColumn' to datetime objects using `pd.to_datetime`. Then, we define the `desired_date` in the same format as the dates in the DataFrame. Finally, we use the `.dt.date` accessor to extract the date portion from the timestamp column and compare it with the desired date to filter the DataFrame.
 
 You can adjust the `desired_date` and the column names according to your specific data.
+
+
+
+To send an email using a specific email account in Outlook using the `win32com` library in Python, you can use the following code. This code allows you to specify the email account to send from:
+
+```python
+import win32com.client
+
+# Create an Outlook application object
+outlook = win32com.client.Dispatch("Outlook.Application")
+
+# Get the accounts in Outlook
+namespace = outlook.GetNamespace("MAPI")
+accounts = namespace.Accounts
+
+# Define the index of the email account you want to use (0 for the first account, 1 for the second, etc.)
+account_index = 1  # Change this to the index of your second email account
+
+# Create a new email item
+mail = outlook.CreateItem(0)
+
+# Set the sender account
+mail._oleobj_.Invoke(*(64209, 0, 8, 0, accounts[account_index]))
+
+# Compose the email
+mail.Subject = "Your Subject"
+mail.Body = "Your Email Body"
+mail.To = "recipient@example.com"
+
+# Send the email
+mail.Send()
+
+# Release the Outlook application
+del outlook
+```
+
+In this code:
+
+1. We use `win32com.client.Dispatch("Outlook.Application")` to create an Outlook application object.
+
+2. We access the email accounts in Outlook using `namespace.Accounts`.
+
+3. You need to specify the `account_index` to select the second email account. The index is zero-based, so 0 corresponds to the first account, 1 to the second account, and so on.
+
+4. We create a new email item using `outlook.CreateItem(0)`.
+
+5. We set the sender account using `mail._oleobj_.Invoke(*(64209, 0, 8, 0, accounts[account_index]))`.
+
+6. Set the email's subject, body, and recipient.
+
+7. Finally, send the email using `mail.Send()`.
+
+Make sure you have the `pywin32` library installed, and adjust the email details and account index to match your requirements.
