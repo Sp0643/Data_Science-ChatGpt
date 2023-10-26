@@ -218,3 +218,30 @@ Certainly! The `timedelta` class in Python is used to represent a duration or ti
    ```
 
 These examples should help you understand how to work with `timedelta` objects in Python. They are particularly useful for tasks that involve time differences, scheduling, or date arithmetic.
+
+
+
+You can convert time from Eastern Standard Time (EST) to Coordinated Universal Time (UTC) in Python using the `pytz` library. First, you'll need to install the `pytz` library if you haven't already. You can do this using pip:
+
+```python
+pip install pytz
+```
+
+Then, you can use the following code to perform the conversion:
+
+```python
+import datetime
+import pytz
+
+# Define the time in EST
+est = pytz.timezone('US/Eastern')
+est_time = datetime.datetime.now(est)
+
+# Convert EST time to UTC
+utc_time = est_time.astimezone(pytz.utc)
+
+print("EST Time:", est_time)
+print("UTC Time:", utc_time)
+```
+
+This code first creates a `datetime` object representing the current time in EST, and then it converts it to UTC using the `astimezone` method. Make sure to replace 'US/Eastern' with the appropriate timezone if you are working with a different EST time zone.
