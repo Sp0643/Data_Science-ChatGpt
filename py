@@ -301,3 +301,31 @@ print(df)
 ```
 
 This code not only converts the date columns to UTC but also adds new columns with the original EST date values. You can compare the original EST dates with the converted UTC dates by examining the DataFrame. Adjust the column names and DataFrame to match your specific data.
+
+
+
+If you have a DataFrame with timestamp columns and you want to filter it based on a specific date, you can use the `pd.to_datetime` method along with the `.dt` accessor in pandas. Here's how to do it:
+
+```python
+import pandas as pd
+
+# Sample DataFrame with timestamp column
+data = {'TimestampColumn': ['2023-10-26 09:00:00', '2023-10-27 10:30:00', '2023-10-28 11:45:00', '2023-10-29 14:15:00'],
+        'Value': [10, 15, 20, 25]}
+df = pd.DataFrame(data)
+
+# Convert 'TimestampColumn' to datetime objects
+df['TimestampColumn'] = pd.to_datetime(df['TimestampColumn'])
+
+# Define the date for filtering
+desired_date = '2023-10-28'
+
+# Filter rows where the date matches the desired date
+filtered_df = df[df['TimestampColumn'].dt.date == pd.to_datetime(desired_date).date()]
+
+print(filtered_df)
+```
+
+In this example, we first convert the 'TimestampColumn' to datetime objects using `pd.to_datetime`. Then, we define the `desired_date` in the same format as the dates in the DataFrame. Finally, we use the `.dt.date` accessor to extract the date portion from the timestamp column and compare it with the desired date to filter the DataFrame.
+
+You can adjust the `desired_date` and the column names according to your specific data.
