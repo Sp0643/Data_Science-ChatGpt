@@ -245,3 +245,28 @@ print("UTC Time:", utc_time)
 ```
 
 This code first creates a `datetime` object representing the current time in EST, and then it converts it to UTC using the `astimezone` method. Make sure to replace 'US/Eastern' with the appropriate timezone if you are working with a different EST time zone.
+
+EST TO UTC 
+You can use the `pytz` library along with pandas to convert date columns in a DataFrame from Eastern Standard Time (EST) to Coordinated Universal Time (UTC). Here's a sample code to demonstrate how to do this:
+
+```python
+import pandas as pd
+import pytz
+
+# Sample DataFrame with date columns in EST
+data = {'Date1': ['2023-10-26 09:00:00', '2023-10-26 10:30:00'],
+        'Date2': ['2023-10-26 08:45:00', '2023-10-26 11:15:00'],
+        'Date3': ['2023-10-26 07:30:00', '2023-10-26 12:45:00']}
+df = pd.DataFrame(data)
+
+# Define the EST timezone
+est = pytz.timezone('US/Eastern')
+
+# Convert date columns to UTC
+for column in ['Date1', 'Date2', 'Date3']:
+    df[column] = pd.to_datetime(df[column]).dt.tz_localize(est).dt.tz_convert('UTC')
+
+print(df)
+```
+
+This code first defines a sample DataFrame with three date columns. It then uses the `pd.to_datetime` method to convert the date columns to datetime objects and applies the EST timezone using `tz_localize`. Finally, it converts these columns to UTC using `tz_convert('UTC')`. The result is a DataFrame with date columns converted to UTC. Adjust the column names and DataFrame to match your specific data.
