@@ -270,3 +270,34 @@ print(df)
 ```
 
 This code first defines a sample DataFrame with three date columns. It then uses the `pd.to_datetime` method to convert the date columns to datetime objects and applies the EST timezone using `tz_localize`. Finally, it converts these columns to UTC using `tz_convert('UTC')`. The result is a DataFrame with date columns converted to UTC. Adjust the column names and DataFrame to match your specific data.
+
+
+If you want to see the comparison between the original EST date columns and the converted UTC date columns in your DataFrame, you can add additional columns to the DataFrame for this purpose. Here's an extended example:
+
+```python
+import pandas as pd
+import pytz
+
+# Sample DataFrame with date columns in EST
+data = {'Date1': ['2023-10-26 09:00:00', '2023-10-26 10:30:00'],
+        'Date2': ['2023-10-26 08:45:00', '2023-10-26 11:15:00'],
+        'Date3': ['2023-10-26 07:30:00', '2023-10-26 12:45:00']}
+df = pd.DataFrame(data)
+
+# Define the EST timezone
+est = pytz.timezone('US/Eastern')
+
+# Convert date columns to UTC
+for column in ['Date1', 'Date2', 'Date3']:
+    df[column] = pd.to_datetime(df[column]).dt.tz_localize(est).dt.tz_convert('UTC')
+
+# Add columns for comparison
+for column in ['Date1', 'Date2', 'Date3']:
+    original_column = column + '_EST'
+    df[original_column] = pd.to_datetime(data[column])
+
+# Print the DataFrame to see the comparison
+print(df)
+```
+
+This code not only converts the date columns to UTC but also adds new columns with the original EST date values. You can compare the original EST dates with the converted UTC dates by examining the DataFrame. Adjust the column names and DataFrame to match your specific data.
