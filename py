@@ -382,3 +382,7 @@ In this code:
 7. Finally, send the email using `mail.Send()`.
 
 Make sure you have the `pywin32` library installed, and adjust the email details and account index to match your requirements.
+
+
+
+"I'm facing difficulties accessing my Teamspace ID. I previously had access to two Teamspace IDs, but after removing myself from the old one and adding a new one, I can no longer access it. I also need assistance in configuring Airflow for our Teamspace ID."
