@@ -419,3 +419,37 @@ print(existing_df)
 ```
 
 This code generates a list of continuous dates and adds columns to your existing DataFrame with these dates in the specified format. Replace `existing_df` with your actual DataFrame, and you can customize the start and end dates accordingly.
+
+
+Certainly! If you want to calculate the cumulative sum for each column separately, while keeping non-numeric columns in the modified DataFrame, you can do the following:
+
+```python
+import pandas as pd
+
+# Sample DataFrame
+data = {'Column1': [1, 2, 3],
+        'Column2': [4, 5, 6],
+        'Column3': [7, 8, 9],
+        'Column4': [10, 11, 12],
+        'Column5': [13, 14, 15],
+        'TextColumn': ['A', 'B', 'C']}
+
+df = pd.DataFrame(data)
+
+# Identify numeric and non-numeric columns
+numeric_columns = df.select_dtypes(include='number').columns
+non_numeric_columns = df.select_dtypes(exclude='number').columns
+
+# Calculate cumulative sum for each numeric column
+cumulative_sum_df = df[numeric_columns].cumsum(axis=0)
+
+# Combine the cumulative sum DataFrame with non-numeric columns
+modified_df = pd.concat([df[non_numeric_columns], cumulative_sum_df], axis=1)
+
+# Display the modified DataFrame
+print(modified_df)
+```
+
+This code calculates the cumulative sum for each numeric column separately along the columns (axis=0) and then combines the result with non-numeric columns in the `modified_df`.
+
+Replace `df` with your actual DataFrame. After running this code, `modified_df` will contain the cumulative sum for each numeric column while preserving the non-numeric columns.
