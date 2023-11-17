@@ -1,0 +1,52 @@
+BLOCK 1
+This code snippet appears to be cleaning and normalizing text stored in the variable `text1`. Here's a breakdown:
+
+1. `text11 = text1.replace("\n", " ")`: Replaces newline characters (`\n`) in the original text (`text1`) with a space.
+
+2. `text11 = " ".join(text11.split())`: Splits the modified text (`text11`) into a list of words using spaces as separators and then joins these words back together with a single space between them. This step effectively removes extra spaces and ensures words are separated by a single space.
+
+The final result is stored in the variable `text11`, representing a cleaned and normalized version of the original text with no newline characters and consistent spacing between words.
+
+
+Block 2:
+
+
+This code seems to extract information related to an agreement date from the variable `text11` and stores it in the variable `ft`. Here's a breakdown:
+
+1. `data = []`: Initializes an empty list named `data`.
+
+2. `ft = ""`: Initializes an empty string named `ft`.
+
+3. The code is enclosed in a `try-except` block, suggesting it's trying to handle potential errors.
+
+4. Inside the `try` block:
+   - It attempts to extract the agreement date from `text11` using the `split` method. The text "is entered into as of" or "dated" is used as a reference point.
+   - If "is entered into as of" is found, it extracts the substring between this phrase and "by".
+   - If not, it assumes the text is "dated" and extracts the substring between "dated" and "is".
+   - The extracted agreement date is stored in the variable `ad`.
+
+5. `ft = ft + "Agreement Date : " + ad + "\n"`: Concatenates the string "Agreement Date : " with the extracted agreement date (`ad`), followed by a newline character (`\n`). This information is appended to the `ft` string.
+
+6. `ft`: Returns the final result stored in the variable `ft`.
+
+In summary, this code snippet tries to extract an agreement date from the given text (`text11`) and formats it into a string with the label "Agreement Date : ". If successful, the result is stored in the variable `ft`.
+
+
+BLOCK 3 :
+
+This code extracts the borrower's name from the variable `text11` and adds it to the existing information stored in the variable `ft`. Here's a breakdown:
+
+1. `text11.split("by and between")[1]`: Splits the text in `text11` using the phrase "by and between" as a separator and selects the second part of the split (index 1), assuming there is such a part.
+
+2. `bn = (text11.split("by and between")[1]).split("(")[0]`: Further splits the selected portion using "(" as a separator and extracts the first part (index 0), which is assumed to be the borrower's name. This name is then stored in the variable `bn`.
+
+3. `ft = ft + "Borrower Name: " + bn + "\n"`: Concatenates the string "Borrower Name: " with the borrower's name (`bn`), followed by a newline character (`\n`). This information is appended to the existing content in the variable `ft`.
+
+4. `ft`: Returns the final result stored in the variable `ft`.
+
+In summary, this code extracts the borrower's name from a specific portion of the text in `text11` and adds this information to the existing content in the variable `ft`.
+
+
+Block 4:
+
+
