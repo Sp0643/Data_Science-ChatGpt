@@ -526,3 +526,36 @@ workbook.save('your_autofitted_file.xlsx')
 ```
 
 Make sure to replace 'your_existing_file.xlsx' with the actual name of your Excel file. The code will load the existing workbook, autofit the column widths, and save the modified workbook with a different name ('your_autofitted_file.xlsx').
+
+
+Yes, you can autofit columns without explicitly using `openpyxl` by relying on the features provided by the `pandas` library itself. Here's an example:
+
+```python
+import pandas as pd
+
+# Create a DataFrame (replace this with your actual DataFrame)
+data = {
+    'Name': ['John Doe', 'Jane Smith', 'Bob Johnson'],
+    'Age': [25, 30, 28],
+    'City': ['New York', 'San Francisco', 'Chicago']
+}
+
+df = pd.DataFrame(data)
+
+# Write the DataFrame to an Excel file and get the ExcelWriter object
+with pd.ExcelWriter('output.xlsx', engine='xlsxwriter') as writer:
+    df.to_excel(writer, sheet_name='Sheet1', index=False)
+
+    # Get the xlsxwriter workbook and worksheet objects
+    workbook  = writer.book
+    worksheet = writer.sheets['Sheet1']
+
+    # Iterate through all columns and set the width to the maximum length of the column data
+    for i, col in enumerate(df.columns):
+        max_length = max(df[col].astype(str).apply(len).max(), len(col))
+        worksheet.set_column(i, i, max_length + 2)
+
+# The Excel file is saved with autofitted columns
+```
+
+In this example, we use the `xlsxwriter` engine provided by `pandas.ExcelWriter` to create the Excel file. After writing the DataFrame to the Excel file, we get the `workbook` and `worksheet` objects from the ExcelWriter and then iterate through the columns to set the width based on the maximum length of the column data. This approach allows you to autofit columns without explicitly using `
