@@ -494,3 +494,35 @@ workbook.save("output.xlsx")
 ```
 
 This code creates a new Excel workbook, writes some sample data to it, and then autofits the column widths before saving the workbook as "output.xlsx". Adjust the data and file name as needed for your specific use case.
+
+
+
+Certainly! You can use the `openpyxl` library to open an existing Excel file, and then autofit the column widths. Here's an example:
+
+```python
+import openpyxl
+
+# Load the existing workbook
+workbook = openpyxl.load_workbook('your_existing_file.xlsx')
+
+# Select the active sheet (you can change the sheet name accordingly)
+sheet = workbook.active
+
+# Autofit columns
+for column in sheet.columns:
+    max_length = 0
+    column = [cell for cell in column]
+    for cell in column:
+        try:
+            if len(str(cell.value)) > max_length:
+                max_length = len(cell.value)
+        except:
+            pass
+    adjusted_width = (max_length + 2)
+    sheet.column_dimensions[column[0].column_letter].width = adjusted_width
+
+# Save the workbook (use a different filename to avoid overwriting the original)
+workbook.save('your_autofitted_file.xlsx')
+```
+
+Make sure to replace 'your_existing_file.xlsx' with the actual name of your Excel file. The code will load the existing workbook, autofit the column widths, and save the modified workbook with a different name ('your_autofitted_file.xlsx').
