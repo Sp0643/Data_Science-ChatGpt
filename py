@@ -453,3 +453,44 @@ print(modified_df)
 This code calculates the cumulative sum for each numeric column separately along the columns (axis=0) and then combines the result with non-numeric columns in the `modified_df`.
 
 Replace `df` with your actual DataFrame. After running this code, `modified_df` will contain the cumulative sum for each numeric column while preserving the non-numeric columns.
+
+
+Certainly! You can use the `openpyxl` library in Python to write an Excel file and set the column widths to autofit. Make sure to install the library first using `pip install openpyxl`. Here's a simple example:
+
+```python
+import openpyxl
+
+# Create a new workbook and select the active sheet
+workbook = openpyxl.Workbook()
+sheet = workbook.active
+
+# Example data to be written to the Excel file
+data = [
+    ["Name", "Age", "City"],
+    ["John Doe", 25, "New York"],
+    ["Jane Smith", 30, "San Francisco"],
+    ["Bob Johnson", 28, "Chicago"],
+]
+
+# Write data to the sheet
+for row in data:
+    sheet.append(row)
+
+# Autofit columns
+for column in sheet.columns:
+    max_length = 0
+    column = [cell for cell in column]
+    for cell in column:
+        try:
+            if len(str(cell.value)) > max_length:
+                max_length = len(cell.value)
+        except:
+            pass
+    adjusted_width = (max_length + 2)
+    sheet.column_dimensions[column[0].column_letter].width = adjusted_width
+
+# Save the workbook
+workbook.save("output.xlsx")
+```
+
+This code creates a new Excel workbook, writes some sample data to it, and then autofits the column widths before saving the workbook as "output.xlsx". Adjust the data and file name as needed for your specific use case.
