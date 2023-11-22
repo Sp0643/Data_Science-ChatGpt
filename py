@@ -651,3 +651,48 @@ This code introduces three nested loops: one for the month, one for the multipli
 
 
 
+
+
+Certainly! To achieve your goal, you can use a loop to iterate through the process you've described and update DataFrame names. Here's an example code snippet for running the provided operations in a loop for 4-5 times:
+
+```python
+import pandas as pd
+
+# Assuming df125 is your initial DataFrame
+df125 = pd.DataFrame({'attr Jun24': [10, 20, 30],
+                     'Emp cnt': [100, 200, 300],
+                     'Associated Market': ['Market1', 'Market2', 'Market3'],
+                     'Remaining_May24_1': [5, 10, 15],
+                     'FUNCTION_GROUP': ['Group1', 'Group2', 'Group3']})
+
+# Set the initial DataFrame name and the number of iterations
+current_df_name = 'df125'
+iterations = 4
+
+for i in range(1, iterations + 1):
+    # Perform operations on the current DataFrame
+    eval(f"{current_df_name}['attr Jun24'] = {current_df_name}['Emp cnt'] * 0.0125 * 11")
+
+    eval(f"{current_df_name + str(i+125)} = pd.pivot_table({current_df_name}, values='attr Jun24', aggfunc='sum', index=['Associated Market']).reset_index()")
+    eval(f"{current_df_name + str(i+125)}.rename(columns={'attr Jun24': 'attr Jun24 Total'}, inplace=True)")
+
+    eval(f"{current_df_name + str(i+127)} = pd.merge({current_df_name}, {current_df_name + str(i+125)}, on='Associated Market', how='inner', indicator=True).drop(columns=['_merge'])")
+    
+    eval(f"{current_df_name + str(i+128)} = pd.pivot_table({current_df_name + str(i+127)}, values='Remaining_May24_1', aggfunc='sum', index=['Associated Market', 'FUNCTION_GROUP']).reset_index()")
+    eval(f"{current_df_name + str(i+128)}.rename(columns={'Remaining_May24_1': 'Emp_fnct_Jun24_cnt'}, inplace=True)")
+
+    eval(f"{current_df_name + str(i+129)} = pd.merge({current_df_name + str(i+127)}, {current_df_name + str(i+128)}, on=['Associated Market', 'FUNCTION_GROUP'], how='inner', indicator=True).drop(columns=['_merge'])")
+
+    eval(f"{current_df_name + str(i+130)} = pd.pivot_table({current_df_name + str(i+129)}, values='Emp_fnct_Jun24_cnt', aggfunc='max', index=['Associated Market']).reset_index()")
+    eval(f"{current_df_name + str(i+130)}.rename(columns={'Emp_fnct_Jun24_cnt': 'max Emp_fnct_Jun24_cnt'}, inplace=True)")
+
+    eval(f"{current_df_name + str(i+131)} = pd.merge({current_df_name + str(i+129)}, {current_df_name + str(i+130)}, on='Associated Market', how='left', indicator=True).drop(columns=['_merge'])")
+
+    # Update the current DataFrame name for the next iteration
+    current_df_name = current_df_name + str(i+131)
+
+# Now, df125, df126, ..., df131 contain the results of each iteration
+```
+
+This code uses the `eval` function to dynamically create and update DataFrame names based on the current iteration. It runs the provided operations in a loop for the specified number of iterations. Adjust the initial DataFrame, column names, and iterations as needed for your specific case.
+
