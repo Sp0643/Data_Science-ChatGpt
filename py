@@ -1,4 +1,4 @@
-To generate a series of months, create a new DataFrame, and then add it to an existing DataFrame, you can use the pandas library in Python. Here's a step-by-step example:
+wwwTo generate a series of months, create a new DataFrame, and then add it to an existing DataFrame, you can use the pandas library in Python. Here's a step-by-step example:
 
 ```python
 import pandas as pd
@@ -559,3 +559,52 @@ with pd.ExcelWriter('output.xlsx', engine='xlsxwriter') as writer:
 ```
 
 In this example, we use the `xlsxwriter` engine provided by `pandas.ExcelWriter` to create the Excel file. After writing the DataFrame to the Excel file, we get the `workbook` and `worksheet` objects from the ExcelWriter and then iterate through the columns to set the width based on the maximum length of the column data. This approach allows you to autofit columns without explicitly using `
+
+
+
+
+Certainly, I'll modify the code to include the creation of DataFrames for each month with updated names (`df_next_month1`, `df_next_month2`, ..., `df_next_month5`). Please note that you might need to adjust the exact calculations based on your data and requirements:
+
+```python
+import numpy as np
+import pandas as pd
+
+# Assuming df95 is your initial DataFrame
+
+# Define the loop for the next 4-5 months
+for month in range(1, 6):
+    # Create a new DataFrame for the current month
+    df_current_month = df95.copy()
+
+    # Perform necessary calculations for the current month
+    df_current_month[f'attr_Mar24_{month}'] = df_current_month['Emp_cnt'] * 0.0125 * 8
+    # ... Continue with the rest of your calculations for the current month
+
+    # Create df96 for the current month
+    df96 = pd.pivot_table(df_current_month, values=f'attr_Mar24_{month}', aggfunc='sum', index=['Associated Market']).reset_index()
+    df96.rename(columns={f'attr_Mar24_{month}': f'attr_Mar24_Total_{month}'}, inplace=True)
+
+    # Merge df_current_month with df96
+    df_current_month = pd.merge(df_current_month, df96, on='Associated Market', how='inner', indicator=True).drop(columns=['_merge'])
+
+    # Create df98 for the current month
+    df98 = pd.pivot_table(df_current_month, values='Remaining_Feb24_1', aggfunc='sum', index=['Associated Market', 'FUNCTION GROUP']).reset_index()
+    df98.rename(columns={'Remaining_Feb24_1': f'Emp_fnct_mar24_cnt_{month}'}, inplace=True)
+
+    # Merge df_current_month with df98
+    df_current_month = pd.merge(df_current_month, df98, on=['Associated Market', 'FUNCTION GROUP'], how='inner', indicator=True)
+
+    # Create df100 for the current month
+    df100 = pd.pivot_table(df_current_month, values='Emp_fnct_mar24_cnt', aggfunc='max', index=['Associated Market']).reset_index()
+    df100.rename(columns={'Emp_fnct_mar24_cnt': f'max_Emp_fnct_mar24_cnt_{month}'}, inplace=True)
+
+    # Merge df_current_month with df100
+    df_current_month = pd.merge(df_current_month, df100, on='Associated Market', how='left', indicator=True).drop(columns=['_merge'])
+
+    # ... Continue with the rest of your code, applying Jpriority and Remains functions
+
+    # After completing all calculations for the current month, save or use the result DataFrame
+    globals()[f'df_next_month{month}'] = df_current_month.copy()
+```
+
+This code creates DataFrames for each month (`df_next_month1`, `df_next_month2`, ..., `df_next_month5`) and performs the necessary calculations for each month based on the previous month's details. Adjust the calculations and DataFrame structures as needed for your specific use case.
