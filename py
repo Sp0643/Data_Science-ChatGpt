@@ -608,3 +608,42 @@ for month in range(1, 6):
 ```
 
 This code creates DataFrames for each month (`df_next_month1`, `df_next_month2`, ..., `df_next_month5`) and performs the necessary calculations for each month based on the previous month's details. Adjust the calculations and DataFrame structures as needed for your specific use case.
+
+
+
+Certainly! I understand that you want a more dynamic approach with nested loops for the multiplier, month, and DataFrame names. Here's how you can structure the code:
+
+```python
+import numpy as np
+import pandas as pd
+
+# Assuming df95 is your initial DataFrame
+current_df = df95
+
+# Define the loop for the next 4-5 months
+for month in range(1, 6):
+    # Create a new DataFrame for the current month
+    current_df_name = f'df{95 + month}'
+    globals()[current_df_name] = current_df.copy()
+
+    # Define the loop for the multiplier range (e.g., 11 to 15)
+    for multiplier in range(11, 16):
+        # Perform necessary calculations for the current month and multiplier
+        attr_col_name = f'attr_Mar24_{month}_{multiplier}'
+        globals()[current_df_name][attr_col_name] = current_df['Emp_cnt'] * 0.0125 * multiplier
+        # ... Continue with the rest of your calculations for the current month and multiplier
+
+    # Create df96 for the current month
+    df96 = pd.pivot_table(globals()[current_df_name], values=f'attr_Mar24_{month}_11', aggfunc='sum', index=['Associated Market']).reset_index()
+    df96.rename(columns={f'attr_Mar24_{month}_11': f'attr_Mar24_Total_{month}'}, inplace=True)
+
+    # Merge globals()[current_df_name] with df96
+    globals()[current_df_name] = pd.merge(globals()[current_df_name], df96, on='Associated Market', how='inner', indicator=True).drop(columns=['_merge'])
+
+    # ... Continue with the rest of your code, applying Jpriority and Remains functions
+
+    # After completing all calculations for the current month, update current_df for the next iteration
+    current_df = globals()[current_df_name].copy()
+```
+
+This code introduces three nested loops: one for the month, one for the multiplier, and one for creating dynamic DataFrame names. It performs calculations based on the current month and multiplier, and creates new DataFrames for each iteration with dynamic names. Adjust the ranges and calculations as needed for your specific use case.
