@@ -647,3 +647,7 @@ for month in range(1, 6):
 ```
 
 This code introduces three nested loops: one for the month, one for the multiplier, and one for creating dynamic DataFrame names. It performs calculations based on the current month and multiplier, and creates new DataFrames for each iteration with dynamic names. Adjust the ranges and calculations as needed for your specific use case.
+
+
+
+
