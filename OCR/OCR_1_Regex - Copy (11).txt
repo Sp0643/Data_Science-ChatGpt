@@ -99,3 +99,26 @@ print(full_text[:200])
 ```
 
 In this example, `astype(str)` is used to ensure that any non-string values in the 'text_column' are converted to strings before joining. Adjust the column names accordingly based on your DataFrame structure.
+
+
+
+My apologies for the confusion. It seems there might be an issue with the variable type. Let's make sure `word_freq` is indeed a Counter object. Here's the corrected code:
+
+```python
+import spacy
+from collections import Counter
+
+# Load the English NLP model from spaCy
+nlp = spacy.load('en_core_web_sm')
+
+# Assuming 'full_text' is the concatenated string from your text column
+doc = nlp(full_text)
+
+# Extract tokens and calculate frequency using Counter
+word_freq = Counter(token.text for token in doc if token.is_alpha)
+
+# Print the most common words and their frequencies
+print(word_freq.most_common(10))
+```
+
+Ensure that `full_text` is a string containing the concatenated text. If the issue persists, double-check the variable types and make sure that the 'full_text' is indeed a string before processing it with Spacy.
