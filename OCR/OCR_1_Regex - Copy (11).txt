@@ -1,4 +1,4 @@
-Certainly! Exploratory Data Analysis (EDA) for text data involves understanding and analyzing the characteristics of your text column. Here's a simple example using Python and pandas:
+jiCertainly! Exploratory Data Analysis (EDA) for text data involves understanding and analyzing the characteristics of your text column. Here's a simple example using Python and pandas:
 
 ```python
 import pandas as pd
@@ -53,3 +53,33 @@ pip install pandas matplotlib wordcloud nltk seaborn
 ```
 
 This example uses NLTK for tokenization, seaborn and matplotlib for plotting, and wordcloud for visualizing word frequencies. Adjust the code according to your specific needs and data.
+
+
+
+Certainly! There are several alternatives to NLTK for tokenizing text data in Python. Here are a few popular options:
+
+1. **Spacy:**
+   ```python
+   import spacy
+   nlp = spacy.load('en_core_web_sm')
+   tokens = [token.text for token in nlp(text)]
+   ```
+
+2. **Tokenizer from Keras:**
+   ```python
+   from keras.preprocessing.text import text_to_word_sequence
+   tokens = text_to_word_sequence(text)
+   ```
+
+3. **Regex Tokenizer:**
+   ```python
+   import re
+   tokens = re.findall(r'\b\w+\b', text)
+   ```
+
+4. **Whitespace Tokenizer:**
+   ```python
+   tokens = text.split()
+   ```
+
+Choose the tokenizer that best fits your specific needs. Each has its own advantages and may perform differently based on the characteristics of your text data.
