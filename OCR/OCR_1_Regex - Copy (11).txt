@@ -1,4 +1,4 @@
-wwwjiCertainly! Exploratory Data Analysis (EDA) for text data involves understanding and analyzing the characteristics of your text column. Here's a simple example using Python and pandas:
+upwwwjiCertainly! Exploratory Data Analysis (EDA) for text data involves understanding and analyzing the characteristics of your text column. Here's a simple example using Python and pandas:
 
 ```python
 import pandas as pd
@@ -265,3 +265,32 @@ print(df[['preprocessed_comment']])
 ```
 
 This code first joins all columns into a list of strings, and then applies text preprocessing steps including tokenization, removing punctuation, removing stop words, stemming, and lemmatization to each comment. The results are displayed in a new column named 'preprocessed_comment'. Adjust the DataFrame and column names according to your actual data.
+
+
+Certainly! To modify the provided code to perform lemmatization instead of stemming, you can use the WordNet Lemmatizer from NLTK. Here's the modified code:
+
+```python
+from nltk.tokenize import RegexpTokenizer
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import stopwords
+
+tokenizer = RegexpTokenizer(r'\w+')
+nltk_stpwd = stopwords.words('english')
+stpwd = [*nltk_stpwd]
+lemmatizer = WordNetLemmatizer()
+
+Processed_Text = []
+
+# Assuming SentTokenized_Text is defined earlier in your code
+for description in range(0, len(SentTokenized_Text)):
+    for sentence in SentTokenized_Text[description]:
+        words = tokenizer.tokenize(sentence)
+        stpwd_free_sent = [word for word in words if not word in stpwd]
+        punc_free_sent = [word for word in stpwd_free_sent if not word in string.punctuation]
+        num_free_sent = [word for word in punc_free_sent if word.isalpha()]
+        lemmatized_sent = [lemmatizer.lemmatize(word) for word in num_free_sent]
+        
+        Processed_Text.append(lemmatized_sent)
+```
+
+In this modified version, the WordNet Lemmatizer is used to perform lemmatization instead of the PorterStemmer for stemming. The lemmatized forms of words are then appended to the `Processed_Text` list. Adjust the code according to your specific needs and data structures.
