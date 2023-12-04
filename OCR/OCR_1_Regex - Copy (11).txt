@@ -205,3 +205,63 @@ pip install pandas matplotlib
 ```
 
 Adjust the column names according to your actual DataFrame structure.
+
+Certainly! To perform text analytics on a DataFrame with a 'comment' column, you can use the Natural Language Toolkit (nltk) and other libraries for text preprocessing. Ensure you have nltk installed:
+
+```bash
+pip install nltk
+```
+
+Here's a code example that demonstrates the process:
+
+```python
+import pandas as pd
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+import string
+
+# Sample DataFrame with a 'comment' column
+data = {'comment': ["This is a sample comment.",
+                    "Text analytics is interesting!",
+                    "Preprocessing helps in NLP."]}
+df = pd.DataFrame(data)
+
+# Joining all columns into a list of strings
+comments_list = df.apply(lambda row: ' '.join(row.astype(str)), axis=1).tolist()
+
+# Function for text preprocessing
+def preprocess_text(text):
+    # Tokenization
+    tokens = word_tokenize(text)
+
+    # Removing punctuation
+    tokens = [word.lower() for word in tokens if word.isalnum()]
+
+    # Removing stop words
+    stop_words = set(stopwords.words('english'))
+    tokens = [word for word in tokens if word not in stop_words]
+
+    # Stemming
+    porter = PorterStemmer()
+    tokens = [porter.stem(word) for word in tokens]
+
+    # Lemmatization
+    lemmatizer = WordNetLemmatizer()
+    tokens = [lemmatizer.lemmatize(word) for word in tokens]
+
+    return ' '.join(tokens)
+
+# Apply preprocessing to each comment
+preprocessed_comments = [preprocess_text(comment) for comment in comments_list]
+
+# Display the original and preprocessed data
+df['preprocessed_comment'] = preprocessed_comments
+print("Original Data:")
+print(df[['comment']])
+print("\nPreprocessed Data:")
+print(df[['preprocessed_comment']])
+```
+
+This code first joins all columns into a list of strings, and then applies text preprocessing steps including tokenization, removing punctuation, removing stop words, stemming, and lemmatization to each comment. The results are displayed in a new column named 'preprocessed_comment'. Adjust the DataFrame and column names according to your actual data.
