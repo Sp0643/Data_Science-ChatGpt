@@ -168,3 +168,40 @@ print(df)
 ```
 
 Note: This is a basic example, and you may need to adapt it based on your specific use case and dataset. It's also important to handle the preprocessing steps based on your data characteristics and the goals of your analysis.
+
+
+
+
+Certainly! To achieve this, you can use Python and a library like pandas for handling the data and matplotlib for creating a bar chart. Here's an example code snippet assuming you have a DataFrame named `df` with a column named 'comments':
+
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Assuming df is your DataFrame with a column 'comments'
+# If it's not already a string, convert the 'comments' column to string
+df['comments'] = df['comments'].astype(str)
+
+# Calculate the length of each comment and create a new column 'comment_length'
+df['comment_length'] = df['comments'].apply(len)
+
+# Display the DataFrame with the added 'comment_length' column
+print(df[['comments', 'comment_length']])
+
+# Create a bar chart
+plt.bar(df.index, df['comment_length'])
+plt.xlabel('Customer')
+plt.ylabel('Comment Length')
+plt.title('Comment Length for Each Customer')
+plt.show()
+```
+
+This code first calculates the length of each comment and adds a new column 'comment_length' to the DataFrame. Then, it displays the DataFrame with the 'comments' and 'comment_length' columns. Finally, it creates a bar chart using matplotlib, where each bar represents the length of the corresponding comment.
+
+Make sure to have the necessary libraries installed:
+
+```bash
+pip install pandas matplotlib
+```
+
+Adjust the column names according to your actual DataFrame structure.
