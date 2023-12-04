@@ -294,3 +294,36 @@ for description in range(0, len(SentTokenized_Text)):
 ```
 
 In this modified version, the WordNet Lemmatizer is used to perform lemmatization instead of the PorterStemmer for stemming. The lemmatized forms of words are then appended to the `Processed_Text` list. Adjust the code according to your specific needs and data structures.
+
+
+Certainly! You can create a loop to perform the same job for multiple columns. Here's an example where the code is adapted to handle 5 columns:
+
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Sample DataFrame with 5 columns
+data = {'Column1': [1, 'A', 3.14, 'B', 'text'],
+        'Column2': ['X', 2, 'Y', 'Z', 3.14],
+        'Column3': [True, 'A', False, 'B', True],
+        'Column4': [1.1, 'C', 'text', False, 'D'],
+        'Column5': ['W', True, 'E', 2.2, 'F']}
+df = pd.DataFrame(data)
+
+# Count element types for each column using a loop
+for column in df.columns:
+    element_counts = df[column].apply(type).value_counts().fillna(0).astype(int)
+    
+    # Display counts for each column
+    print(f"Element Type Counts for {column}:")
+    print(element_counts)
+
+    # Create a bar chart for each column
+    element_counts.plot(kind='bar', stacked=True)
+    plt.xlabel('Element Types')
+    plt.ylabel('Count')
+    plt.title(f'Element Type Counts for {column}')
+    plt.show()
+```
+
+This code iterates through each column in the DataFrame, counts the element types, displays the counts, and creates a bar chart for each column. Adjust the number of columns and the DataFrame according to your actual data structure.
