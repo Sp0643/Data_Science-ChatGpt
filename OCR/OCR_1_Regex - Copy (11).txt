@@ -1,4 +1,4 @@
-upwwwjiCertainly! Exploratory Data Analysis (EDA) for text data involves understanding and analyzing the characteristics of your text column. Here's a simple example using Python and pandas:
+seupwwwjiCertainly! Exploratory Data Analysis (EDA) for text data involves understanding and analyzing the characteristics of your text column. Here's a simple example using Python and pandas:
 
 ```python
 import pandas as pd
@@ -327,3 +327,55 @@ for column in df.columns:
 ```
 
 This code iterates through each column in the DataFrame, counts the element types, displays the counts, and creates a bar chart for each column. Adjust the number of columns and the DataFrame according to your actual data structure.
+
+
+Sure, let's break it down:
+
+1. **Sentiment Analysis:**
+```python
+from textblob import TextBlob
+
+def analyze_sentiment(text):
+    analysis = TextBlob(text)
+    return analysis.sentiment.polarity
+
+# Example usage:
+customer_feedback = "Your product is great!"
+sentiment_score = analyze_sentiment(customer_feedback)
+print("Sentiment Score:", sentiment_score)
+```
+
+2. **Topic Modeling:**
+```python
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.decomposition import LatentDirichletAllocation
+
+def topic_modeling(texts, num_topics=3):
+    vectorizer = TfidfVectorizer(max_df=0.95, min_df=2, stop_words='english')
+    tfidf_matrix = vectorizer.fit_transform(texts)
+
+    lda_model = LatentDirichletAllocation(n_components=num_topics, random_state=42)
+    lda_model.fit(tfidf_matrix)
+
+    return lda_model
+
+# Example usage:
+customer_complaints = ["The product is faulty.", "Late delivery issue.", "Great customer service!"]
+lda = topic_modeling(customer_complaints)
+```
+
+3. **Word Embeddings (Word2Vec):**
+```python
+from gensim.models import Word2Vec
+from nltk.tokenize import word_tokenize
+
+def word_embedding(texts):
+    tokenized_texts = [word_tokenize(text.lower()) for text in texts]
+    model = Word2Vec(sentences=tokenized_texts, vector_size=100, window=5, min_count=1, workers=4)
+    return model
+
+# Example usage:
+word2vec_model = word_embedding(customer_complaints)
+```
+
+Feel free to adapt these snippets to your dataset and requirements. Need help with something specific?
