@@ -67,3 +67,27 @@ def a10_charts(label):
 ```
 
 In this updated example, the chart titles include the label information, and for the A10 chart, a label annotation is added at the bottom. Adjust the labels and annotations according to your preferences or specific requirements.
+
+
+Certainly! If you want to plot the value counts of a categorical variable using Plotly Express, you can use the `px.bar` function. Here's an example:
+
+```python
+import plotly.express as px
+import pandas as pd
+
+# Sample data (replace with your actual data)
+data = pd.DataFrame({'Category': ['A', 'B', 'C', 'A', 'B', 'A', 'C', 'B', 'C', 'C']})
+
+# Value counts of each element
+value_counts = data['Category'].value_counts().reset_index()
+value_counts.columns = ['Category', 'Count']
+
+# Bar chart displaying the value counts
+fig = px.bar(value_counts, x='Category', y='Count', title='Value Counts of Each Category')
+
+fig.show()
+```
+
+This code first calculates the value counts using `value_counts()`, then uses `px.bar` to create a bar chart where the x-axis represents the unique categories, and the y-axis represents the counts.
+
+Adjust the column names and data accordingly based on your specific dataset.
