@@ -91,3 +91,34 @@ fig.show()
 This code first calculates the value counts using `value_counts()`, then uses `px.bar` to create a bar chart where the x-axis represents the unique categories, and the y-axis represents the counts.
 
 Adjust the column names and data accordingly based on your specific dataset.
+
+
+Certainly! If you want to create bar charts for value counts for multiple columns in a loop, you can do something like this:
+
+```python
+import plotly.express as px
+import pandas as pd
+
+# Sample data (replace with your actual data)
+df = pd.DataFrame({
+    'Communication Medium': ['Email', 'Phone', 'Email', 'Phone', 'Social Media', 'Phone', 'Email', 'Social Media'],
+    'Column2': ['A', 'B', 'B', 'A', 'A', 'B', 'A', 'A'],
+    'Column3': ['X', 'Y', 'X', 'Y', 'Y', 'X', 'X', 'Y'],
+    # Add more columns as needed
+})
+
+# Loop through columns
+for column in df.columns:
+    if df[column].dtype == 'object':
+        # Check if the column is of type object (categorical)
+        value_counts = df[column].value_counts().reset_index()
+        value_counts.columns = [column, 'Count']
+
+        # Create bar chart
+        fig = px.bar(value_counts, x=column, y='Count', title=f'Value Counts of {column}')
+
+        # Show the chart
+        fig.show()
+```
+
+This code loops through each column in your DataFrame, checks if the column is of type 'object' (assuming categorical), calculates the value counts, and creates a bar chart using Plotly Express. Adjust the data and conditions based on your specific requirements and column types.
