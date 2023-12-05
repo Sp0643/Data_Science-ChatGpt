@@ -32,3 +32,38 @@ def a10_charts():
 In this example, `eda_charts` generates scatter, histogram, and box plot using Plotly Express. The `a10_charts` function creates a basic A10 architecture-specific bar chart using Plotly Graph Objects.
 
 Remember to replace the placeholder data (`'feature1'`, `'feature2'`, `'category'`, `'value'`, etc.) with your actual dataset columns. If you have specific requirements or data, feel free to provide more details for a more customized example.
+
+
+Certainly! If you want to display labels on the charts indicating that they are associated with label "2," you can modify the chart titles or add annotations. Here's an updated example with labels:
+
+```python
+import plotly.express as px
+import plotly.graph_objects as go
+
+# Sample EDA charts with labels
+def eda_charts(data, label):
+    # Scatter plot
+    scatter_plot = px.scatter(data, x='feature1', y='feature2', title=f'Scatter Plot (Label {label})')
+
+    # Histogram
+    histogram = px.histogram(data, x='feature1', title=f'Histogram (Label {label})')
+
+    # Box plot
+    box_plot = px.box(data, x='category', y='value', title=f'Box Plot (Label {label})')
+
+    return scatter_plot, histogram, box_plot
+
+# Sample A10-related charts with label
+def a10_charts(label):
+    # A10 architecture-specific chart (replace with your data)
+    a10_chart = go.Figure(data=[go.Bar(x=['Core 1', 'Core 2', 'Core 3'], y=[50, 75, 60])],
+                          layout=go.Layout(title=f'A10 Architecture Chart (Label {label})', barmode='group'))
+
+    # Adding a label annotation
+    a10_chart.update_layout(annotations=[dict(x=0.5, y=-0.15, showarrow=False,
+                                              text=f'Label: {label}', xref='paper', yref='paper')])
+
+    return a10_chart
+```
+
+In this updated example, the chart titles include the label information, and for the A10 chart, a label annotation is added at the bottom. Adjust the labels and annotations according to your preferences or specific requirements.
