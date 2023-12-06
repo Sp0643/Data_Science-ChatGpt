@@ -428,3 +428,51 @@ Visualizing topic modeling results is crucial for gaining insights. Two common w
    - This will open an interactive visualization in your web browser, providing an overview of topics, their representative words, and their interrelationships.
 
 Experiment with these visualizations to better understand and communicate your topic modeling results. Adjust parameters based on your needs and data characteristics. If you have specific questions or need further guidance, feel free to ask!
+
+
+
+
+Performing sentiment analysis on a DataFrame column typically involves applying a sentiment analysis tool or library to each text entry in that column. Below, I'll outline a simple example using Python and the popular library called `TextBlob`. Ensure you have the necessary library installed:
+
+```bash
+pip install textblob
+```
+
+Now, let's assume you have a DataFrame named `df` with a column named `text` that contains the text data on which you want to perform sentiment analysis.
+
+```python
+import pandas as pd
+from textblob import TextBlob
+
+# Sample DataFrame
+data = {'text': ['I love this product!', 'Neutral statement.', 'This is terrible.']}
+df = pd.DataFrame(data)
+
+# Define a function to get sentiment polarity
+def get_sentiment(text):
+    analysis = TextBlob(text)
+    # Return the polarity (-1 to 1) as the sentiment score
+    return analysis.sentiment.polarity
+
+# Apply the function to the 'text' column and create a new 'sentiment' column
+df['sentiment'] = df['text'].apply(get_sentiment)
+
+# Define a function to categorize sentiment
+def categorize_sentiment(score):
+    if score > 0:
+        return 'Positive'
+    elif score < 0:
+        return 'Negative'
+    else:
+        return 'Neutral'
+
+# Apply the function to create a new 'sentiment_category' column
+df['sentiment_category'] = df['sentiment'].apply(categorize_sentiment)
+
+# Display the DataFrame with sentiment information
+print(df)
+```
+
+In this example, the `get_sentiment` function calculates the sentiment polarity of each text using `TextBlob`. The sentiment polarity is a float ranging from -1 (most negative) to 1 (most positive). The `categorize_sentiment` function is then used to categorize the sentiment into 'Positive,' 'Negative,' or 'Neutral' based on the polarity score.
+
+You can adapt this code to your specific DataFrame and use other sentiment analysis libraries such as NLTK, VaderSentiment, or spaCy depending on your requirements and the nature of your text data.
