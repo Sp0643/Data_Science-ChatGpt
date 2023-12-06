@@ -476,3 +476,57 @@ print(df)
 In this example, the `get_sentiment` function calculates the sentiment polarity of each text using `TextBlob`. The sentiment polarity is a float ranging from -1 (most negative) to 1 (most positive). The `categorize_sentiment` function is then used to categorize the sentiment into 'Positive,' 'Negative,' or 'Neutral' based on the polarity score.
 
 You can adapt this code to your specific DataFrame and use other sentiment analysis libraries such as NLTK, VaderSentiment, or spaCy depending on your requirements and the nature of your text data.
+
+
+Sure, here's an example code snippet that demonstrates key phrase extraction using RAKE, YAKE, and KeyBERT in Python. Make sure you have the necessary libraries installed:
+
+```bash
+pip install rake-nltk yake keybert
+```
+
+Now, you can use the following code:
+
+```python
+from rake_nltk import Rake
+import yake
+from keybert import KeyBERT
+
+# Sample text
+text = """
+Natural language processing is a subfield of artificial intelligence that focuses on the interaction 
+between computers and humans using natural language. It enables computers to understand, interpret, 
+and generate human-like text. Key phrase extraction is a common task in natural language processing.
+"""
+
+# RAKE (Rapid Automatic Keyword Extraction) method
+def extract_keyphrases_rake(text):
+    r = Rake()
+    r.extract_keywords_from_text(text)
+    return r.get_ranked_phrases()
+
+# YAKE (Yet Another Keyword Extractor) method
+def extract_keyphrases_yake(text):
+    custom_kw_extractor = yake.KeywordExtractor()
+    keywords = custom_kw_extractor.extract_keywords(text)
+    return [key for key, _ in keywords]
+
+# KeyBERT method
+def extract_keyphrases_keybert(text):
+    model = KeyBERT('distilbert-base-nli-mean-tokens')
+    keywords = model.extract_keywords(text, keyphrase_length=1, stop_words='english')
+    return [key for key, _ in keywords]
+
+# Extract key phrases using RAKE
+keyphrases_rake = extract_keyphrases_rake(text)
+print("RAKE Key Phrases:", keyphrases_rake)
+
+# Extract key phrases using YAKE
+keyphrases_yake = extract_keyphrases_yake(text)
+print("YAKE Key Phrases:", keyphrases_yake)
+
+# Extract key phrases using KeyBERT
+keyphrases_keybert = extract_keyphrases_keybert(text)
+print("KeyBERT Key Phrases:", keyphrases_keybert)
+```
+
+This code defines functions to extract key phrases using RAKE, YAKE, and KeyBERT. Replace the `text` variable with your own text data. Note that KeyBERT requires a pre-trained language model, and 'distilbert-base-nli-mean-tokens' is used in this example. You can experiment with other models as well.
