@@ -555,3 +555,32 @@ print(corpus[:1][0][:30])
 ```
 
 In this code, I added the `prune_at` parameter to the `Dictionary` constructor, which limits the dictionary to the specified number of features (`max_features`). Adjust the value of `max_features` according to your desired maximum number.
+
+
+
+Certainly! Below is a basic example code for visualizing LDA (Latent Dirichlet Allocation) topic modeling results using Plotly in Python. Make sure you have the necessary libraries installed, you can install them using `pip install plotly pandas`.
+
+```python
+import plotly.express as px
+import pandas as pd
+
+# Assuming you have LDA model results (topics, words, weights)
+# Replace the sample data with your actual LDA model results
+
+topics = ["Topic 1", "Topic 2", "Topic 3"]
+words = ["word1", "word2", "word3"]
+weights = [0.3, 0.4, 0.3]
+
+# Creating a DataFrame for visualization
+df = pd.DataFrame({'Topics': topics, 'Words': words, 'Weights': weights})
+
+# Creating a sunburst chart for LDA topic modeling results
+fig = px.sunburst(df, path=['Topics', 'Words'], values='Weights',
+                  title='LDA Topic Modeling Results',
+                  width=800, height=800)
+
+# Show the plot
+fig.show()
+```
+
+Replace the sample data with your actual LDA model results, where `topics` represent the topics, `words` represent the words associated with each topic, and `weights` represent the corresponding weights or probabilities. The sunburst chart visually represents the hierarchy of topics and associated words. Adjust the chart parameters based on your specific needs.
