@@ -584,3 +584,53 @@ fig.show()
 ```
 
 Replace the sample data with your actual LDA model results, where `topics` represent the topics, `words` represent the words associated with each topic, and `weights` represent the corresponding weights or probabilities. The sunburst chart visually represents the hierarchy of topics and associated words. Adjust the chart parameters based on your specific needs.
+
+
+Certainly! You can use the LDA model results and Plotly to create a visualization of the topic modeling results. Here's an example code snippet:
+
+```python
+import plotly.express as px
+import pandas as pd
+from pprint import pprint
+import gensim
+from gensim import corpora
+
+# Assuming you have the LDA model and corpus already created
+# Replace this with your actual LDA model and corpus
+
+# Sample code to create a simple corpus and LDA model (replace this with your actual data)
+corpus = [
+    [(0, 1), (1, 1), (2, 1)],
+    [(1, 1), (3, 1), (4, 1)],
+    [(0, 1), (2, 1), (3, 1)],
+    [(1, 1), (2, 1), (3, 1), (4, 1)],
+    [(0, 1), (1, 1), (3, 1)],
+]
+
+dictionary = corpora.Dictionary.from_corpus(corpus)
+
+num_topics = 5
+lda_model = gensim.models.LdaMulticore(corpus, id2word=dictionary, num_topics=num_topics)
+
+# Print the topics
+pprint(lda_model.print_topics())
+
+# Get the topic distribution for each document
+doc_lda = lda_model[corpus]
+
+# Create a DataFrame for visualization
+topic_data = {'Document': range(len(doc_lda))}
+for topic_id, topic_weights in enumerate(doc_lda):
+    topic_data[f'Topic {topic_id + 1}'] = [weight for _, weight in topic_weights]
+
+df = pd.DataFrame(topic_data)
+
+# Create a stacked bar chart for topic modeling results
+fig = px.bar(df, x='Document', y=df.columns[1:], title='LDA Topic Modeling Results',
+             labels={'value': 'Topic Weight'}, height=400)
+
+# Show the plot
+fig.show()
+```
+
+This code assumes a simple example with a small corpus. Replace the sample corpus and LDA model creation with your actual data. The resulting plot will display the topic distribution for each document in a stacked bar chart. Adjust the chart parameters based on your specific needs.
