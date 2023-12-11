@@ -1,4 +1,4 @@
-seupwwwjiCertainly! Exploratory Data Analysis (EDA) for text data involves understanding and analyzing the characteristics of your text column. Here's a simple example using Python and pandas:
+Certainly! Exploratory Data Analysis (EDA) for text data involves understanding and analyzing the characteristics of your text column. Here's a simple example using Python and pandas:
 
 ```python
 import pandas as pd
@@ -530,3 +530,28 @@ print("KeyBERT Key Phrases:", keyphrases_keybert)
 ```
 
 This code defines functions to extract key phrases using RAKE, YAKE, and KeyBERT. Replace the `text` variable with your own text data. Note that KeyBERT requires a pre-trained language model, and 'distilbert-base-nli-mean-tokens' is used in this example. You can experiment with other models as well.
+
+
+Certainly! If you want to limit the maximum number of features in the dictionary created using gensim's `corpora.Dictionary`, you can pass the `num_features` parameter. Here's the modified code:
+
+```python
+import gensim
+from gensim.corpora import Dictionary
+
+# Assuming Processed_Text is a list of tokenized texts
+texts = Processed_Text
+
+# Set the maximum number of features
+max_features = 10000  # Change this value based on your requirement
+
+# Create Dictionary with a limit on the number of features
+id2word = Dictionary(texts, prune_at=max_features)
+
+# Term Document Frequency
+corpus = [id2word.doc2bow(text) for text in texts]
+
+# Print an example of the corpus
+print(corpus[:1][0][:30])
+```
+
+In this code, I added the `prune_at` parameter to the `Dictionary` constructor, which limits the dictionary to the specified number of features (`max_features`). Adjust the value of `max_features` according to your desired maximum number.
