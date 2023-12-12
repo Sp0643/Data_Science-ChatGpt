@@ -634,3 +634,36 @@ fig.show()
 ```
 
 This code assumes a simple example with a small corpus. Replace the sample corpus and LDA model creation with your actual data. The resulting plot will display the topic distribution for each document in a stacked bar chart. Adjust the chart parameters based on your specific needs.
+
+
+Certainly! Here's a Python code snippet using the pandas library to achieve this:
+
+```python
+import pandas as pd
+
+# Assuming 'your_dataframe' is the variable holding your DataFrame
+# Replace 'column1', 'column2', etc., with the actual column names you want to analyze
+
+columns_to_analyze = ['column1', 'column2', 'column3']  # Add more columns as needed
+
+# Create a Pandas DataFrame to store value counts
+value_counts_df = pd.DataFrame(columns=['Column', 'Value', 'Count'])
+
+# Iterate through the specified columns and calculate value counts
+for column in columns_to_analyze:
+    counts = your_dataframe[column].value_counts().reset_index()
+    counts.columns = ['Value', 'Count']
+    counts.insert(0, 'Column', column)
+    value_counts_df = pd.concat([value_counts_df, counts], ignore_index=True)
+
+# Create an Excel writer object
+excel_writer = pd.ExcelWriter('value_counts_results.xlsx', engine='xlsxwriter')
+
+# Write the DataFrame to an Excel sheet
+value_counts_df.to_excel(excel_writer, sheet_name='ValueCounts', index=False)
+
+# Save the Excel file
+excel_writer.save()
+```
+
+This code will create an Excel file named 'value_counts_results.xlsx' with a sheet named 'ValueCounts'. Each row in this sheet will represent a unique value count for a specific column. You can customize the column names and file name as needed.
