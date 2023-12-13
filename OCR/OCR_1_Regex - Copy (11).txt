@@ -667,3 +667,36 @@ excel_writer.save()
 ```
 
 This code will create an Excel file named 'value_counts_results.xlsx' with a sheet named 'ValueCounts'. Each row in this sheet will represent a unique value count for a specific column. You can customize the column names and file name as needed.
+
+
+
+Certainly! To find key phrases from text using KeyBERT in Python, you'll need to install the `keybert` library first. You can install it using:
+
+```bash
+pip install keybert
+```
+
+Now, here's a simple example of how you can use KeyBERT to extract key phrases from a given text:
+
+```python
+from keybert import KeyBERT
+
+def find_key_phrases(text, num_phrases=5):
+    # Load pre-trained BERT model for key phrase extraction
+    model = KeyBERT()
+
+    # Extract key phrases from the given text
+    key_phrases = model.extract_keywords(text, keyphrase_ngram_range=(1, 1), stop_words='english', top_n=num_phrases)
+
+    return key_phrases
+
+# Example usage
+text_to_analyze = "This is a sample text. KeyBERT is a powerful tool for extracting key phrases."
+
+result = find_key_phrases(text_to_analyze)
+print("Key Phrases:", result)
+```
+
+Adjust the `num_phrases` parameter according to how many key phrases you want to extract. The `top_n` parameter in `extract_keywords` specifies the number of key phrases to return.
+
+Make sure to have a good understanding of the `keybert` library parameters, as you might want to customize them based on your specific use case.
