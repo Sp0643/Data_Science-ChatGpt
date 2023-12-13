@@ -700,3 +700,41 @@ print("Key Phrases:", result)
 Adjust the `num_phrases` parameter according to how many key phrases you want to extract. The `top_n` parameter in `extract_keywords` specifies the number of key phrases to return.
 
 Make sure to have a good understanding of the `keybert` library parameters, as you might want to customize them based on your specific use case.
+
+
+
+Certainly! If you want to compare the text data for each unique combination of "Medium" and "Text" in your DataFrame, you can use the `groupby` function along with `apply` to compare the text data. Here's an example:
+
+```python
+import pandas as pd
+
+# Assuming you have a DataFrame named 'df' with 'Medium' and 'Text' columns
+# Replace this with your actual DataFrame and column names
+
+data = {
+    'Medium': ['Phone', 'Email', 'Letter', 'Phone', 'Email', 'Fax', 'Letter', 'Phone', 'Fax', 'Email'],
+    'Text': ['Text1', 'Text2', 'Text3', 'Text4', 'Text5', 'Text6', 'Text7', 'Text8', 'Text9', 'Text10'],
+    'Other_Column': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+}
+
+df = pd.DataFrame(data)
+
+# Group by 'Medium' and 'Text' and apply a function to compare the text data
+def compare_texts(group):
+    # Assuming 'Text' is the column with text data
+    texts = group['Text'].tolist()
+    
+    # Compare the text data here
+    # This is a simple example, you might want to replace this with your own comparison logic
+    comparison_result = all(text == texts[0] for text in texts)
+    
+    # Return the result
+    return pd.Series({'TextsMatch': comparison_result})
+
+result_df = df.groupby(['Medium', 'Text']).apply(compare_texts).reset_index()
+
+# Display the result
+print(result_df)
+```
+
+This example compares the text data for each combination of "Medium" and "Text" and adds a column 'TextsMatch' indicating whether the text data matches for each group. You can replace the comparison logic inside the `compare_texts` function with your specific requirements. Adjust the column names based on your actual DataFrame structure.
