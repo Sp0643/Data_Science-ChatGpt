@@ -1,0 +1,21 @@
+import pkg_resources
+from openpyxl import Workbook
+
+# Get a list of installed packages with their versions
+installed_packages = [(pkg.key, pkg.version) for pkg in pkg_resources.working_set]
+
+# Create a new Excel workbook
+workbook = Workbook()
+
+# Create a new sheet in the workbook
+sheet = workbook.active
+
+# Write headers to the sheet
+sheet.append(['Library', 'Version'])
+
+# Write package information to the sheet
+for package, version in installed_packages:
+    sheet.append([package, version])
+
+# Save the workbook to a file
+workbook.save('installed_libraries.xlsx')
