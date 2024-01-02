@@ -19,3 +19,39 @@ for package, version in installed_packages:
 
 # Save the workbook to a file
 workbook.save('installed_libraries.xlsx')
+
+
+
+Certainly! You can use the `subprocess` module to run the `pip list` command and capture its output. Then, parse the output to extract the package information and save it to an Excel file. Here's an example:
+
+```python
+import subprocess
+from openpyxl import Workbook
+
+# Run 'pip list' command and capture the output
+pip_list_output = subprocess.check_output(['pip', 'list']).decode('utf-8')
+
+# Split the output into lines and skip the header
+package_lines = pip_list_output.strip().split('\n')[2:]
+
+# Parse the package information
+installed_packages = [line.split()[:2] for line in package_lines]
+
+# Create a new Excel workbook
+workbook = Workbook()
+
+# Create a new sheet in the workbook
+sheet = workbook.active
+
+# Write headers to the sheet
+sheet.append(['Library', 'Version'])
+
+# Write package information to the sheet
+for package, version in installed_packages:
+    sheet.append([package, version])
+
+# Save the workbook to a file
+workbook.save('installed_libraries_from_pip_list.xlsx')
+```
+
+This code will run the `pip list` command, parse its output, and save the package information to an Excel file named `installed_libraries_from_pip_list.xlsx`.
