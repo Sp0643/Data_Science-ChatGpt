@@ -117,4 +117,22 @@ for topic_id, word_freq in topics_words:
     plt.show()
 
 
+import plotly.graph_objs as go
+from plotly.subplots import make_subplots
+
+# Assuming you've already obtained topics_words as in the previous code snippets
+
+# Create subplots for top words in each topic
+num_words_to_display = 10  # Number of words to display per topic
+
+fig = make_subplots(rows=1, cols=len(topics_words), subplot_titles=[f"Topic {i}" for i in range(len(topics_words))])
+
+for i, (_, word_freq) in enumerate(topics_words, start=1):
+    words = [word for word, _ in word_freq[:num_words_to_display]]
+    weights = [weight for _, weight in word_freq[:num_words_to_display]]
+    
+    fig.add_trace(go.Bar(y=words, x=weights, orientation='h', name=f'Topic {i}'), row=1, col=i)
+
+fig.update_layout(height=400, width=1500, title_text="Top Words for Each Topic", showlegend=False)
+fig.show()
 
