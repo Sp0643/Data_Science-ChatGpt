@@ -40,3 +40,60 @@ df['cleaned_comment_length'] = df['clean_comment'].apply(len)
 
 # Display the DataFrame
 print(df)
+
+
+import matplotlib.pyplot as plt
+from gensim import corpora, models
+from wordcloud import WordCloud
+
+# Assuming you've already processed the text and created the processed_text variable
+
+# Tokenize the processed_text
+tokens = processed_text.split()  # You may need further tokenization based on your requirements
+
+# Create a dictionary and corpus
+dictionary = corpora.Dictionary([tokens])
+corpus = [dictionary.doc2bow(tokens)]
+
+# Train an LDA model
+lda_model = models.LdaModel(corpus, num_topics=5, id2word=dictionary, passes=10)
+
+# Get top words for each topic
+topics_words = lda_model.show_topics(formatted=False, num_words=10)
+
+# Generate word clouds for topics
+for topic, word_freq in topics_words:
+    wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(dict(word_freq))
+    
+    # Display the word cloud for each topic
+    plt.figure(figsize=(8, 6))
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.title(f"Topic {topic}")
+    plt.axis('off')
+    plt.show()
+
+
+from gensim import corpora, models
+
+# Assuming you've already processed the text and created the processed_text variable
+
+# Tokenize the processed_text
+tokens = processed_text.split()  # You may need further tokenization based on your requirements
+
+# Create a dictionary and corpus
+dictionary = corpora.Dictionary([tokens])
+corpus = [dictionary.doc2bow(tokens)]
+
+# Train an LDA model
+lda_model = models.LdaModel(corpus, num_topics=5, id2word=dictionary, passes=10)
+
+# Get top words for each topic
+topics_words = lda_model.show_topics(formatted=False, num_words=10)
+
+# Display top words for each topic
+for topic_id, word_freq in topics_words:
+    print(f"Topic {topic_id}:")
+    for word, weight in word_freq:
+        print(f"{word}: {weight}")
+    print("\n")
+
