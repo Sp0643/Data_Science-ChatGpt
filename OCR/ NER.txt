@@ -1,0 +1,14 @@
+import spacy
+
+# Load the English language model in SpaCy
+nlp = spacy.load("en_core_web_sm")
+
+# Sample text for NER
+text = "Apple is planning to open a new store in Paris next month."
+
+# Process the text using SpaCy's NLP pipeline
+doc = nlp(text)
+
+# Extract named entities and their labels
+for entity in doc.ents:
+    print(f"Entity: {entity.text}, Label: {entity.label_}")
