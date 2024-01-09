@@ -1,17 +1,30 @@
-import spacy
+import nltk
+from nltk.corpus import stopwords
+import string
 
-# Load the English language model in SpaCy
-nlp = spacy.load("en_core_web_sm")
+nltk.download('punkt')
+nltk.download('stopwords')
 
-# Sample text for NER
-text = "Apple is planning to open a new store in Paris next month."
+# Sample text for preprocessing
+text = "Your text data goes here."
 
-# Process the text using SpaCy's NLP pipeline
-doc = nlp(text)
+# Tokenize the text into words
+tokens = nltk.word_tokenize(text)
 
-# Extract named entities and their labels
-for entity in doc.ents:
-    print(f"Entity: {entity.text}, Label: {entity.label_}")
+# Convert tokens to lowercase and remove punctuation
+tokens = [word.lower() for word in tokens if word.isalpha()]
+
+# Remove stop words
+stop_words = set(stopwords.words('english'))
+filtered_tokens = [word for word in tokens if word not in stop_words]
+
+# Join tokens back into a cleaned text string
+cleaned_text = ' '.join(filtered_tokens)
+
+# Display the cleaned text
+print("Cleaned Text:")
+print(cleaned_text)
+
 
 # Add domain-specific stop words to the existing NLTK stop words list
 custom_stop_words = set(['specific_word1', 'specific_word2'])  # Add your custom stop words here
