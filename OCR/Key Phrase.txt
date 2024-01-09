@@ -37,3 +37,24 @@ filtered_tokens = [word for word in tokens if word not in stop_words]
 
 # Continue with the rest of the text preprocessing steps
 # (lowercasing, removing punctuation, etc.)
+
+
+from rake_nltk import Rake
+
+# Sample text for key phrase extraction
+text = "Your text data goes here."
+
+# Initialize Rake with custom parameters
+r = Rake(min_length=1, max_length=2)  # Adjust min_length and max_length as needed
+
+# Extract keywords and key phrases
+r.extract_keywords_from_text(text)
+
+# Get the ranked key phrases
+key_phrases = r.get_ranked_phrases()
+
+# Display the extracted key phrases
+print("Extracted Key Phrases:")
+for phrase in key_phrases:
+    print(phrase)
+
