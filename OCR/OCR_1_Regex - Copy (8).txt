@@ -5,3 +5,12 @@ Text(RoundDown((Timer1.Duration - Timer1.Value) / 1000 / 60, 0), "[$-en]General 
 ```
 
 This formula calculates the remaining minutes and seconds separately and concatenates them in the format "minutes:seconds". Adjust the control names based on your actual setup (e.g., replace "Timer1" with your Timer control's name).
+
+
+I apologize for the confusion. Let's correct the formula for displaying the countdown in "minutes:seconds." Use the following formula for the Label's Text property:
+
+```plaintext
+Text(RoundDown(Timer1.Value / 60000, 0), "[$-en]General Number") & ":" & Text(RoundDown(Mod(Timer1.Value, 60000) / 1000, 0), "[$-en]General Number")
+```
+
+This formula calculates the remaining minutes and seconds separately and concatenates them in the format "minutes:seconds". Replace "Timer1" with the actual name of your Timer control.
