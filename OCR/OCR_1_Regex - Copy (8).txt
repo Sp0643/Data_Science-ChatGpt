@@ -14,3 +14,27 @@ Text(RoundDown(Timer1.Value / 60000, 0), "[$-en]General Number") & ":" & Text(Ro
 ```
 
 This formula calculates the remaining minutes and seconds separately and concatenates them in the format "minutes:seconds". Replace "Timer1" with the actual name of your Timer control.
+
+
+Certainly! To achieve this, you'll want to filter the data based on the entered kid and display the corresponding username. Here's a basic example assuming you have a TextBox for the user to enter the kid's name and a Label to display the welcome message:
+
+1. **Insert TextBox for Kid's name:**
+   - Insert a TextBox control for the user to input the kid's name.
+
+2. **Insert Label for Welcome message:**
+   - Insert a Label control where you want to display the welcome message.
+
+3. **Set Label's Text property:**
+   - Set the `Text` property of the Label to the following formula (replace "YourDataSource" with your actual data source and "KidColumnName" and "UsernameColumnName" with the actual column names):
+   ```plaintext
+   "Welcome " & LookUp(YourDataSource, KidColumnName = TextInput1.Text, UsernameColumnName)
+   ```
+   This formula uses the `LookUp` function to find the username where the kid's name matches the input from the TextBox.
+
+4. **Handle non-matching case:**
+   - To handle the case where the kid's name doesn't match any entry, you can modify the formula to provide a default message:
+   ```plaintext
+   If(IsBlank(LookUp(YourDataSource, KidColumnName = TextInput1.Text, UsernameColumnName)), "Kid not found", "Welcome " & LookUp(YourDataSource, KidColumnName = TextInput1.Text, UsernameColumnName))
+   ```
+
+Remember to replace "YourDataSource," "KidColumnName," and "UsernameColumnName" with your actual data source and column names. Adjust this example based on your specific data structure and app design.
