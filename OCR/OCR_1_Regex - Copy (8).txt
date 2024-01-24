@@ -64,3 +64,30 @@ If(
 Here, `LookUp(Questions, Question = ThisItem.Question).CorrectAnswer` fetches the correct answer from the Excel table based on the current question.
 
 Make sure to replace `Questions` with the actual name of your Excel table, and adjust field names as needed. Also, set appropriate values for `PointsForCorrectAnswer` and `PointsForIncorrectAnswer`.
+
+
+
+To store the score data in a user response Excel sheet, you'll need to add a step to update or create records in your Excel file based on the user's responses. Here's a simplified example:
+
+Assuming you have a table named `UserResponses` in your Excel file with columns `UserName`, `Question`, `UserAnswer`, and `Score`, you can use the following formula after calculating the score:
+
+```plaintext
+Patch(
+    UserResponses,
+    Defaults(UserResponses),
+    {
+        UserName: User().FullName,  // Assuming you want to store the user's name
+        Question: ThisItem.Question,
+        UserAnswer: ThisItem.UserAnswer,
+        Score: If(
+            ThisItem.UserAnswer = LookUp(Questions, Question = ThisItem.Question).CorrectAnswer,
+            PointsForCorrectAnswer,
+            PointsForIncorrectAnswer
+        )
+    }
+)
+```
+
+This `Patch` function creates a new record in the `UserResponses` table, or updates an existing record if a record with the same `UserName` and `Question` already exists. Replace `UserResponses` with the actual name of your Excel table, and adjust field names as needed.
+
+Make sure to include this formula in the appropriate place in your app where you are processing the user's responses.
