@@ -149,4 +149,44 @@ Sure, it sounds like you have a comprehensive plan for creating a dashboard in y
    )
    ```
 
-These formulas are simplified examples, and you might need to adapt them based on your actual data structure and requirements. Ensure that you replace table and column names with your real data sources, and adjust any constants like `PassPercentage` based on your specific scenario. If you encounter any specific challenges while implementing these, feel free to ask for more guidance!
+These formulas are simplified examples, and you might need to adapt them based on your actual data structure and requirements. Ensure that you replace table and column names with your real data sources, and adjust any constants like `PassPercentage` based on your specific scenario. If you encounter any specific challenges while implementing these, feel free to ask for more guidance
+
+
+
+Understood, it seems you want to aggregate data based on unique identifiers like the `KID`. For scenarios where a user may have multiple rows in your data source (one row per question attempted), and you want to perform calculations on a per-user basis, you can use the `GroupBy` function in Power Apps.
+
+**1. Calculate Total Score per User (KID):**
+Assuming your response Excel sheet has columns `KID` and `Score`, you can sum up the scores per user:
+
+```plaintext
+ClearCollect(
+    UserScores,
+    AddColumns(
+        GroupBy(QuizResponses, "KID", "UserSummary"),
+        "TotalScore",
+        Sum(UserSummary, Score)
+    )
+)
+```
+
+Now, `UserScores` collection will contain each unique `KID` with its corresponding total score.
+
+**2. Count Attempts per User (KID):**
+Assuming you want to count the number of attempts per user:
+
+```plaintext
+ClearCollect(
+    UserAttempts,
+    AddColumns(
+        GroupBy(QuizResponses, "KID", "UserSummary"),
+        "Attempts",
+        CountRows(UserSummary)
+    )
+)
+```
+
+Now, `UserAttempts` collection will contain each unique `KID` with the number of attempts.
+
+You can then use these collections to display the relevant information on your dashboard. Adjust the column names and collections as needed based on your actual data structure.
+
+Remember, these formulas assume a basic structure, and you may need to adapt them based on your specific scenario. If you encounter any issues or need further clarification, feel free to ask!
