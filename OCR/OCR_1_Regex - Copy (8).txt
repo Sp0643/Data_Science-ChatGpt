@@ -91,3 +91,62 @@ Patch(
 This `Patch` function creates a new record in the `UserResponses` table, or updates an existing record if a record with the same `UserName` and `Question` already exists. Replace `UserResponses` with the actual name of your Excel table, and adjust field names as needed.
 
 Make sure to include this formula in the appropriate place in your app where you are processing the user's responses..
+
+
+Sure, it sounds like you have a comprehensive plan for creating a dashboard in your PowerApp to track user performance in the quiz. Here's a step-by-step guide along with relevant formulas for each component of your dashboard:
+
+**1. Attempt Rate:**
+   - To calculate the attempt rate, count the number of users who have submitted the test compared to the total number of users.
+
+   ```plaintext
+   CountRows(SubmittedUsers) / CountRows(AllUsers)
+   ```
+
+**2. Total Score for Each User:**
+   - Assuming you have a column named `Score` in your response Excel sheet and `KID` is the unique identifier:
+
+   ```plaintext
+   Sum(Filter(QuizResponses, KID = "K058224"), Score)
+   ```
+
+**3. Pass Percentage:**
+   - Assuming you have a pass percentage of 80%, count the number of users who scored above this percentage.
+
+   ```plaintext
+   CountRows(Filter(SubmittedUsers, TotalScore >= (TotalQuestions * PassPercentage)))
+   ```
+
+**4. Comparison to Others:**
+   - You can use the `Rank` function to rank users based on their scores and then compare their rank with others.
+
+   ```plaintext
+   Rank(CurrentUser.Score, AllUsers.Score)
+   ```
+
+**5. Team-Wise Average Score:**
+   - Assuming you have a column named `Team` in your user data, you can calculate the average score for each team.
+
+   ```plaintext
+   ClearCollect(
+      TeamScores,
+      AddColumns(
+         GroupBy(SubmittedUsers, "Team", "TeamSummary"),
+         "AverageScore",
+         Average(TeamSummary.Score)
+      )
+   )
+   ```
+
+**6. Team-Wise Pass Percentage:**
+   - Similar to the pass percentage calculation, count the number of users in each team who passed.
+
+   ```plaintext
+   CountRows(
+      Filter(
+         TeamScores,
+         AverageScore >= (TotalQuestions * PassPercentage)
+      )
+   )
+   ```
+
+These formulas are simplified examples, and you might need to adapt them based on your actual data structure and requirements. Ensure that you replace table and column names with your real data sources, and adjust any constants like `PassPercentage` based on your specific scenario. If you encounter any specific challenges while implementing these, feel free to ask for more guidance!
