@@ -38,3 +38,29 @@ Certainly! To achieve this, you'll want to filter the data based on the entered 
    ```
 
 Remember to replace "YourDataSource," "KidColumnName," and "UsernameColumnName" with your actual data source and column names. Adjust this example based on your specific data structure and app design.
+
+
+
+Certainly, if the correct answers are coming from an Excel file, you'll need to fetch those correct answers dynamically. Assuming you have a table named `Questions` in your Excel file with columns `Question`, `CorrectAnswer`, and `UserAnswer` in Power Apps, you can modify the formulas like this:
+
+**MCQ (Multiple Choice Questions) Score Formula:**
+```plaintext
+If(
+    ThisItem.UserAnswer = LookUp(Questions, Question = ThisItem.Question).CorrectAnswer,
+    PointsForCorrectAnswer,
+    PointsForIncorrectAnswer
+)
+```
+
+**Boolean Score Formula:**
+```plaintext
+If(
+    ThisItem.UserAnswer = LookUp(Questions, Question = ThisItem.Question).CorrectAnswer,
+    PointsForCorrectAnswer,
+    PointsForIncorrectAnswer
+)
+```
+
+Here, `LookUp(Questions, Question = ThisItem.Question).CorrectAnswer` fetches the correct answer from the Excel table based on the current question.
+
+Make sure to replace `Questions` with the actual name of your Excel table, and adjust field names as needed. Also, set appropriate values for `PointsForCorrectAnswer` and `PointsForIncorrectAnswer`.
