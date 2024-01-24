@@ -90,4 +90,4 @@ Patch(
 
 This `Patch` function creates a new record in the `UserResponses` table, or updates an existing record if a record with the same `UserName` and `Question` already exists. Replace `UserResponses` with the actual name of your Excel table, and adjust field names as needed.
 
-Make sure to include this formula in the appropriate place in your app where you are processing the user's responses.
+Make sure to include this formula in the appropriate place in your app where you are processing the user's responses..
