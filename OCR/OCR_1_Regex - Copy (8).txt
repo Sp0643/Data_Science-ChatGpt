@@ -258,3 +258,28 @@ Certainly, let's address the additional requirements:
 Make sure to replace `UserScores`, `QuizResponses`, `KID`, `TeamName`, `Dropdown`, and other variable or column names with your actual data sources and elements. Adjust the logic based on the structure of your app and data.
 
 Feel free to ask for further clarification or assistance if needed!
+
+
+Certainly! If you want to create a single collection with two columns - one for the count of users who have attempted the quiz and another for the total number of users, you can use the following formulas:
+
+```plaintext
+ClearCollect(
+    QuizStatsCollection,
+    {
+        "UserAttempted": CountRows(Distinct(QuizResponses, KID)),
+        "TotalUsers": CountRows(UserData)
+    }
+)
+```
+
+In this formula:
+- `CountRows(Distinct(QuizResponses, KID))` calculates the count of unique users who have attempted the quiz.
+- `CountRows(UserData)` calculates the total count of users in your `UserData` table.
+
+This formula creates a collection named `QuizStatsCollection` with two columns:
+- "UserAttempted": Count of users who have attempted the quiz.
+- "TotalUsers": Total count of users.
+
+You can then use this `QuizStatsCollection` in your app for various purposes, including displaying the attempt rate and total user count.
+
+Feel free to adjust the table and column names based on your actual data structure. If you have more questions or need further clarification, feel free to ask!
