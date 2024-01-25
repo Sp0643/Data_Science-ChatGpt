@@ -227,3 +227,34 @@ I apologize for any confusion. It seems there might be a misunderstanding. In Po
 ```
 
 Ensure that there are no spaces after `Char(10)` and that the formula is correctly structured within the `Text` property of the label control. If you encounter further issues or have additional details to provide, feel free to share them for more precise assistance.
+
+
+
+Certainly, let's address the additional requirements:
+
+### 1. **Count of Users who have Attempted the Quiz:**
+   - **Formula:**
+     ```plaintext
+     UsersAttempted = CountRows(
+         Distinct(QuizResponses, KID)
+     )
+     ```
+
+   This formula counts the distinct number of users who have submitted quiz responses.
+
+### 2. **Filter by Team:**
+   - **Formula (Assuming you're using a dropdown for team selection):**
+     ```plaintext
+     OnSelect (of Team Dropdown):
+         ClearCollect(
+             FilteredUserScores,
+             Filter(UserScores, TeamName = Dropdown.Selected.Value)
+         )
+     ```
+
+   - **Usage:**
+     - Use `FilteredUserScores` collection in your charts and data visualizations instead of `UserScores`. This will ensure that the charts update based on the selected team.
+
+Make sure to replace `UserScores`, `QuizResponses`, `KID`, `TeamName`, `Dropdown`, and other variable or column names with your actual data sources and elements. Adjust the logic based on the structure of your app and data.
+
+Feel free to ask for further clarification or assistance if needed!
