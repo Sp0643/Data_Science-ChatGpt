@@ -350,3 +350,43 @@ In this modified formula:
 Now, the `UserScores` collection includes columns for Kid, total score, max score (number of rows), and the percentage of marks for each user.
 
 Adjust the column names based on your actual data structure. If you have more questions or need further clarification, feel free to ask!
+
+
+In Power Apps, currently, there is no built-in chart control that supports adding a benchmark line directly. However, you can create a workaround using a combination of controls to mimic a benchmark line in a line chart. Here's a step-by-step guide:
+
+1. **Create a Line Chart:**
+   - Add a Line Chart control to your Power App.
+
+2. **Add a Line Series:**
+   - Configure the Line Chart with your data series.
+
+3. **Create a Benchmark Line:**
+   - You can use a combination of controls like rectangles or labels to create a visual representation of the benchmark line. For example, if your line chart is based on the X-axis values (time, categories), you might add a rectangle control and set its width to represent the entire X-axis range.
+
+4. **Position the Benchmark Line:**
+   - Adjust the position of the rectangle to align it with the benchmark value on the Y-axis.
+
+5. **Adjust Styling:**
+   - Customize the appearance of the rectangle to make it look like a benchmark line. You can adjust the color, transparency, and other properties to match the overall style of your chart.
+
+Here's a simplified example using a rectangle control:
+
+```plaintext
+// Assuming your line chart is based on time (X-axis) and values (Y-axis)
+// Set the width of the rectangle to represent the entire X-axis range
+Set(BenchmarkWidth, YourMaxXAxisValue - YourMinXAxisValue);
+
+// Set the Y-axis value for the benchmark line
+Set(BenchmarkYValue, YourBenchmarkValue);
+
+// Add a rectangle control to represent the benchmark line
+Rectangle(
+    X: YourMinXAxisValue,
+    Y: BenchmarkYValue - 2, // Adjust to position the line appropriately
+    Width: BenchmarkWidth,
+    Height: 4, // Adjust for line thickness
+    Fill: RGBA(255, 0, 0, 0.5) // Adjust color and transparency
+)
+```
+
+Adjust the values in the example based on your specific scenario. This approach allows you to visually represent a benchmark line alongside your line chart. Keep in mind that this is a workaround, and it may not provide the same level of interactivity as a native benchmark line in some dedicated chart controls.
