@@ -312,3 +312,41 @@ In this formula:
 Now, you have a collection (`PassingCriteriaCollection`) with a column "PassingCriteria" containing the calculated passing criteria for each user.
 
 Adjust the table and column names based on your actual data structure. If you have more questions or need further clarification, feel free to ask!
+
+
+
+Certainly! You can modify your formula as follows to add a column for "MaxScore" (number of rows) and another column for "PercentageOfMarks":
+
+```plaintext
+ClearCollect(
+    UserScores,
+    AddColumns(
+        GroupBy(
+            QuzAns,
+            "Kid",
+            "UserSummary"
+        ),
+        "TotalScore",
+        Sum(
+            UserSummary,
+            Score
+        ),
+        "MaxScore",
+        CountRows(UserSummary),
+        "PercentageOfMarks",
+        If(
+            CountRows(UserSummary) > 0,
+            Sum(UserSummary, Score) / CountRows(UserSummary),
+            0
+        )
+    )
+)
+```
+
+In this modified formula:
+- "MaxScore" is added as the count of rows in the `UserSummary` group (the number of rows for each Kid).
+- "PercentageOfMarks" calculates the percentage of marks for each Kid based on the total score and the number of rows.
+
+Now, the `UserScores` collection includes columns for Kid, total score, max score (number of rows), and the percentage of marks for each user.
+
+Adjust the column names based on your actual data structure. If you have more questions or need further clarification, feel free to ask!
