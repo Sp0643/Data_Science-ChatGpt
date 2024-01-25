@@ -190,3 +190,31 @@ Now, `UserAttempts` collection will contain each unique `KID` with the number of
 You can then use these collections to display the relevant information on your dashboard. Adjust the column names and collections as needed based on your actual data structure.
 
 Remember, these formulas assume a basic structure, and you may need to adapt them based on your specific scenario. If you encounter any issues or need further clarification, feel free to ask!
+
+
+
+In Power Apps, you can use the "Label" control to display text, and you can format the text to include bullet points. Here's a brief example:
+
+1. **Insert a Label Control:**
+   - Go to the screen where you want to display bullet points.
+   - Insert a "Label" control from the Power Apps ribbon.
+
+2. **Set Text Property:**
+   - Set the `Text` property of the label control to include bullet points. For example:
+
+     ```plaintext
+     "• Item 1" & Char(10) & "• Item 2" & Char(10) & "  • Subitem 2.1" & Char(10) & "  • Subitem 2.2" & Char(10) & "• Item 3"
+     ```
+
+     Here, `Char(10)` represents a line break to separate each bullet point.
+
+3. **Format Text:**
+   - Use the formatting options in the Power Apps ribbon to adjust font size, color, or other styling as needed.
+
+4. **Adjust Control Properties:**
+   - Configure other properties of the label control, such as size, alignment, and visibility.
+
+5. **Save and Preview:**
+   - Save your changes and preview the app to see the label with bullet points.
+
+This example assumes you're manually entering the bullet points. If your bullet points come from a data source, you would use a different approach to bind the data to the label control. Adjust the formula and formatting based on your specific requirements.
