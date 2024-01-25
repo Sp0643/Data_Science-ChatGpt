@@ -283,3 +283,32 @@ This formula creates a collection named `QuizStatsCollection` with two columns:
 You can then use this `QuizStatsCollection` in your app for various purposes, including displaying the attempt rate and total user count.
 
 Feel free to adjust the table and column names based on your actual data structure. If you have more questions or need further clarification, feel free to ask!
+
+
+Certainly! If you want to create a collection that includes the passing criteria for each user, you can use the following formula:
+
+```plaintext
+ClearCollect(
+    PassingCriteriaCollection,
+    AddColumns(
+        QuizResponses,
+        "PassingCriteria",
+        If(
+            TotalQuestions > 0,
+            Sum(QuestionData, Score) / TotalQuestions,
+            0
+        )
+    )
+)
+```
+
+In this formula:
+- `PassingCriteriaCollection` is the name of the collection being created.
+- `AddColumns` adds a new column named "PassingCriteria" to the `QuizResponses` collection.
+- The `If` statement checks if `TotalQuestions` is greater than 0 to avoid division by zero.
+- `Sum(QuestionData, Score)` calculates the total score achieved by a specific user.
+- `TotalQuestions` represents the total number of questions in the quiz.
+
+Now, you have a collection (`PassingCriteriaCollection`) with a column "PassingCriteria" containing the calculated passing criteria for each user.
+
+Adjust the table and column names based on your actual data structure. If you have more questions or need further clarification, feel free to ask!
