@@ -390,3 +390,15 @@ Rectangle(
 ```
 
 Adjust the values in the example based on your specific scenario. This approach allows you to visually represent a benchmark line alongside your line chart. Keep in mind that this is a workaround, and it may not provide the same level of interactivity as a native benchmark line in some dedicated chart controls.
+
+
+
+Which document requires WF Authorization signature mandatorily to satisfy the tickler?
+
+A) Loan Agreement
+
+B) Closing Instruction
+
+C) Subordination Lease Agreement
+
+D) SNDA with Lender Signature Line
