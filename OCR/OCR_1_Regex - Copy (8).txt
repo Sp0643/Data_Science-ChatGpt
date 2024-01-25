@@ -402,3 +402,15 @@ B) Closing Instruction
 C) Subordination Lease Agreement
 
 D) SNDA with Lender Signature Line
+
+
+
+What are the validation points for a Vehicle Title document?
+
+A) Verify vehicle ownership
+
+B) Check for the original lien for the state
+
+C) Confirm grantor name consistency with TCM
+
+D) Validate VIN, Year, make, and model consistency with TCM
