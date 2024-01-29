@@ -414,3 +414,31 @@ B) Check for the original lien for the state
 C) Confirm grantor name consistency with TCM
 
 D) Validate VIN, Year, make, and model consistency with TCM
+
+
+
+
+
+If you already have a Timer control on your screen and you want to capture its information, you can utilize its properties directly to capture the timing information. Here's how you can do it:
+
+1. **Capture Start Time:**
+   - When the user starts the quiz or when they navigate to the quiz screen, capture the start time using a variable:
+     ```plaintext
+     Set(startTime, Timer1.Start)
+     ```
+
+   - Replace "Timer1" with the name of your Timer control.
+
+2. **Capture End Time and Calculate Elapsed Time:**
+   - When the user submits the quiz or finishes the quiz, capture the end time using another variable and calculate the elapsed time:
+     ```plaintext
+     Set(endTime, Timer1.Value)
+     Set(elapsedTime, endTime - startTime)
+     ```
+
+3. **Save Timing Information:**
+   - Save the timing information (elapsed time) along with the user's responses to your data source. Follow the saving process as mentioned in the previous response.
+
+In this approach, you are using the Timer control's Start and Value properties to capture the start time and end time, respectively. Make sure your app's logic triggers the timing capturing process appropriately based on the quiz's start and end events.
+
+Adjust the code and logic based on your app's specific requirements and structure.
