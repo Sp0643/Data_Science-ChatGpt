@@ -442,3 +442,32 @@ If you already have a Timer control on your screen and you want to capture its i
 In this approach, you are using the Timer control's Start and Value properties to capture the start time and end time, respectively. Make sure your app's logic triggers the timing capturing process appropriately based on the quiz's start and end events.
 
 Adjust the code and logic based on your app's specific requirements and structure.
+
+
+
+It seems like you're using PowerApps or a similar platform to manipulate data. To adjust your formula to calculate `MaxScore` and `PercentageOfMarks` for each team, you need to modify the aggregation logic within the formula. Here's a revised version of your formula:
+
+```plaintext
+ClearCollect(
+    UserScores,
+    AddColumns(
+        GroupBy(
+            QuzAns,
+            "Team",
+            "UserSummary",
+            "TotalScore", Sum(UserSummary, Score),
+            "TimeTaken", Average(UserSummary, Time),
+            "MaxScore", Sum(UserSummary, Score), // Sum of scores for each team
+            "CountQuestions", CountRows(UserSummary), // Count of questions for each team
+            "PercentageOfMarks", If(CountRows(UserSummary) > 0, Sum(UserSummary, Score) / CountRows(UserSummary), 0) // Calculate percentage for each team
+        ),
+        "ColumnChart2"
+    )
+);
+```
+
+In this modified formula:
+
+- We're using `Sum(UserSummary, Score)` to calculate the total score for each team (`MaxScore`).
+- We're counting the number of questions (`CountQuestions`) for each team using `CountRows(UserSummary)`.
+- The `PercentageOfMarks` is calculated as the sum of scores divided by the count of questions for each team, ensuring it's specific to each team's performance.
