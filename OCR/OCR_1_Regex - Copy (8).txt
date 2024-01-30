@@ -471,3 +471,28 @@ In this modified formula:
 - We're using `Sum(UserSummary, Score)` to calculate the total score for each team (`MaxScore`).
 - We're counting the number of questions (`CountQuestions`) for each team using `CountRows(UserSummary)`.
 - The `PercentageOfMarks` is calculated as the sum of scores divided by the count of questions for each team, ensuring it's specific to each team's performance.
+
+
+
+It seems there might be a syntax error or inconsistency in the formula you provided. Here's a revised version with corrections:
+
+```plaintext
+ClearCollect(
+    UserScores,
+    AddColumns(
+        GroupBy(
+            QuzAns,
+            "Team",
+            "UserSummary",
+            "TotalScore", Sum(UserSummary, Score),
+            "TimeTaken", Average(UserSummary, Time),
+            "MaxScore", Sum(UserSummary, Score), // Sum of scores for each team
+            "CountQuestions", CountRows(UserSummary), // Count of questions for each team
+            "PercentageOfMarks", If(CountRows(UserSummary) > 0, Sum(UserSummary, Score) / CountRows(UserSummary), 0) // Calculate percentage for each team
+        ),
+        "ColumnChart2" // This seems to be a placeholder for chart formatting or visualization
+    )
+);
+```
+
+Please ensure that all commas, parentheses, and function names are correctly placed according to the syntax rules of the platform you are using, such as PowerApps. Also, make sure that the fields and functions used in the formula are properly defined and available within your data context. If you encounter a specific error message, it would be helpful to know the details to provide more targeted assistance.
