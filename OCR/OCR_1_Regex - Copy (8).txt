@@ -496,3 +496,50 @@ ClearCollect(
 ```
 
 Please ensure that all commas, parentheses, and function names are correctly placed according to the syntax rules of the platform you are using, such as PowerApps. Also, make sure that the fields and functions used in the formula are properly defined and available within your data context. If you encounter a specific error message, it would be helpful to know the details to provide more targeted assistance.
+
+
+
+
+
+Certainly! Below is a sample code that you can use in Power Apps to achieve this functionality:
+
+```plaintext
+// Assuming you have a collection named 'UserScores' containing user scores
+// and a button named 'btnBenchmark' to display the count of users above and below the benchmark.
+
+// OnSelect event of the 'btnBenchmark' button
+ClearCollect(
+    UsersAboveBenchmark,
+    Filter(
+        UserScores,
+        Score > 75
+    )
+);
+
+ClearCollect(
+    UsersBelowBenchmark,
+    Filter(
+        UserScores,
+        Score <= 75
+    )
+);
+
+UpdateContext({ 
+    CountAboveBenchmark: CountRows(UsersAboveBenchmark),
+    CountBelowBenchmark: CountRows(UsersBelowBenchmark)
+});
+
+// Update the button text to display the counts
+UpdateContext({ 
+    ButtonText: "Users Above Benchmark: " & CountAboveBenchmark & ", Users Below Benchmark: " & CountBelowBenchmark
+})
+```
+
+In this code:
+
+- We assume there is a collection named 'UserScores' containing user scores.
+- We use the ClearCollect function to filter users who scored above 75% into a collection named 'UsersAboveBenchmark' and those who scored at or below 75% into a collection named 'UsersBelowBenchmark'.
+- We then use the UpdateContext function to update the context variables CountAboveBenchmark and CountBelowBenchmark to store the counts of users above and below the benchmark, respectively.
+- Finally, we update the button text using the UpdateContext function to display the counts in the desired format.
+
+You can place this code in the OnSelect property of your button named 'btnBenchmark'. Make sure to adjust the collection name and score field name according to your app's data structure.
