@@ -543,3 +543,62 @@ In this code:
 - Finally, we update the button text using the UpdateContext function to display the counts in the desired format.
 
 You can place this code in the OnSelect property of your button named 'btnBenchmark'. Make sure to adjust the collection name and score field name according to your app's data structure.
+
+
+
+To calculate the maximum score for each team based on the total number of questions in each respective team, you need to count the total number of questions for each team. Then, you can adjust the calculation of the maximum score accordingly.
+
+Here's how you can modify the formula:
+
+```plaintext
+ClearCollect(
+    UserScores,
+    AddColumns(
+        GroupBy(
+            QuzAns,
+            "Team",
+            "Kid",
+            "UserSummary"
+        ),
+        "TotalScore",
+        Sum(
+            UserSummary,
+            Score
+        ),
+        "TimeTaken",
+        Average(
+            UserSummary,
+            Time
+        ),
+        "MaxScore",
+        Max(
+            GroupBy(
+                QuzAns,
+                "Team",
+                "Kid",
+                "UserSummary"
+            ),
+            Sum(
+                UserSummary,
+                Score
+            )
+        ) / Sum(
+            Filter(
+                QuzAns,
+                Team = [Team]
+            ),
+            Score
+        ), // Dividing by the total score of questions in the team
+        "PercentageOfMarks",
+        If(
+            IsBlank(
+                [MaxScore]
+            ),
+            0,
+            [TotalScore] / [MaxScore]
+        )
+    )
+)
+```
+
+In this modified formula, we divide the sum of scores for each team by the total score of questions in that team. This adjustment ensures that the maximum score reflects the performance of each user within the team, considering the total number of questions in the team.
