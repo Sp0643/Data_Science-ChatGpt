@@ -640,3 +640,36 @@ In this formula:
 - `Max(UserSummary, CountRows(Kid))`: Finds the maximum count of unique kids in each team. `UserSummary` is the grouped data, and `CountRows(Kid)` counts the number of unique kids in each group (team).
 
 This will add a new column named "UsersInTeam" to your collection, showing the maximum number of users in each team. Make sure to replace "ExistingCollection" with the name of your existing collection variable.
+
+
+
+
+To join data from two tables in Power Apps, you typically use functions like `AddColumns`, `LookUp`, or `Filter` to combine data from one table with data from another based on common keys or conditions. Here's a basic example using the `AddColumns` function to join two tables:
+
+```plaintext
+ClearCollect(
+    JoinedData,
+    AddColumns(
+        Table1,
+        "JoinedColumn",
+        LookUp(
+            Table2,
+            KeyColumnInTable2 = KeyColumnInTable1,
+            ValueColumnInTable2
+        )
+    )
+)
+```
+
+Let's break down the example:
+
+- `ClearCollect`: Initializes a new collection named `JoinedData`.
+- `AddColumns`: Adds a new column to `Table1` by looking up data from `Table2`.
+- `LookUp`: Finds a matching record in `Table2` based on a common key (`KeyColumnInTable2`) and the key in `Table1` (`KeyColumnInTable1`).
+- `ValueColumnInTable2`: Represents the column in `Table2` whose value you want to include in `Table1` based on the lookup.
+
+Replace `Table1`, `Table2`, `KeyColumnInTable2`, `KeyColumnInTable1`, and `ValueColumnInTable2` with the actual names of your tables and columns.
+
+Alternatively, you can use other functions like `Filter` or `LookUp` with conditions to join the data based on specific criteria.
+
+Ensure that the columns you are using for the join have compatible data types and that the data structure aligns with your requirements. Adjust the formula based on your specific data and join conditions.
