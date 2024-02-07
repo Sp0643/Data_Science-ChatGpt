@@ -707,3 +707,32 @@ In the above code:
 - `User().Email` retrieves the current user's email address or any other unique identifier. You should replace it with the appropriate identifier based on your app's authentication method.
 
 Ensure that you replace placeholders with actual column names and data source names according to your Power App setup. Additionally, adjust the logic based on your specific requirements and data structure.
+
+
+
+To display the error message in a pop-up dialog box, you can use the `Set` function in Power Apps to set a variable indicating the error message, and then use the `Notify` function to display the error message as a pop-up. Here's how you can modify the code to show the error in a pop-up:
+
+```powerapps
+// OnStart property of the quiz screen
+// Check if the current user identity exists in the Excel sheet
+If(
+    CountIf(ExcelDataSource, UsernameColumn = User().Email) > 0, // Replace User().Email with the appropriate user identifier
+    Set(ShowError, true), // Set a variable to indicate that an error occurred
+    Navigate(QuizScreen, ScreenTransition.None) // Proceed to the quiz screen if the user is new
+)
+
+// OnVisible property of the quiz screen or wherever you want to display the pop-up
+If(ShowError,
+    Notify("You have already taken the quiz.", NotificationType.Error),
+    // Reset the variable after showing the error
+    Set(ShowError, false)
+)
+```
+
+In this modified code:
+- We introduce a variable called `ShowError` to indicate whether an error occurred.
+- If the user is a repeat user, we set `ShowError` to `true`.
+- When the quiz screen becomes visible, it checks if `ShowError` is `true`, and if so, it displays the error message as a pop-up using the `Notify` function.
+- After showing the error, we reset the `ShowError` variable to `false` to ensure that the pop-up doesn't appear repeatedly.
+
+Make sure to place the second block of code where you want to display the pop-up, such as in the `OnVisible` property of the quiz screen. Adjust the message and error handling according to your app's requirements.
