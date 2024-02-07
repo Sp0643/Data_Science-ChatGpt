@@ -673,3 +673,37 @@ Replace `Table1`, `Table2`, `KeyColumnInTable2`, `KeyColumnInTable1`, and `Value
 Alternatively, you can use other functions like `Filter` or `LookUp` with conditions to join the data based on specific criteria.
 
 Ensure that the columns you are using for the join have compatible data types and that the data structure aligns with your requirements. Adjust the formula based on your specific data and join conditions.
+
+
+
+
+To prevent repeat users from taking the quiz again, you can implement a simple check in your Power App before allowing them to proceed. Here's a basic outline of how you can do it:
+
+1. **Set up your Excel sheet**: Ensure that your Excel sheet contains a column to store user identities or usernames.
+
+2. **Design your Power App**:
+   - Create a screen for user registration or login.
+   - Create a screen for the quiz.
+
+3. **Add logic to check for repeat users**:
+   - When a user tries to start the quiz, check if their identity already exists in the Excel sheet.
+   - If the identity exists, block them from taking the quiz again. Otherwise, allow them to proceed.
+
+Here's a simplified example of how you can implement this logic in your Power App:
+
+```powerapps
+// OnStart property of the quiz screen
+// Check if the current user identity exists in the Excel sheet
+If(
+    CountIf(ExcelDataSource, UsernameColumn = User().Email) > 0, // Replace User().Email with the appropriate user identifier
+    Notify("You have already taken the quiz.", NotificationType.Error), // Notify the user if they have already taken the quiz
+    Navigate(QuizScreen, ScreenTransition.None) // Proceed to the quiz screen if the user is new
+)
+```
+
+In the above code:
+- `ExcelDataSource` represents the data source connected to your Excel sheet.
+- `UsernameColumn` is the column in your Excel sheet that stores user identities or usernames.
+- `User().Email` retrieves the current user's email address or any other unique identifier. You should replace it with the appropriate identifier based on your app's authentication method.
+
+Ensure that you replace placeholders with actual column names and data source names according to your Power App setup. Additionally, adjust the logic based on your specific requirements and data structure.
