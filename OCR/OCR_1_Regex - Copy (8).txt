@@ -736,3 +736,37 @@ In this modified code:
 - After showing the error, we reset the `ShowError` variable to `false` to ensure that the pop-up doesn't appear repeatedly.
 
 Make sure to place the second block of code where you want to display the pop-up, such as in the `OnVisible` property of the quiz screen. Adjust the message and error handling according to your app's requirements.
+
+
+
+To implement cascading dropdowns in Power Apps, you can use the "OnChange" property of the dropdown control to trigger actions based on the selected value. Here's a basic example of how you can implement cascading dropdowns in Power Apps:
+
+1. **Create Dropdown Controls**: Add two dropdown controls to your Power Apps canvas. Let's call them `Dropdown1` and `Dropdown2`.
+
+2. **Set Items Property**: Set the Items property of `Dropdown1` to a collection or data source that contains the options for the first dropdown.
+
+3. **Set OnChange Property**: Set the OnChange property of `Dropdown1` to a formula that updates the Items property of `Dropdown2` based on the selected value of `Dropdown1`.
+
+Here's a sample formula for the OnChange property of `Dropdown1`:
+
+```plaintext
+Reset(Dropdown2);
+If(Dropdown1.Selected.Value = "Option1",
+    // Update items for Dropdown2 based on Option1
+    UpdateContext({ Dropdown2Items: ["Option1_Item1", "Option1_Item2", "Option1_Item3"] }),
+    // Update items for Dropdown2 based on Option2
+    UpdateContext({ Dropdown2Items: ["Option2_Item1", "Option2_Item2", "Option2_Item3"] })
+)
+```
+
+4. **Set Items Property of Dropdown2**: Set the Items property of `Dropdown2` to the `Dropdown2Items` context variable created in the OnChange property of `Dropdown1`.
+
+Here's how you can set the Items property of `Dropdown2`:
+
+```plaintext
+Dropdown2Items
+```
+
+This setup ensures that when a user selects an option in `Dropdown1`, `Dropdown2` is dynamically updated with the relevant options based on the selected value of `Dropdown1`.
+
+You can extend this approach to handle more than two dropdowns or add additional complexity as needed for your specific requirements. Power Apps provides flexibility in implementing cascading dropdowns and other interactive features to enhance user experience.
