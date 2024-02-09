@@ -770,3 +770,30 @@ Dropdown2Items
 This setup ensures that when a user selects an option in `Dropdown1`, `Dropdown2` is dynamically updated with the relevant options based on the selected value of `Dropdown1`.
 
 You can extend this approach to handle more than two dropdowns or add additional complexity as needed for your specific requirements. Power Apps provides flexibility in implementing cascading dropdowns and other interactive features to enhance user experience.
+
+
+
+To store the output of the formula you provided into a variable, you can use the Set function in Power Apps. Here's how you can modify the formula to store the output into a variable named `ResultVariable`:
+
+```plaintext
+Set(
+    ResultVariable,
+    Round(
+        LookUp(
+            UserAttemptedByTeam,
+            Team = Dropdown1.Selected.Value
+        ).AttemptedTeamCount / 
+        LookUp(
+            UserllyTeam,
+            Team = Dropdownl.Selected.Value
+        ).TeamCount * 100
+    )
+)
+```
+
+In this modified formula:
+- The Set function is used to assign a value to a variable.
+- `ResultVariable` is the name of the variable where the result will be stored.
+- The rest of the formula is the same as the one you provided, except it's now nested inside the Set function.
+
+After executing this formula, the value calculated by the formula will be stored in the variable `ResultVariable`, and you can use this variable elsewhere in your app as needed.
