@@ -797,3 +797,50 @@ In this modified formula:
 - The rest of the formula is the same as the one you provided, except it's now nested inside the Set function.
 
 After executing this formula, the value calculated by the formula will be stored in the variable `ResultVariable`, and you can use this variable elsewhere in your app as needed.
+
+
+
+To select random rows from Excel data input in PowerApps, you can follow these steps:
+
+1. Import your Excel data into PowerApps as a data source.
+2. Create a collection from the Excel data if needed.
+3. Use the `Rand()` function to generate random numbers for each row in your data.
+4. Sort the data based on the random numbers.
+5. Display the desired number of rows.
+
+Here's a basic example of how you can achieve this:
+
+```plaintext
+// Assuming you have imported your Excel data into a collection named 'MyData'
+
+// Step 1: Generate random numbers for each row
+ClearCollect(
+    RandomizedData,
+    AddColumns(
+        MyData,
+        "RandomNumber",
+        Rand()
+    )
+)
+
+// Step 2: Sort the data based on the random numbers
+ClearCollect(
+    RandomizedDataSorted,
+    Sort(
+        RandomizedData,
+        RandomNumber
+    )
+)
+
+// Step 3: Display the desired number of rows
+// Let's say you want to display 5 random rows
+Set(
+    NumberOfRowsToDisplay,
+    5
+)
+
+// Display the random rows in a gallery or data table
+RandomizedDataSorted // Or use this collection as the Items property of your gallery or data table
+```
+
+You can adjust the number of rows to display and customize the display of the data according to your app's requirements. This example assumes you are familiar with PowerApps and its basic functions.
