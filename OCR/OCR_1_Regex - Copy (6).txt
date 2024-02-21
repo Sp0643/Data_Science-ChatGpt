@@ -1,0 +1,19 @@
+To create a MapR ticket in Hadoop using Linux or PuTTY, you typically use the `maprlogin` command. Follow these steps:
+
+1. **Open Terminal or PuTTY**: Launch your terminal or PuTTY session where you have access to your Hadoop cluster.
+
+2. **Run maprlogin Command**: Type the following command and press Enter:
+
+    ```
+    maprlogin password -user <username>
+    ```
+
+    Replace `<username>` with your MapR username.
+
+3. **Enter Password**: After running the command, you will be prompted to enter your MapR password.
+
+4. **Generate Ticket**: Once you enter the correct password, a ticket will be generated, and you will have access to the MapR cluster.
+
+5. **Verify Ticket**: You can verify that the ticket has been generated successfully by running MapR commands or accessing MapR resources.
+
+That's it! You have successfully created a MapR ticket in Hadoop using Linux or PuTTY. Remember that the ticket has a limited lifespan, typically 24 hours, after which you may need to regenerate it.
