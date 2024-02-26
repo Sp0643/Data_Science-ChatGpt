@@ -844,3 +844,28 @@ RandomizedDataSorted // Or use this collection as the Items property of your gal
 ```
 
 You can adjust the number of rows to display and customize the display of the data according to your app's requirements. This example assumes you are familiar with PowerApps and its basic functions.
+
+
+
+
+Here's the modified formula with an additional condition:
+
+```plaintext
+If(
+    CountIf(QuzAns, Kid = TextInput1.Text) > 0,
+    Notify("You have already taken the quiz.", NotificationType.Error),
+    If(
+        CountIf(CourseFile, Kid = TextInput1.Text) > 0,
+        Navigate(InstructionPage, ScreenTransition.None),
+        Notify("Kid does not match with course file.", NotificationType.Warning)
+    )
+)
+```
+
+Let's break down the updated formula:
+
+- The outermost `If()` function checks if the count of occurrences where the Kid matches the text input in the QuzAns data source is greater than 0. If it is, it means the kid has already taken the quiz, and it shows an error notification.
+
+- If the count is not greater than 0, it goes to the next `If()` function.
+
+- In the inner `If()` function, it checks if the count of occurrences where the Kid matches the text input in the CourseFile data source is greater than 0. If it is, it means
