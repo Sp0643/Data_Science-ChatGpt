@@ -84,3 +84,46 @@ Explanation:
 - We sort the documents based on their association with the topic and print out the top documents along with their IDs and scores.
 
 You may need to adjust the parameters like the number of topics (`num_topics`) and the number of top documents to retrieve (`num_top_documents`) based on your specific requirements and the characteristics of your data.
+
+
+
+To save the results of the LDA model, including the document IDs, scores, and the actual document text, into an Excel file, you can use the `pandas` library. Here's how you can modify the previous code to save the results into an Excel file:
+
+```python
+import pandas as pd
+from gensim import models
+from gensim.utils import simple_preprocess
+
+# Assuming you have already created the dictionary and corpus
+# dictionary and corpus creation steps are not shown here, assuming they are already created
+
+# Train the LDA model
+lda_model = models.LdaModel(corpus, num_topics=10, id2word=dictionary, passes=15)
+
+# Get the top documents for each topic
+num_top_documents = 10  # You can adjust the number of top documents you want to retrieve for each topic
+
+# Create an empty list to store the results
+results = []
+
+for topic_id in range(lda_model.num_topics):
+    topic_documents = []
+    for index, score in lda_model.get_topic_terms(topic_id):
+        topic_documents.extend(lda_model.get_document_topics(corpus[index], minimum_probability=0.0))
+    sorted_documents = sorted(topic_documents, key=lambda x: x[1], reverse=True)[:num_top_documents]
+    for doc_id, score in sorted_documents:
+        document_text = ' '.join(processed_text[doc_id])  # Joining the tokenized text into a single string
+        results.append([topic_id, doc_id, score, document_text])
+
+# Convert results to a DataFrame
+df = pd.DataFrame(results, columns=['Topic ID', 'Document ID', 'Score', 'Document Text'])
+
+# Save DataFrame to Excel
+excel_file_output = 'lda_results.xlsx'
+df.to_excel(excel_file_output, index=False)
+print(f"Results saved to {excel_file_output}")
+```
+
+This code iterates over each topic, retrieves the top documents associated with that topic, and then stores the results in a list. After processing all topics, it converts the list into a pandas DataFrame and saves it to an Excel file using the `to_excel()` method.
+
+Make sure to adjust the file paths and filenames according to your needs. This code will create an Excel file named 'lda_results.xlsx' containing the results of the LDA model.
