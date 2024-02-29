@@ -41,3 +41,46 @@ This function takes a piece of text as input and performs the following preproce
 5. Stemming: Reduce words to their root form using stemming (Porter Stemmer in this case).
 
 You need to make sure to have NLTK installed and also download necessary NLTK resources by running `nltk.download('punkt')` and `nltk.download('stopwords')` before using this code if you haven't done so already.
+
+
+
+
+# LDA TOPIC WISE FULL CORPUS 
+
+
+To get the full corpus of each individual LDA (Latent Dirichlet Allocation) topic, you need to extract the documents that are most strongly associated with each topic. Here's how you can do it using Gensim's LDA model:
+
+```python
+from gensim import models
+from gensim.utils import simple_preprocess
+
+# Assuming you have already created the dictionary and corpus
+# dictionary and corpus creation steps are not shown here, assuming they are already created
+
+# Train the LDA model
+lda_model = models.LdaModel(corpus, num_topics=10, id2word=dictionary, passes=15)
+
+# Get the top documents for each topic
+num_top_documents = 10  # You can adjust the number of top documents you want to retrieve for each topic
+
+for topic_id in range(lda_model.num_topics):
+    print(f"Topic {topic_id}:")
+    topic_documents = []
+    for index, score in lda_model.get_topic_terms(topic_id):
+        topic_documents.extend(lda_model.get_document_topics(corpus[index], minimum_probability=0.0))
+    sorted_documents = sorted(topic_documents, key=lambda x: x[1], reverse=True)[:num_top_documents]
+    for doc_id, score in sorted_documents:
+        print(f"Document ID: {doc_id}, Score: {score}")
+        print(processed_text[doc_id])  # print the actual document text from the processed_text list
+        print()
+    print("----------")
+```
+
+Explanation:
+
+- We train an LDA model using `models.LdaModel()`.
+- We loop through each topic and retrieve the top documents associated with that topic by first getting the topic terms and then retrieving documents that are associated with those terms.
+- The `get_document_topics()` method retrieves the topic distribution for a given document.
+- We sort the documents based on their association with the topic and print out the top documents along with their IDs and scores.
+
+You may need to adjust the parameters like the number of topics (`num_topics`) and the number of top documents to retrieve (`num_top_documents`) based on your specific requirements and the characteristics of your data.
