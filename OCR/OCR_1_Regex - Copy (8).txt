@@ -869,3 +869,36 @@ Let's break down the updated formula:
 - If the count is not greater than 0, it goes to the next `If()` function.
 
 - In the inner `If()` function, it checks if the count of occurrences where the Kid matches the text input in the CourseFile data source is greater than 0. If it is, it means
+
+
+
+To save only those inputs that have some value and skip saving empty or null values, you can add a condition to your Patch function or SubmitForm function. Here's how you can modify the formula to achieve this:
+
+```plaintext
+ForAll(
+    Gallery1.AllItems,
+    If(
+        !IsBlank(TextInput_Question.Text) && !IsBlank(TextInput_Option1.Text) && !IsBlank(TextInput_Option2.Text) && !IsBlank(TextInput_Option3.Text) && !IsBlank(TextInput_Option4.Text) && !IsBlank(Dropdown_CorrectAnswer.Selected.Value),
+        Patch(
+            'Your_Table_Name',
+            Defaults('Your_Table_Name'),
+            {
+                Question: TextInput_Question.Text,
+                Option1: TextInput_Option1.Text,
+                Option2: TextInput_Option2.Text,
+                Option3: TextInput_Option3.Text,
+                Option4: TextInput_Option4.Text,
+                CorrectAnswer: Dropdown_CorrectAnswer.Selected.Value
+            }
+        )
+    )
+)
+```
+
+In this updated formula:
+
+- `!IsBlank()` checks if the input controls have a value.
+- The Patch function is executed only if all the input controls (`TextInput_Question`, `TextInput_Option1` to `TextInput_Option4`, and `Dropdown_CorrectAnswer`) have non-empty values.
+- If any of the input controls are empty, the Patch function won't be executed for that particular item in the gallery.
+
+This way, only those inputs with values will be saved into your Dataverse table, and empty inputs will be skipped. Adjust the conditions as per your specific requirements and the structure of your input controls.
