@@ -902,3 +902,34 @@ In this updated formula:
 - If any of the input controls are empty, the Patch function won't be executed for that particular item in the gallery.
 
 This way, only those inputs with values will be saved into your Dataverse table, and empty inputs will be skipped. Adjust the conditions as per your specific requirements and the structure of your input controls.
+
+
+Certainly! If you can't use the `GroupBy` function for some reason, you can still achieve the same result by using other functions like `Filter`, `Distinct`, and `CountIf`.
+
+Here's how you can count the total number of records for each team without using the `GroupBy` function:
+
+```plaintext
+ClearCollect(
+    TeamCounts,
+    AddColumns(
+        AddColumns(
+            Distinct('YourDataverseTableName', Team),
+            "TeamCount", 
+            CountIf('YourDataverseTableName', Team = Result)
+        ),
+        "TeamName",
+        Result
+    )
+)
+```
+
+Let's break down the formula:
+
+- `ClearCollect`: This function clears the collection `TeamCounts` and then populates it with the calculated data.
+- `Distinct`: This function retrieves a distinct list of team names from the 'YourDataverseTableName' table.
+- `CountIf`: This function counts the number of records in the 'YourDataverseTableName' table where the team name matches the current team name being evaluated.
+- `AddColumns`: This function adds new columns to the resulting table. We add columns for "TeamCount" and "TeamName" to hold the count and name of each team, respectively.
+
+After running this formula, you'll have a collection named `TeamCounts` where each record will contain the team name and the count of records for that team.
+
+You can then use this collection to display the team counts in your Power Apps interface or perform any other operations you need.
