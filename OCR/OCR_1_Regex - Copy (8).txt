@@ -933,3 +933,33 @@ Let's break down the formula:
 After running this formula, you'll have a collection named `TeamCounts` where each record will contain the team name and the count of records for that team.
 
 You can then use this collection to display the team counts in your Power Apps interface or perform any other operations you need.
+
+
+
+
+To apply two filters to the formula you provided, you can integrate both filters within the Filter function. Here's how you can modify the formula to include two filters:
+
+```plaintext
+Filter(
+    Filter(
+        QuestionBankCollaterals,
+        Team = Dropdown5.Selected.Value
+    ),
+    Condition2 = Value2
+),
+{
+    Options: If(
+        ThisItem.QuestionType = "MCQ",
+        Shuffle([ThisItem.A, ThisItem.B, ThisItem.C, ThisItem.D]),
+        If(
+            ThisItem.QuestionType = "True/False",
+            Shuffle([ThisItem.A, ThisItem.B]),
+            []
+        )
+    )
+}
+```
+
+Replace `Condition2 = Value2` with your second filter condition, where `Condition2` represents the column or condition you want to filter on, and `Value2` is the specific value you're filtering for.
+
+This way, the items displayed in the gallery will be filtered based on both conditions: `Team = Dropdown5.Selected.Value` and `Condition2 = Value2`. Adjust the column names and values according to your actual data structure and filter criteria.
