@@ -963,3 +963,20 @@ Filter(
 Replace `Condition2 = Value2` with your second filter condition, where `Condition2` represents the column or condition you want to filter on, and `Value2` is the specific value you're filtering for.
 
 This way, the items displayed in the gallery will be filtered based on both conditions: `Team = Dropdown5.Selected.Value` and `Condition2 = Value2`. Adjust the column names and values according to your actual data structure and filter criteria.
+
+
+
+
+If(
+    ThisItem.QuestionType = "MCQ",
+    Shuffle([ThisItem.A, ThisItem.B, ThisItem.C, ThisItem.D]),
+    If(
+        ThisItem.QuestionType = "True/False",
+        Shuffle([ThisItem.A, ThisItem.B]),
+        If(
+            ThisItem.QuestionType = "Text",
+            ["Input Text"],
+            []
+        )
+    )
+)
