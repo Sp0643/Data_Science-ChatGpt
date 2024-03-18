@@ -980,3 +980,41 @@ If(
         )
     )
 )
+
+
+
+Certainly! Here's a formula to achieve what you described:
+
+```PowerApps
+ClearCollect(
+    AllQuestions,
+    YourDataSource // Replace with your actual data source
+);
+
+ClearCollect(
+    NumberedQuestions,
+    AddColumns(
+        AllQuestions,
+        "Index",
+        CountRows(AllQuestions) - Rank(ThisRecord, AllQuestions, "ID") + 1 // Replace "ID" with the unique identifier column of your data source
+    )
+);
+
+ClearCollect(
+    RandomizedQuestions,
+    SortByColumns(
+        NumberedQuestions,
+        Rnd(),
+        Ascending
+    )
+)
+```
+
+In this formula:
+
+1. We first collect all the data from your data source into a collection named `AllQuestions`.
+2. We add an index to each item in the `AllQuestions` collection using the `AddColumns` function. The index is calculated based on the rank of each item in the collection.
+3. We create another collection named `RandomizedQuestions` where the items from `NumberedQuestions` are sorted randomly using the `SortByColumns` function with the `Rnd()` function as the sort column.
+
+Now, you can bind your gallery to the `RandomizedQuestions` collection, and within the gallery, you can use `ThisItem.Index` to display the sequential numbering for each question.
+
