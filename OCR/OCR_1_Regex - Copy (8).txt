@@ -1087,3 +1087,36 @@ Modify the Subject and Body of the email as per your requirement. In this exampl
 4. Test your app by filling in the input fields and clicking the Submit button. This will send an email using the provided information.
 
 Remember to replace placeholder names and adjust the formula to fit your specific requirements and data source structure.
+
+
+
+Sure, here's how you can write a formula to send an email based on the selected inputs:
+
+Assuming you have the following controls in your PowerApps form:
+- Dropdown_Email (Dropdown control for selecting the recipient email)
+- TextInput_IDS (Text input control for IDS)
+- TextInput_OBC (Text input control for OBC)
+- TextInput_EmailBody (Text input control for email body)
+- Dropdown_EmailType (Dropdown control for selecting email type)
+- TextInput_BorrowerName (Text input control for borrower name)
+
+You can use the following formula for the "Send Email" button:
+
+```plaintext
+Office365Outlook.SendEmailV2(
+    Dropdown_Email.Selected.Email, // To
+    "Subject: IDS-" & TextInput_IDS.Text & ", OBC-" & TextInput_OBC.Text, // Subject
+    "Hello " & TextInput_BorrowerName.Text & ",\n\n" & TextInput_EmailBody.Text, // Body
+    {
+        Importance: Dropdown_EmailType.Selected.Value // Email importance
+    }
+)
+```
+
+This formula will send an email using Office 365 Outlook connector with the following details:
+- To: The email address selected in the Dropdown_Email control.
+- Subject: Combined from the text inputs TextInput_IDS and TextInput_OBC.
+- Body: Combined from the TextInput_EmailBody control and includes the borrower name.
+- Importance: Selected from the Dropdown_EmailType control.
+
+Make sure to adjust the control names (`Dropdown_Email`, `TextInput_IDS`, etc.) according to your actual control names in your PowerApps form. Also, modify the email subject and body composition according to your specific requirements.
