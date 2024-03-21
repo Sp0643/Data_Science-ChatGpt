@@ -1048,3 +1048,42 @@ TextInput1.Default = First(ExcelData).Name
 Replace `"Name"` with the name of the column in your Excel sheet.
 
 Remember to replace `YourOneDriveFolder` and `YourExcelFileName.xlsx` with the actual folder path and file name of your Excel sheet in OneDrive.
+
+
+
+Certainly! Below is an example of how you can use the Patch function along with a button to send an email using the input controls you mentioned:
+
+1. First, ensure you have your input controls set up for borrower name, email type, email, IDS, and OBC ID.
+
+2. Create a button in your PowerApps form and name it "Submit" or something similar.
+
+3. In the OnSelect property of the Submit button, you can use the Patch function to send the email. Here's an example of how you can structure the formula:
+
+```plaintext
+Patch(
+    'YourDataSource',
+    Defaults('YourDataSource'),
+    {
+        BorrowerName: TextInput_BorrowerName.Text,
+        EmailType: Dropdown_EmailType.Selected.Value,
+        Email: TextInput_Email.Text,
+        Subject: "IDS: " & TextInput_IDS.Text & ", OBC ID: " & TextInput_OBCID.Text,
+        // Add more fields as needed
+    }
+);
+Office365Outlook.SendEmailV2(
+    TextInput_Email.Text, // To
+    "Subject: IDS-" & TextInput_IDS.Text & ", OBC ID-" & TextInput_OBCID.Text, // Subject
+    "Hello " & TextInput_BorrowerName.Text & ", This is a sample email." // Body
+)
+```
+
+Replace `'YourDataSource'` with the name of your data source where you want to store the information.
+
+Replace `TextInput_BorrowerName`, `Dropdown_EmailType`, `TextInput_Email`, `TextInput_IDS`, and `TextInput_OBCID` with the actual names of your input controls.
+
+Modify the Subject and Body of the email as per your requirement. In this example, the Subject includes IDS and OBC ID, and the Body includes the borrower's name.
+
+4. Test your app by filling in the input fields and clicking the Submit button. This will send an email using the provided information.
+
+Remember to replace placeholder names and adjust the formula to fit your specific requirements and data source structure.
