@@ -1018,3 +1018,33 @@ In this formula:
 
 Now, you can bind your gallery to the `RandomizedQuestions` collection, and within the gallery, you can use `ThisItem.Index` to display the sequential numbering for each question.
 
+
+
+To connect a PowerApps form to an Excel sheet stored in OneDrive and display the data, you can use the following formula:
+
+```plaintext
+ClearCollect(
+    ExcelData,
+    Office365.Excel.GetTables("YourOneDriveFolder/YourExcelFileName.xlsx").Tables[0]
+)
+```
+
+Replace `"YourOneDriveFolder/YourExcelFileName.xlsx"` with the path to your Excel file in OneDrive.
+
+Then, you can set the `Items` property of your form to `ExcelData` to display the data in the form:
+
+```plaintext
+Items = ExcelData
+```
+
+Finally, bind the form controls to the corresponding fields in the Excel sheet's table using their respective properties such as `Default` or `Text`.
+
+For example, if you have a text input control named `TextInput1` and you want it to display the "Name" field from your Excel sheet, you would set its `Default` property like this:
+
+```plaintext
+TextInput1.Default = First(ExcelData).Name
+```
+
+Replace `"Name"` with the name of the column in your Excel sheet.
+
+Remember to replace `YourOneDriveFolder` and `YourExcelFileName.xlsx` with the actual folder path and file name of your Excel sheet in OneDrive.
