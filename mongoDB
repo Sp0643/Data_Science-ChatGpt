@@ -1,0 +1,38 @@
+To handle a situation where half of the attributes are dictionary elements and half are array nested documents, you can use a combination of dot notation and list comprehension to extract the data. Here's how you can do it:
+
+```python
+import pymongo
+import pandas as pd
+from pandas.io.json import json_normalize
+
+# Connect to MongoDB
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+db = client["your_database_name"]
+collection = db["your_collection_name"]
+
+# Fetch data from MongoDB
+cursor = collection.find({}, {"_id": 0, "dictionary_field": 1, "array_field": 1})
+
+# Convert cursor to DataFrame
+df = pd.DataFrame(list(cursor))
+
+# Extract data from dictionary field using dot notation
+for key in df['dictionary_field'][0].keys():
+    df[key] = df['dictionary_field'].apply(lambda x: x.get(key))
+
+# Flatten nested documents in the array field
+df_normalized = json_normalize(df['array_field'])
+
+# Concatenate flattened array data with original DataFrame
+df_combined = pd.concat([df.drop(['dictionary_field', 'array_field'], axis=1), df_normalized], axis=1)
+
+# Close MongoDB connection
+client.close()
+
+# Display DataFrame with extracted data
+print(df_combined)
+```
+
+Replace `"your_database_name"` and `"your_collection_name"` with your actual database and collection names. Also, replace `"dictionary_field"` and `"array_field"` with the names of the fields in your documents that contain the dictionary and array nested documents, respectively.
+
+This code fetches both the dictionary and array fields from MongoDB. It then extracts data from the dictionary field using dot notation and flattens the nested documents in the array field. Finally, it concatenates the extracted data with the original DataFrame.
