@@ -36,3 +36,38 @@ print(df_combined)
 Replace `"your_database_name"` and `"your_collection_name"` with your actual database and collection names. Also, replace `"dictionary_field"` and `"array_field"` with the names of the fields in your documents that contain the dictionary and array nested documents, respectively.
 
 This code fetches both the dictionary and array fields from MongoDB. It then extracts data from the dictionary field using dot notation and flattens the nested documents in the array field. Finally, it concatenates the extracted data with the original DataFrame.
+
+
+
+To normalize an array containing nested dictionaries in MongoDB JSON output, you can use `json_normalize` with the appropriate record path. Here's how you can do it:
+
+```python
+import pandas as pd
+from pymongo import MongoClient
+from pandas.io.json import json_normalize
+
+# Connect to MongoDB
+client = MongoClient('mongodb://localhost:27017/')
+db = client['your_database']
+collection = db['your_collection']
+
+# Retrieve data from MongoDB
+cursor = collection.find()
+
+# Convert cursor to list of dictionaries
+data = list(cursor)
+
+# Normalize array with nested dictionaries
+df_normalized = pd.DataFrame()
+for item in data:
+    nested_array = item['your_nested_array_key']  # Replace 'your_nested_array_key' with the key of your array
+    if nested_array:  # Check if array exists
+        df_nested = json_normalize(nested_array, record_path='your_nested_record_path')  # Replace 'your_nested_record_path' with the path to the nested record within each array element
+        df_nested['parent_id'] = item['_id']  # Assuming you want to keep track of the parent document ID
+        df_normalized = pd.concat([df_normalized, df_nested], ignore_index=True)
+
+# Now you have your MongoDB data with normalized array in a DataFrame
+print(df_normalized)
+```
+
+Replace `'your_nested_array_key'` with the key of the array containing nested dictionaries, and `'your_nested_record_path'` with the path to the nested record within each array element. This will flatten the nested dictionaries within the array and create separate rows in the DataFrame.
