@@ -71,3 +71,41 @@ print(df_normalized)
 ```
 
 Replace `'your_nested_array_key'` with the key of the array containing nested dictionaries, and `'your_nested_record_path'` with the path to the nested record within each array element. This will flatten the nested dictionaries within the array and create separate rows in the DataFrame.
+
+
+
+
+In MongoDB, you can filter, project (select specific columns), and sort data using the `find()` method along with various query modifiers. Here's an example of how you can do it:
+
+```python
+from pymongo import MongoClient
+
+# Connect to MongoDB
+client = MongoClient('mongodb://localhost:27017/')
+db = client['your_database']  # Replace 'your_database' with your actual database name
+collection = db['your_collection']  # Replace 'your_collection' with your actual collection name
+
+# Define filter criteria (query)
+filter_criteria = {'field_to_filter': 'value_to_match'}
+
+# Define projection (select specific columns)
+projection = {'field1': 1, 'field2': 1, '_id': 0}  # Include fields 'field1' and 'field2', exclude '_id'
+
+# Define sort order
+sort_order = [('field_to_sort', 1)]  # Sort by 'field_to_sort' in ascending order (1) or descending order (-1)
+
+# Execute the query
+cursor = collection.find(filter_criteria, projection).sort(sort_order)
+
+# Iterate over the results
+for document in cursor:
+    print(document)
+```
+
+Replace `'your_database'` with your actual database name and `'your_collection'` with your actual collection name. Adjust the `filter_criteria`, `projection`, and `sort_order` variables according to your specific requirements.
+
+- `filter_criteria`: This is a dictionary specifying the filter criteria for selecting documents.
+- `projection`: This is a dictionary specifying the fields to include or exclude from the results. Use `1` to include a field and `0` to exclude it.
+- `sort_order`: This is a list of tuples specifying the field(s) to sort by and the sort order (ascending or descending).
+
+This code will execute the query, filter the data based on the specified criteria, select specific columns, and sort the results accordingly.
