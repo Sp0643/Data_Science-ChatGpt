@@ -109,3 +109,46 @@ Replace `'your_database'` with your actual database name and `'your_collection'`
 - `sort_order`: This is a list of tuples specifying the field(s) to sort by and the sort order (ascending or descending).
 
 This code will execute the query, filter the data based on the specified criteria, select specific columns, and sort the results accordingly.
+
+
+
+To query nested dictionaries and nested arrays in MongoDB and show the result in a single dictionary, you can use the aggregation framework with the `$project` stage to reshape the output. Here's an example:
+
+Suppose you have a collection named `myCollection` with documents structured like this:
+
+```json
+{
+  "_id": ObjectId("1234567890"),
+  "nestedDict": {
+    "field1": "value1",
+    "field2": "value2"
+  },
+  "nestedArray": [
+    {"arrayField1": "arrayValue1"},
+    {"arrayField2": "arrayValue2"}
+  ]
+}
+```
+
+You can use the aggregation pipeline to reshape the output into a single dictionary:
+
+```mongodb
+db.myCollection.aggregate([
+  {
+    $project: {
+      combinedDict: {
+        $mergeObjects: ["$nestedDict", { $arrayToObject: { $map: { input: "$nestedArray", as: "item", in: { k: { $toString: { $indexOfArray: ["$nestedArray", "$$item"] } }, v: { $objectToArray: "$$item" } } } } }]
+      }
+    }
+  }
+])
+```
+
+In this query:
+
+- `$map` is used to iterate over the `nestedArray` field and convert each element to an object with `k` (key) and `v` (value) fields.
+- `$objectToArray` is used to convert each element of the `nestedArray` into an array of key-value pairs.
+- `$toString` and `$indexOfArray` are used to generate unique keys for each element of the `nestedArray`.
+- `$mergeObjects` is used to merge the `nestedDict` and the transformed `nestedArray` into a single dictionary named `combinedDict`.
+
+This will produce output documents where the nested dictionary and array are merged into a single dictionary under the `combinedDict` field. Adjust the field names and collection name as per your actual data structure.
