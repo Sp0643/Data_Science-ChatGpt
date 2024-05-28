@@ -1,7 +1,19 @@
-1. To clarify, we create an Excel report using a Python script and send it to users via email. Currently, we've set up a batch file using the Windows Task Scheduler. To enhance security, we're considering deploying the report in a more secure environment. Given that deployment is beyond our team's scope, my manager suggests the implementation of a cron job and utilizing a production-ready scheduler based on our discussion.
+I891. To clarify, we create an Excel report using a Python script and send it to users via email. Currently, we've set up a batch file using the Windows Task Scheduler. To enhance security, we're considering deploying the report in a more secure environment. Given that deployment is beyond our team's scope, my manager suggests the implementation of a cron job and utilizing a production-ready scheduler based on our discussion.
 
 2. Clarification: We generate an Excel report through a Python script and distribute it to users via email. The current setup involves a batch file and the Windows Task Scheduler. To boost security, we're exploring the possibility of deploying the report in a more secure environment. As deployment is not within our team's purview, my manager recommends setting up a cron job and utilizing a production-ready scheduler following our discussion.
 
 3. In summary, our process involves creating an Excel report with a Python script and delivering it to users via email. Currently, we've employed a batch file through the Windows Task Scheduler. Considering the need for heightened security, we are exploring the deployment of the report in a more secure environment. Since deployment is beyond our team's responsibility, my manager suggests establishing a cron job and utilizing a production-ready scheduler based on our discussion.
 
-4. To clarify, our workflow includes generating an Excel report through a Python script and emailing it to users. The current setup involves a batch file and the Windows Task Scheduler. To enhance security, we're looking into deploying the report in a more secure environment. As deployment falls outside our team's scope, my manager recommends setting up a cron job and using a production-ready scheduler based on our discussion.
+4. To clarify, our workflow includes generating an Excel report through a Python script and emailing it to users. The current setup involves a batch file and the Windows Task Scheduler. To enhance security, we're looking into deploying the report in a more secure environment. As deployment falls outside our team's scope, my manager recommends setting up a cron job and using a production-ready scheduler based on our discu
+
+
+
+In the context of the GSS 1.0 initiative, we have successfully implemented multiple dashboard solutions for the Loan Maintenance organization.
+
+With the introduction of GSS 2.0, we are currently in the process of onboarding new organizations, with a focus on specialized services and commercial real estate.
+
+In my capacity, I am tasked with developing fundamental Tableau dashboard functionalities and providing support to Sangeeth and Sandeep to ensure the timely delivery of these dashboards.
+
+Additionally, under the GSS 2.0 framework, we are responsible for generating MM EOD reports for all organizations involved in outbound money movement activities. Furthermore, we are addressing three ad hoc requests until the necessary data is available in the SMART DB.
+
+In my role, I am responsible for creating these reports by accessing the GSS MongoDB database and utilizing Python in conjunction with Windows Task Scheduler. Moreover, I am collaborating with the Technology team to obtain Autosys access and to enhance the security of service credentials for the GSS MongoDB Production database.
