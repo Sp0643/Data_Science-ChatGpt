@@ -34,3 +34,6 @@ The Process Knowledge Tool (PKT) project aims to transform a traditionally manua
 The PKT project seeks to streamline and automate these processes, improving control, efficiency, and risk mitigation. By leveraging Power Apps, the new solution will replicate these tasks in a more organized and efficient manner, reducing the reliance on manual efforts and enhancing overall process management.
 
 The project involves collaboration among three teams, led by Sudhir, Kiran, and Anand. Coordination and information gathering are done with the help of Swarnika, with the goal of deploying the automated solution into production as soon as possible.
+
+
+My responsibilities involve collaborating with three teams led by Sudhir, Kiran, and Anand to gather user requirements and develop solutions. We have successfully developed a complete solution for Sudhir's team. Currently, Varnika and I are working together on developing solutions for Kiran's and Anand's teams.
