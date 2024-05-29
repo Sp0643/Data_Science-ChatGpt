@@ -27,3 +27,10 @@ Certainly, here's a more professional version of your text:
 
 
 This initiative entails comprehending AWB and GitHub, facilitating team onboarding, and conducting team training sessions.
+
+
+The Process Knowledge Tool (PKT) project aims to transform a traditionally manual process into an automated solution using Power Apps. The current system involves numerous employees managing tasks such as creating questionnaires, distributing them, collecting responses, performing manual evaluations, and delivering scorecards. This manual approach is time-consuming and prone to errors.
+
+The PKT project seeks to streamline and automate these processes, improving control, efficiency, and risk mitigation. By leveraging Power Apps, the new solution will replicate these tasks in a more organized and efficient manner, reducing the reliance on manual efforts and enhancing overall process management.
+
+The project involves collaboration among three teams, led by Sudhir, Kiran, and Anand. Coordination and information gathering are done with the help of Swarnika, with the goal of deploying the automated solution into production as soon as possible.
