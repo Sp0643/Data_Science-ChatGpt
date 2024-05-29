@@ -1,4 +1,4 @@
-I891. To clarify, we create an Excel report using a Python script and send it to users via email. Currently, we've set up a batch file using the Windows Task Scheduler. To enhance security, we're considering deploying the report in a more secure environment. Given that deployment is beyond our team's scope, my manager suggests the implementation of a cron job and utilizing a production-ready scheduler based on our discussion.
+To clarify, we create an Excel report using a Python script and send it to users via email. Currently, we've set up a batch file using the Windows Task Scheduler. To enhance security, we're considering deploying the report in a more secure environment. Given that deployment is beyond our team's scope, my manager suggests the implementation of a cron job and utilizing a production-ready scheduler based on our discussion.
 
 2. Clarification: We generate an Excel report through a Python script and distribute it to users via email. The current setup involves a batch file and the Windows Task Scheduler. To boost security, we're exploring the possibility of deploying the report in a more secure environment. As deployment is not within our team's purview, my manager recommends setting up a cron job and utilizing a production-ready scheduler following our discussion.
 
@@ -24,3 +24,6 @@ Certainly, here's a more professional version of your text:
 
 "In addition to the aforementioned initiative, we are currently focused on delivering an analytics-powered dashboard within GSS. Our team has developed a proof of concept (POC) solution for text analytics. My responsibility entails leveraging Python to craft a text analytics solution aimed at extracting insights from comment data."
 
+
+
+This initiative entails comprehending AWB and GitHub, facilitating team onboarding, and conducting team training sessions.
