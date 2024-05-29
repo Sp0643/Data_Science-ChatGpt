@@ -17,3 +17,10 @@ In my capacity, I am tasked with developing fundamental Tableau dashboard functi
 Additionally, under the GSS 2.0 framework, we are responsible for generating MM EOD reports for all organizations involved in outbound money movement activities. Furthermore, we are addressing three ad hoc requests until the necessary data is available in the SMART DB.
 
 In my role, I am responsible for creating these reports by accessing the GSS MongoDB database and utilizing Python in conjunction with Windows Task Scheduler. Moreover, I am collaborating with the Technology team to obtain Autosys access and to enhance the security of service credentials for the GSS MongoDB Production database.
+
+
+
+Certainly, here's a more professional version of your text:
+
+"In addition to the aforementioned initiative, we are currently focused on delivering an analytics-powered dashboard within GSS. Our team has developed a proof of concept (POC) solution for text analytics. My responsibility entails leveraging Python to craft a text analytics solution aimed at extracting insights from comment data."
+
