@@ -44,3 +44,36 @@ Looking forward, I aim to utilize my expertise in Python and analytics to undert
 
 
 Under the GSS 2.0 initiative, we are expanding Tableau dashboard solutions to new organizations, generating MM EOD reports, and handling ad hoc requests using Python and Windows Task Scheduler. Additionally, we are developing a text analytics POC for comment data insights and automating the Process Knowledge Tool (PKT) with Power Apps to improve efficiency and reduce manual effort. My roles include developing dashboards, creating reports, enhancing security, and crafting text analytics solutions.
+
+
+
+Correct language and make more professional :
+
+
+Subject: Follow-Up on Service Account for GSS MongoDB Prod Environment
+
+Hi [Recipient's Name],
+
+Did you have a chance to discuss with your management about securing the service account for GSS MongoDB?
+
+Please let me know if you need any information from my side. A timely response would be greatly appreciated, as this is crucial for creating MM EOD and ad hoc reports.
+
+Thank you.
+
+Best,  
+[Your Name]  
+[Your Position]  
+[Your Contact Information]Subject: Follow-Up on Service Account for GSS MongoDB Prod Environment
+
+Hi [Recipient's Name],
+
+Did you have a chance to discuss with your management about securing the service account for GSS MongoDB?
+
+Please let me know if you need any information from my side. A timely response would be greatly appreciated, as this is crucial for creating MM EOD and ad hoc reports.
+
+Thank you.
+
+Best,  
+[Your Name]  
+[Your Position]  
+[Your Contact Information] 
