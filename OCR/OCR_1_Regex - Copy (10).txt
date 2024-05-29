@@ -41,3 +41,6 @@ My responsibilities involve collaborating with three teams led by Sudhir, Kiran,
 
 
 Looking forward, I aim to utilize my expertise in Python and analytics to undertake more projects in areas such as natural language processing (NLP) and forecasting.
+
+
+Under the GSS 2.0 initiative, we are expanding Tableau dashboard solutions to new organizations, generating MM EOD reports, and handling ad hoc requests using Python and Windows Task Scheduler. Additionally, we are developing a text analytics POC for comment data insights and automating the Process Knowledge Tool (PKT) with Power Apps to improve efficiency and reduce manual effort. My roles include developing dashboards, creating reports, enhancing security, and crafting text analytics solutions.
