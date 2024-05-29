@@ -37,3 +37,7 @@ The project involves collaboration among three teams, led by Sudhir, Kiran, and 
 
 
 My responsibilities involve collaborating with three teams led by Sudhir, Kiran, and Anand to gather user requirements and develop solutions. We have successfully developed a complete solution for Sudhir's team. Currently, Varnika and I are working together on developing solutions for Kiran's and Anand's teams.
+
+
+
+Looking forward, I aim to utilize my expertise in Python and analytics to undertake more projects in areas such as natural language processing (NLP) and forecasting.
