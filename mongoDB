@@ -152,3 +152,47 @@ In this query:
 - `$mergeObjects` is used to merge the `nestedDict` and the transformed `nestedArray` into a single dictionary named `combinedDict`.
 
 This will produce output documents where the nested dictionary and array are merged into a single dictionary under the `combinedDict` field. Adjust the field names and collection name as per your actual data structure.
+
+
+import pymongo
+import pandas as pd
+
+# Connect to MongoDB
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+database = client["your_database"]
+
+# Two different collections
+collection1 = database["collection1"]
+collection2 = database["collection2"]
+
+# Perform aggregation to mimic a join
+pipeline = [
+    {
+        "$lookup": {
+            "from": "collection2",
+            "localField": "field_in_collection1",
+            "foreignField": "field_in_collection2",
+            "as": "joined_data"
+        }
+    },
+    {
+        "$unwind": "$joined_data"
+    },
+    {
+        "$project": {
+            "_id": 0,  # Exclude _id field
+            "field_in_collection1": 1,
+            "field_in_collection2": "$joined_data.field_in_collection2"
+            # Add other fields as needed
+        }
+    }
+]
+
+# Execute the aggregation pipeline
+result = list(collection1.aggregate(pipeline))
+
+# Convert the result to a DataFrame
+df = pd.DataFrame(result)
+
+# Now you have a DataFrame containing the joined data
+print(df)
