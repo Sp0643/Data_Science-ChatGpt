@@ -105,3 +105,48 @@ print(df)
 ```
 
 This code iterates through each month and year, creating a new column "attr_month_year" and applying the specified logic for subtraction. The result is captured in the "subtract_result" column. Adjust the logic as needed based on your actual DataFrame structure and requirements.
+
+
+
+
+
+
+To update the code for pandas version 0.23.4, we need to consider the methods and functions available in that version. Here is the updated code:
+
+1. `json_normalize` should be imported from `pandas.io.json` as it's not directly part of pandas.
+2. `explode` method does not exist in pandas 0.23.4, so we need to use an alternative method to achieve the same functionality.
+
+Below is the modified code:
+
+```python
+import pandas as pd
+from pandas.io.json import json_normalize
+from pymongo import MongoClient
+
+# Assuming COLLECTION_CASE is a MongoDB collection
+# df_case = pd.DataFrame(list(COLLECTION_CASE.find(filter_criteria, projection)))
+# For illustration, let's assume df_case is already defined.
+
+# Normalize the JSON data
+df_normalized = json_normalize(df_case.to_dict('records'))
+
+# Explode 'serviceRequests' column
+df_normalized = df_normalized.set_index(df_normalized.columns.drop('serviceRequests', 1).tolist())
+df_normalized = df_normalized['serviceRequests'].apply(pd.Series).stack().reset_index().rename(columns={0:'serviceRequests'})
+
+# Merge back with the rest of the DataFrame
+df_normalized = df_normalized.join(df_case, on='level_0').drop(['level_0', 'serviceRequests_y'], axis=1).rename(columns={'serviceRequests_x': 'serviceRequests'})
+
+# Further normalization if needed
+df_normalized_final = json_normalize(df_normalized.to_dict('records'))
+
+# Display the result
+df_normalized_final.head()
+```
+
+Key changes and explanations:
+1. Importing `json_normalize` from `pandas.io.json`.
+2. Since `explode` is not available, we manually "explode" the `serviceRequests` column by setting the other columns as the index, applying `pd.Series` to `serviceRequests`, using `stack()`, and then resetting the index.
+3. Joining the exploded DataFrame back with the original DataFrame to retain all other columns.
+
+Make sure that `df_case` is defined with the relevant data, as this example assumes it is already created from a MongoDB query.
