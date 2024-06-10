@@ -235,3 +235,36 @@ df['new_column'].fillna('default_value', inplace=True)
 This code defines four conditions based on the values in `column1`, and for the fourth condition, it checks if `column4` and `column7` are equal. It then assigns values to the new column based on these conditions, with a default value for cases that don't match any condition.
 
 You can adjust the conditions and values as needed for your specific DataFrame and logic.
+
+
+
+
+To modify the query to display the data for the last 6 months, you can use a `UNION ALL` clause to combine the results for each of the past 6 months. Here's the revised query:
+
+```sql
+SELECT TO_CHAR(TRUNC(TASK_CREATED_DATE, 'MM'), 'Mon YYYY') AS MONTH,
+       COUNT(DISTINCT TASK_NUMBER) AS TASK_COUNT,
+       TASK_TYPE
+FROM wdm_consumption.VW_GSSC_TASKS_DTL
+WHERE TRUNC(TASK_CREATED_DATE) BETWEEN ADD_MONTHS(TRUNC(SYSDATE, 'MM'), -5) AND LAST_DAY(ADD_MONTHS(TRUNC(SYSDATE), -1))
+GROUP BY TO_CHAR(TRUNC(TASK_CREATED_DATE, 'MM'), 'Mon YYYY'), TASK_TYPE
+ORDER BY MONTH, TASK_TYPE;
+```
+
+### Explanation:
+
+1. **TO_CHAR(TRUNC(TASK_CREATED_DATE, 'MM'), 'Mon YYYY')**: This converts the truncated task creation date to a string representing the month and year in the format 'Mon YYYY'.
+
+2. **COUNT(DISTINCT TASK_NUMBER)**: This counts the distinct task numbers.
+
+3. **TRUNC(TASK_CREATED_DATE)**: This truncates the task creation date to remove the time portion, considering only the date.
+
+4. **ADD_MONTHS(TRUNC(SYSDATE, 'MM'), -5)**: This calculates the start date, which is the first day of the month 5 months ago.
+
+5. **LAST_DAY(ADD_MONTHS(TRUNC(SYSDATE), -1))**: This calculates the end date, which is the last day of the previous month.
+
+6. **GROUP BY TO_CHAR(TRUNC(TASK_CREATED_DATE, 'MM'), 'Mon YYYY'), TASK_TYPE**: This groups the results by month and task type.
+
+7. **ORDER BY MONTH, TASK_TYPE**: This orders the results by month and task type.
+
+This query will give you a table with the count of distinct task numbers for each task type for each of the last 6 months.
