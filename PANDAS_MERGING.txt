@@ -150,3 +150,100 @@ Key changes and explanations:
 3. Joining the exploded DataFrame back with the original DataFrame to retain all other columns.
 
 Make sure that `df_case` is defined with the relevant data, as this example assumes it is already created from a MongoDB query.
+
+
+
+To achieve a feature where users can toggle randomization on and off in your PowerApps quiz-taking app, you can use a toggle control or a radio button control. Below, I'll demonstrate using both a toggle and a radio button for this functionality.
+
+### Using a Toggle Control
+
+1. **Add a Toggle Control:**
+   - Insert a Toggle control to your app (let's call it `RandomToggle`).
+   - Set the **Text** property of the toggle to "Randomization".
+
+2. **Implement Randomization Logic:**
+   - Use the value of the `RandomToggle` to determine whether to randomize the questions.
+
+   Assume you have a collection of questions called `QuestionsCollection`. Here’s an example of how you can randomize based on the toggle value.
+
+   ```plaintext
+   If(
+       RandomToggle.Value,
+       Shuffle(QuestionsCollection), // Randomize if toggle is on
+       QuestionsCollection // Use original order if toggle is off
+   )
+   ```
+
+3. **Display Questions:**
+   - Bind the questions to a gallery or any control that displays the questions. For instance, if using a Gallery control named `QuestionsGallery`, set its `Items` property to the above logic.
+
+   ```plaintext
+   QuestionsGallery.Items = If(
+       RandomToggle.Value,
+       Shuffle(QuestionsCollection),
+       QuestionsCollection
+   )
+   ```
+
+### Using a Radio Button Control
+
+1. **Add a Radio Button Control:**
+   - Insert a Radio button control to your app (let's call it `RandomOption`).
+   - Set the `Items` property of the radio button to `["Randomization On", "Randomization Off"]`.
+
+2. **Implement Randomization Logic:**
+   - Use the selected value of the `RandomOption` to determine whether to randomize the questions.
+
+   ```plaintext
+   If(
+       RandomOption.Selected.Value = "Randomization On",
+       Shuffle(QuestionsCollection), // Randomize if selected
+       QuestionsCollection // Use original order if not selected
+   )
+   ```
+
+3. **Display Questions:**
+   - Bind the questions to a gallery or any control that displays the questions. For instance, if using a Gallery control named `QuestionsGallery`, set its `Items` property to the above logic.
+
+   ```plaintext
+   QuestionsGallery.Items = If(
+       RandomOption.Selected.Value = "Randomization On",
+       Shuffle(QuestionsCollection),
+       QuestionsCollection
+   )
+   ```
+
+### Complete Example
+
+Here is a complete example using the Toggle control:
+
+1. **Create a Collection:**
+   - Create your questions collection. For example:
+
+     ```plaintext
+     ClearCollect(QuestionsCollection,
+         {Question: "What is 2+2?", Answer: "4"},
+         {Question: "What is the capital of France?", Answer: "Paris"},
+         {Question: "What is the boiling point of water?", Answer: "100°C"}
+     );
+     ```
+
+2. **Add a Toggle Control:**
+   - Insert a Toggle control and set its `Text` property to "Randomization".
+
+3. **Add a Gallery Control:**
+   - Insert a Gallery control to display the questions.
+   - Set its `Items` property to:
+
+     ```plaintext
+     If(
+         RandomToggle.Value,
+         Shuffle(QuestionsCollection),
+         QuestionsCollection
+     )
+     ```
+
+4. **Test the App:**
+   - Run the app, toggle the `RandomToggle`, and see the questions being randomized or displayed in their original order based on the toggle state.
+
+This approach ensures that your users have control over whether the questions in the quiz are randomized or not, giving them a flexible and interactive experience.
