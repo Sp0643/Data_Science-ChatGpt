@@ -1120,3 +1120,97 @@ This formula will send an email using Office 365 Outlook connector with the foll
 - Importance: Selected from the Dropdown_EmailType control.
 
 Make sure to adjust the control names (`Dropdown_Email`, `TextInput_IDS`, etc.) according to your actual control names in your PowerApps form. Also, modify the email subject and body composition according to your specific requirements.
+
+
+To add the functionality to automatically submit the quiz when the elapsed time goes to zero in Power Apps, you can use the `OnTimerEnd` event of the timer control. This event triggers when the timer reaches zero. 
+
+Here's how you can modify your code to include this functionality:
+
+1. **Set up your timer**: Make sure your timer control is configured to count down from the set time and triggers the `OnTimerEnd` event when it reaches zero.
+
+2. **Modify the `OnTimerEnd` event**: Add the logic to automatically submit the quiz when the timer ends.
+
+3. **Handle user responses**: Ensure that user responses are collected and submitted correctly.
+
+Here's an example of how you can implement this:
+
+### Step-by-Step Implementation
+
+1. **Set up the timer control**:
+   - Ensure `tmrQuizTimerWFCC_Titles_5` is configured to start from the desired countdown value.
+
+2. **Add the `OnTimerEnd` event handler**:
+   - This event should include the logic to submit the quiz automatically when the timer reaches zero.
+
+3. **Code to handle auto-submission**:
+   - Collect the user responses and submit them when the timer ends.
+
+Here is the modified code including the auto-submission:
+
+```plaintext
+// Setting up the start time when the quiz starts
+Set(startTime, tmrQuizTimerWFCC_Titles_5.Start);
+
+// Calculating the elapsed time
+Set(endTime, tmrQuizTimerWFCC_Titles_5.Value);
+Set(elapsedTime, endTime - startTime);
+
+// Collect user responses
+ClearCollect(userResponse,
+    ForAll(glyQuestion_ListWFCC_Titles_3.AllItems,
+        Patch(QuzAns,
+            Defaults(QuzAns),
+            {
+                Team: Text(LookUp(USER_DATA, Kid=currentKid).Team),
+                Kid: currentKid,
+                UserName: User().FullName,
+                Questions: lblQuestionsWFCC_Titles_3.Text,
+                QuestionType: lblQuestionType.Text,
+                QuestionID: lblQuestionID.Text,
+                Answers: If(lblQuestionType.Text = "MCQ", rdoAnswersWFCC_Titles_3.Selected.Value, txtUserAnswer2.Text),
+                SubmissionTime: Now(),
+                Time: elapsedTime / 1000,
+                Score: If((lblQuestionType.Text = "MCQ" || lblQuestionType.Text = "TF"), 
+                          If(Text(rdoAnswersWFCC_Titles_3.Selected.Value) = lblCorrectAnswer.Text, 1, 0), 0)
+            }
+        )
+    )
+);
+
+// Timer configuration
+tmrQuizTimerWFCC_Titles_5.OnTimerEnd = CollectAndSubmit();
+
+// Function to collect and submit responses
+CollectAndSubmit() {
+    ClearCollect(userResponse,
+        ForAll(glyQuestion_ListWFCC_Titles_3.AllItems,
+            Patch(QuzAns,
+                Defaults(QuzAns),
+                {
+                    Team: Text(LookUp(USER_DATA, Kid=currentKid).Team),
+                    Kid: currentKid,
+                    UserName: User().FullName,
+                    Questions: lblQuestionsWFCC_Titles_3.Text,
+                    QuestionType: lblQuestionType.Text,
+                    QuestionID: lblQuestionID.Text,
+                    Answers: If(lblQuestionType.Text = "MCQ", rdoAnswersWFCC_Titles_3.Selected.Value, txtUserAnswer2.Text),
+                    SubmissionTime: Now(),
+                    Time: elapsedTime / 1000,
+                    Score: If((lblQuestionType.Text = "MCQ" || lblQuestionType.Text = "TF"), 
+                              If(Text(rdoAnswersWFCC_Titles_3.Selected.Value) = lblCorrectAnswer.Text, 1, 0), 0)
+                }
+            )
+        )
+    );
+}
+
+// Submit button
+btnSubmitWFCC_Titles_10.OnSelect = CollectAndSubmit();
+```
+
+### Explanation:
+- **Timer Setup**: `tmrQuizTimerWFCC_Titles_5` is set up to trigger the `OnTimerEnd` event when the timer reaches zero.
+- **CollectAndSubmit Function**: This function collects all user responses and submits them. It is called both when the timer ends and when the submit button is clicked.
+- **Auto-submission**: The `OnTimerEnd` event of the timer control calls the `CollectAndSubmit` function to automatically submit the quiz when the time runs out.
+
+By following these steps, the quiz will automatically submit when the elapsed time goes to zero, ensuring that all user responses are captured and submitted correctly.
