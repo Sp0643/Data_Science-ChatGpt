@@ -696,3 +696,40 @@ for i in range(1, iterations + 1):
 
 This code uses the `eval` function to dynamically create and update DataFrame names based on the current iteration. It runs the provided operations in a loop for the specified number of iterations. Adjust the initial DataFrame, column names, and iterations as needed for your specific case.
 
+
+
+
+
+The issue with your code appears to be in the way you set the column widths, which may be affecting the visibility of headers when there is no data. The code for setting the column widths should not delete headers, but there might be a mistake in how the maximum length is calculated and applied. Here's a revised version of your code that ensures the headers are preserved and column widths are set correctly:
+
+```python
+import pandas as pd
+
+with pd.ExcelWriter('output.xlsx', engine='xlsxwriter') as writer:
+    df_CM.to_excel(writer, sheet_name='Sheet1', index=False)
+    
+    # Get the xlsxwriter workbook and worksheet objects
+    workbook = writer.book
+    worksheet = writer.sheets['Sheet1']
+    
+    # Iterate through all columns and set the width to the maximum length of the column data
+    for i, col in enumerate(df_CM.columns):
+        # Calculate the maximum length of the column
+        max_length = df_CM[col].astype(str).map(len).max() if not df_CM.empty else 0
+        # Include the column header length
+        max_length = max(max_length, len(col))
+        
+        # Set the column width with an added buffer
+        worksheet.set_column(i, i, max_length + 2)  # Add 2 for some extra padding
+```
+
+### Explanation:
+1. **File Writing Context**: The `with pd.ExcelWriter(excel_out, engine='xlsxwriter') as writer:` ensures the file is properly saved and closed.
+2. **Data Export**: `df_CM.to_excel(writer, sheet_name='Sheet1', index=False)` writes the DataFrame to the specified sheet without including the index.
+3. **Workbook and Worksheet Objects**: `workbook = writer.book` and `worksheet = writer.sheets['Sheet1']` obtain references to the workbook and worksheet objects created by `xlsxwriter`.
+4. **Column Width Calculation**:
+   - **Maximum Length Calculation**:
+     - For each column, the length of the longest string in the column is found using `df_CM[col].astype(str).map(len).max()`.
+     - If the DataFrame is empty (`df_CM.empty`), the length is set to 0 to avoid errors.
+     - The length of the column header (`len(col)`) is also considered.
+     - The final maximum length for
