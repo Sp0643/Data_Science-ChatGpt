@@ -733,3 +733,53 @@ with pd.ExcelWriter('output.xlsx', engine='xlsxwriter') as writer:
      - If the DataFrame is empty (`df_CM.empty`), the length is set to 0 to avoid errors.
      - The length of the column header (`len(col)`) is also considered.
      - The final maximum length for
+
+
+
+
+
+To handle cases where the DataFrame (`df_CM`) might be empty and ensure that columns are not deleted when it's empty, we can adjust the code to explicitly check for an empty DataFrame and handle the column width setting accordingly.
+
+Here is the updated code:
+
+```python
+import pandas as pd
+
+# Sample DataFrame for demonstration purposes
+df_CM = pd.DataFrame({
+    'Column1': [],
+    'Column2': []
+})
+
+excel_out = 'output.xlsx'
+
+with pd.ExcelWriter(excel_out, engine='xlsxwriter') as writer:
+    # Write the DataFrame to the Excel sheet
+    df_CM.to_excel(writer, sheet_name='Sheet1', index=False)
+    
+    # Get the xlsxwriter workbook and worksheet objects
+    workbook = writer.book
+    worksheet = writer.sheets['Sheet1']
+    
+    # Iterate through all columns and set the width to the maximum length of the column data
+    for i, col in enumerate(df_CM.columns):
+        if df_CM.empty:
+            max_length = len(col)  # If the DataFrame is empty, use only the header length
+        else:
+            max_length = max(df_CM[col].astype(str).map(len).max(), len(col))
+        
+        worksheet.set_column(i, i, max_length + 2)  # Add a small buffer
+
+# Ensure file is properly closed and saved
+print(f"DataFrame written to {excel_out}")
+```
+
+### Explanation of the code:
+1. **Sample DataFrame**: For demonstration, the DataFrame `df_CM` is created empty. Ensure your DataFrame is properly assigned.
+2. **Export DataFrame to Excel**: `df_CM.to_excel(writer, sheet_name='Sheet1', index=False)` writes the DataFrame to an Excel sheet named "Sheet1" without the index.
+3. **Obtain Workbook and Worksheet Objects**: The `writer.book` and `writer.sheets['Sheet1']` references are correctly obtained.
+4. **Set Column Widths**:
+   - **Check for Empty DataFrame**: Before calculating the maximum length, check if the DataFrame is empty using `df_CM.empty`.
+   - **Maximum Length Calculation**:
+     - If the DataFrame is empty, use the length of the column header (`len(col)`).
+     - If the DataFrame is not empty, calculate the maximum length of the column data using `df_CM
