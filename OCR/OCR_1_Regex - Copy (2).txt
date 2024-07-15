@@ -55,3 +55,60 @@ workbook.save('installed_libraries_from_pip_list.xlsx')
 ```
 
 This code will run the `pip list` command, parse its output, and save the package information to an Excel file named `installed_libraries_from_pip_list.xlsx`.
+
+
+
+
+**Minutes of Meeting**
+
+**Date:** [Insert Date]  
+**Time:** [Insert Time]  
+**Attendees:** [Insert Attendees]
+
+1. **Demo of PKT Tool:**
+   - A demonstration of the PKT Tool was conducted.
+
+2. **Questions on Access and Testing:**
+   - Several questions were received regarding access for testing the PKT Tool.
+   - It was discussed whom to contact in case the application breaks down.
+
+3. **Character Size Adjustment:**
+   - It was suggested that the character size should be increased to allow Admin to provide case studies in questions.
+
+4. **User Quiz Information:**
+   - A request was made to pull out user quiz information in Excel format.
+
+5. **Embedding Excel Worksheet in PowerApps:**
+   - The embedding of an Excel worksheet in PowerApps to evaluate user responses was discussed.
+
+6. **Basic Document on App's Scope:**
+   - The need for a basic document outlining the scope of the application was highlighted.
+
+**Action Items:**
+
+1. **Access and Testing Queries:**
+   - [Responsible Person] to provide details on whom to contact for application breakdown issues.
+
+2. **Character Size Adjustment:**
+   - [Responsible Person] to adjust the character size for case studies in questions.
+
+3. **User Quiz Information:**
+   - [Responsible Person] to pull out user quiz information and format it in Excel.
+
+4. **Embedding Excel Worksheet:**
+   - [Responsible Person] to embed the Excel worksheet in PowerApps for user response evaluation.
+
+5. **App's Scope Document:**
+   - [Responsible Person] to draft and circulate a basic document on the app's scope.
+
+**Next Meeting:**
+**Date:** [Insert Next Meeting Date]  
+**Time:** [Insert Next Meeting Time]
+
+**Adjournment:**
+The meeting was adjourned at [Insert Time].
+
+---
+
+**Prepared by:** [Your Name]  
+**Date:** [Insert Date]
