@@ -133,3 +133,98 @@ Navigate(LandingPageScreen, ScreenTransition.None);
     - Submit quiz with `SubmitQuizButton`.
 
 This solution provides a structured approach to releasing quizzes and notifying users within Power Apps using Power Fx logic.
+
+
+
+Here’s a step-by-step approach to writing the Power Fx logic for releasing a quiz to selected users and displaying notifications:
+
+### Step 1: Define the collections
+Ensure you have the collections defined in your app:
+- `colUserselected`: Collection for capturing the user list.
+- `colCollectedQuestion`: Collection for capturing the quiz questions.
+
+### Step 2: Release the Quiz
+Add a button named `btnReleaseQuiz` on your configuration page. Use the `OnSelect` property of the button to set the logic for releasing the quiz.
+
+```powerfx
+// Generate a unique Quiz ID
+Set(varQuizID, GUID());
+
+// Get the current date and time
+Set(varCurrentDateTime, Now());
+
+// Set the expiry date to one week from now
+Set(varExpiryDate, DateAdd(varCurrentDateTime, 7, Days));
+
+// Create a collection to store the released quiz details
+ClearCollect(colReleasedQuizzes, {
+    QuizID: varQuizID,
+    Questions: colCollectedQuestion,
+    Users: colUserselected,
+    ReleaseDate: varCurrentDateTime,
+    ExpiryDate: varExpiryDate
+});
+
+// Update the user notifications
+ForAll(
+    colUserselected,
+    Collect(
+        colUserNotifications,
+        {
+            UserID: ThisRecord.UserID,
+            QuizID: varQuizID,
+            NotificationText: "A new quiz has been released and is active for a week.",
+            IsActive: true,
+            NotificationDate: varCurrentDateTime,
+            ExpiryDate: varExpiryDate
+        }
+    )
+);
+
+// Provide feedback to the admin
+Notify("Quiz released successfully and notifications sent to users.", NotificationType.Success);
+```
+
+### Step 3: Display Notifications on User Landing Page
+On the user's landing page, create a gallery to display active notifications.
+
+1. Insert a gallery control (`galNotifications`).
+2. Set the `Items` property of the gallery to filter the notifications for the logged-in user.
+
+```powerfx
+Filter(
+    colUserNotifications,
+    UserID = User().Email && IsActive = true && ExpiryDate >= Today()
+)
+```
+
+3. Add labels or other controls inside the gallery to display the notification text and other details.
+
+### Step 4: Handle Quiz Expiry
+To automatically handle quiz expiry, you can use a timer control that checks and updates the status of quizzes and notifications periodically.
+
+1. Insert a timer control (`timerCheckExpiry`).
+2. Set the `Duration` property to a suitable interval (e.g., 86400000 for 24 hours).
+3. Set the `OnTimerEnd` property to check and deactivate expired quizzes and notifications.
+
+```powerfx
+ForAll(
+    Filter(colReleasedQuizzes, ExpiryDate < Now()),
+    Patch(
+        colReleasedQuizzes,
+        ThisRecord,
+        { IsActive: false }
+    )
+);
+
+ForAll(
+    Filter(colUserNotifications, ExpiryDate < Now()),
+    Patch(
+        colUserNotifications,
+        ThisRecord,
+        { IsActive: false }
+    )
+);
+```
+
+By following these steps, you can create the logic needed to release quizzes to users, display notifications, and manage the active status of quizzes and notifications in Power Apps.
