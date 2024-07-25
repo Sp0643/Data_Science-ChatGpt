@@ -1,14 +1,135 @@
 import spacy
 
 # Load the English language model in SpaCy
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load("en_core_web
 
-# Sample text for NER
-text = "Apple is planning to open a new store in Paris next month."
 
-# Process the text using SpaCy's NLP pipeline
-doc = nlp(text)
 
-# Extract named entities and their labels
-for entity in doc.ents:
-    print(f"Entity: {entity.text}, Label: {entity.label_}")
+### Releasing the Quiz to Multiple Users
+
+To release a quiz to multiple users, you will need to:
+1. Store the quiz questions and user assignments.
+2. Notify users once the quiz is released.
+
+#### Power Fx Logic for Releasing the Quiz
+
+Assuming you have two collections: `QuestionsCollection` for storing quiz questions and `UsersCollection` for storing user details:
+
+1. **Admin Configuration Page:**
+    - Have a button called `ReleaseQuizButton`.
+    - Use the `OnSelect` property of `ReleaseQuizButton` to release the quiz to selected users.
+
+Here’s the Power Fx logic for the `OnSelect` property:
+
+```Power Fx
+// Collect selected questions
+ClearCollect(SelectedQuestions, Filter(QuestionsCollection, IsSelected = true));
+
+// Collect selected users
+ClearCollect(SelectedUsers, Filter(UsersCollection, IsSelected = true));
+
+// Update each user's record to indicate a new quiz is available
+ForAll(
+    SelectedUsers,
+    Patch(
+        UsersCollection,
+        LookUp(UsersCollection, UserID = ThisRecord.UserID),
+        {
+            QuizAvailable: true,
+            QuizQuestions: SelectedQuestions
+        }
+    )
+);
+
+// Notify admin of successful release
+Notify("Quiz released to selected users!", NotificationType.Success);
+```
+
+### Detailed Solution for Creating User Landing Page
+
+1. **Create a Landing Page Screen:**
+    - Name it `LandingPageScreen`.
+
+2. **Add a Gallery to Display Notifications:**
+    - Insert a gallery (`NotificationGallery`) to show available quizzes.
+    - Set the `Items` property of the gallery to filter users who have quizzes available.
+
+```Power Fx
+Filter(UsersCollection, QuizAvailable = true && UserID = User().Email)
+```
+
+3. **Display Quiz Information:**
+    - In the `NotificationGallery`, add a label to display the quiz notification.
+    - Set the `Text` property of the label to show a message.
+
+```Power Fx
+"New Quiz Available! Click to Start."
+```
+
+4. **Add a Button to Attempt the Quiz:**
+    - Insert a button inside the gallery item template (`StartQuizButton`).
+    - Set the `Text` property to "Start Quiz".
+    - Use the `OnSelect` property to navigate to the quiz page and pass the selected questions.
+
+```Power Fx
+Navigate(
+    QuizPage,
+    ScreenTransition.None,
+    {
+        SelectedQuizQuestions: ThisItem.QuizQuestions
+    }
+);
+```
+
+5. **Creating the Quiz Page:**
+    - Name it `QuizPage`.
+    - Add a gallery (`QuizQuestionsGallery`) to display quiz questions.
+    - Set the `Items` property to the passed questions.
+
+```Power Fx
+Param("SelectedQuizQuestions")
+```
+
+6. **Quiz Submission:**
+    - Add a button (`SubmitQuizButton`) on the `QuizPage`.
+    - Set the `Text` property to "Submit Quiz".
+    - Use the `OnSelect` property to submit the quiz and update the user's record to indicate the quiz is completed.
+
+```Power Fx
+ForAll(
+    QuizQuestionsGallery.AllItems,
+    // Logic to store user's answers
+);
+
+// Update user's record to indicate quiz completion
+Patch(
+    UsersCollection,
+    LookUp(UsersCollection, UserID = User().Email),
+    {
+        QuizAvailable: false,
+        QuizQuestions: Blank()
+    }
+);
+
+// Notify user of successful submission
+Notify("Quiz submitted successfully!", NotificationType.Success);
+
+// Navigate back to the landing page
+Navigate(LandingPageScreen, ScreenTransition.None);
+```
+
+### Summary
+
+1. **Admin Configuration Page:**
+    - Select questions and users.
+    - Release quiz with `ReleaseQuizButton` logic.
+
+2. **User Landing Page:**
+    - Display notifications with `NotificationGallery`.
+    - Allow users to start the quiz with `StartQuizButton`.
+
+3. **Quiz Page:**
+    - Display selected quiz questions with `QuizQuestionsGallery`.
+    - Submit quiz with `SubmitQuizButton`.
+
+This solution provides a structured approach to releasing quizzes and notifying users within Power Apps using Power Fx logic.
