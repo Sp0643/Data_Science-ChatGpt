@@ -218,3 +218,38 @@ NewQuizID
 - Ensure your SharePoint list "QuizIDs" exists and has a column "QuizID" to store these IDs.
 - This code should be placed in the relevant location in your Power Apps app, such as in the `OnSelect` property of a button that generates new quiz IDs.
 - Make sure to handle any potential race conditions if multiple users might generate IDs simultaneously.
+
+
+Gemini
+------------
+
+ClearCollect(
+    LastQuizID,
+    SortByColumns(QuizConfiguration, "CreatedOn", Descending)
+)
+
+ClearCollect(
+    QuizIDParts,
+    {
+        Prefix: "Quiz",
+        Year: Right(Text(Today(), "YYYY"), 2),
+        Month: Lower(Text(Today(), "MMM")),
+        Number: If(
+            CountRows(
+                Filter(LastQuizID,
+                    Left(QuizID, 7) = Concatenate("Quiz", Right(Text(Today(), "YYYY"), 2), Lower(Text(Today(), "MMM")))
+                )
+            ) > 0,
+            Value(Right(Last(LastQuizID).QuizID, 2)) + 1,
+            1
+        )
+    }
+)
+
+// Generate the QuizID
+Concatenate(
+    First(QuizIDParts).Prefix,
+    First(QuizIDParts).Year,
+    First(QuizIDParts).Month,
+    Text(First(QuizIDParts).Number, "00")
+)
