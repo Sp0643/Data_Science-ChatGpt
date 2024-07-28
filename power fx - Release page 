@@ -1,0 +1,132 @@
+To create a customized set of questions from a question bank and store this question subset/collection in another SharePoint list, you can follow these steps:
+
+1. **Correct the Formula**: Ensure that the PowerApps formula is syntactically correct.
+2. **Store the Collection in SharePoint List**: Use `Patch` to add the collection to your SharePoint list.
+
+Here's a revised and complete version of your formula:
+
+```plaintext
+ClearCollect(
+    AllQuestions,
+    FirstN(
+        Shuffle(
+            Filter(
+                QuestionBankCollateral, 
+                Process = drpQuestionBank.Selected.Value, 
+                QuestionType = "MCQ"
+            )
+        ),
+        Int(txtMCQnumber.Text)
+    ),
+    FirstN(
+        Shuffle(
+            Filter(
+                QuestionBankCollateral, 
+                Process = drpQuestionBank.Selected.Value, 
+                QuestionType = "Text"
+            )
+        ),
+        Int(txtTextNumber.Text)
+    ),
+    FirstN(
+        Shuffle(
+            Filter(
+                QuestionBankCollateral, 
+                Process = drpQuestionBank.Selected.Value, 
+                QuestionType = "TF"
+            )
+        ),
+        Int(txtTFnumber.Text)
+    )
+);
+```
+
+To store this collection in a SharePoint list, you will need to use the `ForAll` and `Patch` functions. Here's how you can do it:
+
+1. **Add a Button**: Add a button to your PowerApps screen.
+2. **Set Button's `OnSelect` Property**: Set the button's `OnSelect` property to use `ForAll` and `Patch`.
+
+```plaintext
+ForAll(
+    AllQuestions,
+    Patch(
+        YourSharePointList,
+        Defaults(YourSharePointList),
+        {
+            Title: Title, // Assuming "Title" is a column in your SharePoint list
+            Question: Question, // Assuming "Question" is a column in your SharePoint list
+            QuestionType: QuestionType,
+            Process: Process
+            // Add other columns as necessary
+        }
+    )
+)
+```
+
+Replace `YourSharePointList` with the name of your SharePoint list, and make sure to map the fields correctly.
+
+### Steps Breakdown:
+
+1. **Generate the Customized Set of Questions**:
+   - Use the `ClearCollect` formula to create a collection named `AllQuestions` with your filtered and shuffled questions.
+
+2. **Store the Collection in SharePoint List**:
+   - Use the `ForAll` function to iterate through each item in the `AllQuestions` collection.
+   - Use the `Patch` function to add each item to the SharePoint list.
+
+### Example with Button:
+
+1. Add a button to the screen and set its `OnSelect` property:
+
+```plaintext
+OnSelect:
+ClearCollect(
+    AllQuestions,
+    FirstN(
+        Shuffle(
+            Filter(
+                QuestionBankCollateral, 
+                Process = drpQuestionBank.Selected.Value, 
+                QuestionType = "MCQ"
+            )
+        ),
+        Int(txtMCQnumber.Text)
+    ),
+    FirstN(
+        Shuffle(
+            Filter(
+                QuestionBankCollateral, 
+                Process = drpQuestionBank.Selected.Value, 
+                QuestionType = "Text"
+            )
+        ),
+        Int(txtTextNumber.Text)
+    ),
+    FirstN(
+        Shuffle(
+            Filter(
+                QuestionBankCollateral, 
+                Process = drpQuestionBank.Selected.Value, 
+                QuestionType = "TF"
+            )
+        ),
+        Int(txtTFnumber.Text)
+    )
+);
+
+ForAll(
+    AllQuestions,
+    Patch(
+        YourSharePointList,
+        Defaults(YourSharePointList),
+        {
+            Title: Title, 
+            Question: Question, 
+            QuestionType: QuestionType,
+            Process: Process
+        }
+    )
+)
+```
+
+This should help you filter, shuffle, collect, and store your question subset in another SharePoint list.
