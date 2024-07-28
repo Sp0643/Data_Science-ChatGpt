@@ -130,3 +130,51 @@ ForAll(
 ```
 
 This should help you filter, shuffle, collect, and store your question subset in another SharePoint list.
+
+
+
+To generate a unique alphanumeric quiz ID in Power Apps with the format `YYMonthN` (where `YY` is the last two digits of the current year, `Month` is the full month name, and `N` is an incrementing number), you can use Power FX code. 
+
+Here’s how you can achieve this:
+
+1. **Retrieve the current year and month.**
+2. **Fetch the last generated ID from your data source.**
+3. **Increment the number part of the last ID.**
+
+Assuming you're using a SharePoint list named "QuizIDs" with a column "QuizID" to store these IDs, the Power FX code will look something like this:
+
+```PowerFX
+// Define the current year and month
+Set(CurrentYear, Text(Today(), "yy"));
+Set(CurrentMonth, Text(Today(), "mmmm"));
+
+// Fetch the last generated ID from the SharePoint list
+Set(LastGeneratedID, Last(Sort(Filter(QuizIDs, StartsWith(QuizID, CurrentYear & CurrentMonth)), QuizID, Descending)).QuizID);
+
+// Extract the numeric part of the last generated ID
+Set(LastNumber, If(IsBlank(LastGeneratedID), 0, Value(Mid(LastGeneratedID, Len(CurrentYear & CurrentMonth) + 1, Len(LastGeneratedID) - Len(CurrentYear & CurrentMonth)))));
+
+// Increment the number
+Set(NewNumber, LastNumber + 1);
+
+// Construct the new QuizID
+Set(NewQuizID, CurrentYear & CurrentMonth & Text(NewNumber));
+
+// Display or save the new QuizID
+NewQuizID
+```
+
+### Explanation:
+
+1. **Set(CurrentYear, Text(Today(), "yy"))**: Retrieves the last two digits of the current year.
+2. **Set(CurrentMonth, Text(Today(), "mmmm"))**: Retrieves the full name of the current month.
+3. **Set(LastGeneratedID, Last(...))**: Fetches the last generated QuizID from the SharePoint list, sorted in descending order, to get the most recent one.
+4. **Set(LastNumber, ...)**: Extracts the numeric part of the last generated ID. If there is no last ID, it sets `LastNumber` to 0.
+5. **Set(NewNumber, LastNumber + 1)**: Increments the numeric part by 1.
+6. **Set(NewQuizID, CurrentYear & CurrentMonth & Text(NewNumber))**: Constructs the new QuizID by concatenating the year, month, and the new number.
+7. **NewQuizID**: Displays or uses the new QuizID.
+
+### Notes:
+- Ensure your SharePoint list "QuizIDs" exists and has a column "QuizID" to store these IDs.
+- This code should be placed in the relevant location in your Power Apps app, such as in the `OnSelect` property of a button that generates new quiz IDs.
+- Make sure to handle any potential race conditions if multiple users might generate IDs simultaneously.
