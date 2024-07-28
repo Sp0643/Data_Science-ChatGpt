@@ -253,3 +253,63 @@ Concatenate(
     First(QuizIDParts).Month,
     Text(First(QuizIDParts).Number, "00")
 )
+
+
+
+To store these generated IDs in a SharePoint list or any data source within Power Apps, you can follow these steps:
+
+1. **Create Columns in SharePoint List**: Ensure you have columns named `QuizID` and `NotificationID` in your SharePoint list.
+
+2. **Generate and Store IDs**: Use Power Fx formulas to generate the IDs and then save them to the SharePoint list.
+
+Here's an example on how to set and store the information in a SharePoint list:
+
+### Step-by-Step Process
+
+1. **Generate Unique IDs**:
+   Use variables to generate and store the IDs when a new item is created.
+
+2. **Patch to SharePoint List**:
+   Use the `Patch` function to save the new item with the generated IDs to your SharePoint list.
+
+### Example Code in Power Fx
+
+#### OnSelect Property of a Button to Create a New Quiz
+```plaintext
+// Generate unique QuizID
+Set(varQuizID, "QUIZ-" & Text(Now(), "yyyyMMdd-HHmmss") & "-" & Text(Rand() * 10000, "0000"));
+
+// Patch the new quiz item to SharePoint list
+Patch(
+    YourSharePointListName,
+    Defaults(YourSharePointListName),
+    {
+        QuizID: varQuizID,
+        Title: "Your Quiz Title", // Replace with your actual title or other fields
+        // Add other fields as needed
+    }
+);
+```
+
+#### OnSelect Property of a Button to Create a New Notification
+```plaintext
+// Generate unique NotificationID
+Set(varNotificationID, "NOTIF-" & Text(Now(), "yyyyMMdd-HHmmss") & "-" & Text(Rand() * 10000, "0000"));
+
+// Patch the new notification item to SharePoint list
+Patch(
+    YourNotificationSharePointListName,
+    Defaults(YourNotificationSharePointListName),
+    {
+        NotificationID: varNotificationID,
+        Title: "Your Notification Title", // Replace with your actual title or other fields
+        // Add other fields as needed
+    }
+);
+```
+
+### Explanation
+- `Set(varQuizID, ...)` and `Set(varNotificationID, ...)`: These lines generate and store the unique IDs in variables.
+- `Patch(YourSharePointListName, Defaults(YourSharePointListName), { ... })`: This line saves a new item to the specified SharePoint list using the generated IDs and any additional fields you want to include.
+
+Replace `YourSharePointListName` and `YourNotificationSharePointListName` with the actual names of your SharePoint lists. Adjust the fields inside the `Patch` function as necessary to match the structure of your SharePoint lists.
