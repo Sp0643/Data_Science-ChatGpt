@@ -313,3 +313,77 @@ Patch(
 - `Patch(YourSharePointListName, Defaults(YourSharePointListName), { ... })`: This line saves a new item to the specified SharePoint list using the generated IDs and any additional fields you want to include.
 
 Replace `YourSharePointListName` and `YourNotificationSharePointListName` with the actual names of your SharePoint lists. Adjust the fields inside the `Patch` function as necessary to match the structure of your SharePoint lists.
+
+
+
+To patch a new question to your SharePoint data source and ensure the new question ID is incremented by 1 from the last question ID, you can follow these steps:
+
+1. **Retrieve the Last Question ID:**
+   Use the `Last` function to get the highest question ID from your SharePoint list.
+   
+2. **Increment the Question ID:**
+   Add 1 to the last question ID to create a new unique question ID.
+   
+3. **Patch the New Question:**
+   Use the `Patch` function to add the new question to your SharePoint data source.
+
+### Implementation
+
+1. **Retrieve the Last Question ID:**
+   ```PowerApps
+   // Assuming your SharePoint list is named QuestionsDataSource and QuestionID is the column for question IDs
+   LastQuestionID = Last(Sort(QuestionsDataSource, QuestionID, Descending)).QuestionID
+   ```
+
+2. **Increment the Question ID:**
+   ```PowerApps
+   NewQuestionID = LastQuestionID + 1
+   ```
+
+3. **Patch the New Question:**
+   Assuming you have a form to collect new question details, and you have text inputs or dropdowns to gather the new question details.
+
+   ```PowerApps
+   Patch(QuestionsDataSource, Defaults(QuestionsDataSource), 
+         {
+           QuestionID: NewQuestionID,
+           Theme: DropdownTheme.Selected.Value,
+           QuestionType: DropdownQuestionType.Selected.Value,
+           QuestionText: TextInputQuestionText.Text,
+           Answer: TextInputAnswer.Text
+         });
+   ```
+
+### Complete Code for Button OnSelect
+
+Here’s the complete code for the `OnSelect` property of a button that will add a new question:
+
+```PowerApps
+// Step 1: Get the last question ID
+Set(LastQuestionID, Last(Sort(QuestionsDataSource, QuestionID, Descending)).QuestionID);
+
+// Step 2: Increment the question ID
+Set(NewQuestionID, LastQuestionID + 1);
+
+// Step 3: Patch the new question
+Patch(QuestionsDataSource, Defaults(QuestionsDataSource), 
+      {
+        QuestionID: NewQuestionID,
+        Theme: DropdownTheme.Selected.Value,
+        QuestionType: DropdownQuestionType.Selected.Value,
+        QuestionText: TextInputQuestionText.Text,
+        Answer: TextInputAnswer.Text
+      });
+
+// Optionally refresh the data source to reflect the new question in the gallery
+Refresh(QuestionsDataSource);
+```
+
+### Explanation
+
+- **Set Variables:** Use `Set` to create variables for the last question ID and the new question ID.
+- **Sort and Last:** Use `Sort` and `Last` to get the highest question ID in descending order.
+- **Patch:** Use `Patch` to add the new question to the SharePoint list, setting the `QuestionID` to `NewQuestionID` and other fields to the values from the form inputs.
+- **Refresh:** Optionally, refresh the data source to update the gallery with the new question.
+
+By implementing this code in the `OnSelect` property of a button, you can ensure that new questions are added with unique, incremented question IDs and that the new question data is correctly patched to your SharePoint data source.
