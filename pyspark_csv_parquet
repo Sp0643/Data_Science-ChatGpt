@@ -635,3 +635,146 @@ spark.stop()
 
 ### Summary
 This guide provides PySpark code snippets to create an external Hive table from a CSV file, convert it to a Parquet table, and fetch the data using PySpark. This approach helps demonstrate the efficiency of using PySpark over Hue for data fetching.
+
+
+To handle columns that contain array documents, you'll need to use the appropriate PySpark data types to read and create the tables correctly. Here’s how you can modify the code to incorporate array columns.
+
+### Step-by-Step Guide to Create Hive Table from CSV with Array Columns Using PySpark
+
+#### Step 1: Uploading the Sample CSV File to HDFS
+First, upload your sample CSV file to HDFS. Use the following command:
+
+```bash
+hdfs dfs -put /local/path/to/sample.csv /hdfs/path/sample.csv
+```
+
+#### Step 2: Creating an External Table in Hive from the CSV File Using PySpark
+Assuming the CSV has a JSON-like structure for array columns, here's how you can handle it:
+
+1. **Define the schema** including array types.
+2. **Read the CSV** with the schema.
+3. **Create the external table** in Hive with the proper schema.
+
+Here’s the updated PySpark code:
+
+```python
+from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType, ArrayType
+
+# Initialize Spark session
+spark = SparkSession.builder \
+    .appName("Create Hive Table from CSV") \
+    .enableHiveSupport() \
+    .getOrCreate()
+
+# Define the schema
+schema = StructType([
+    StructField("column1", StringType(), True),
+    StructField("column2", IntegerType(), True),
+    StructField("column3", ArrayType(StringType()), True)  # Array of strings as an example
+])
+
+# Load the data into a DataFrame
+csv_df = spark.read.csv("/hdfs/path/sample.csv", header=True, schema=schema)
+
+# Show the data (for verification)
+csv_df.show()
+
+# Register the DataFrame as a temporary view
+csv_df.createOrReplaceTempView("temp_csv_table")
+
+# Create an external table in Hive using the schema
+spark.sql("""
+    CREATE EXTERNAL TABLE IF NOT EXISTS sample_csv_table (
+        column1 STRING,
+        column2 INT,
+        column3 ARRAY<STRING>
+    )
+    ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+    STORED AS TEXTFILE
+    LOCATION '/hdfs/path/sample.csv'
+""")
+
+# Stop the Spark session
+spark.stop()
+```
+
+#### Step 3: Creating a Parquet Table from the External Table Using PySpark
+Next, create a Parquet table and insert data from the CSV table into this Parquet table using PySpark:
+
+```python
+# Initialize Spark session
+spark = SparkSession.builder \
+    .appName("Create Parquet Table from CSV Table") \
+    .enableHiveSupport() \
+    .getOrCreate()
+
+# Create a Parquet table in Hive
+spark.sql("""
+    CREATE TABLE IF NOT EXISTS sample_parquet_table (
+        column1 STRING,
+        column2 INT,
+        column3 ARRAY<STRING>
+    )
+    STORED AS PARQUET
+""")
+
+# Insert data into the Parquet table from the temporary view
+spark.sql("""
+    INSERT INTO TABLE sample_parquet_table
+    SELECT * FROM temp_csv_table
+""")
+
+# Verify the data in the Parquet table
+parquet_df = spark.sql("SELECT * FROM sample_parquet_table")
+parquet_df.show()
+
+# Stop the Spark session
+spark.stop()
+```
+
+#### Step 4: Fetching and Processing Data from the Parquet Table Using PySpark
+Use the following PySpark code to read data from the Parquet table and process it:
+
+```python
+# Initialize Spark session
+spark = SparkSession.builder \
+    .appName("Fetch Parquet Data") \
+    .enableHiveSupport() \
+    .getOrCreate()
+
+# Start timer
+import time
+start_time = time.time()
+
+# Read data from the Parquet table
+parquet_df = spark.sql("SELECT * FROM sample_parquet_table")
+
+# Show the data (for verification)
+parquet_df.show()
+
+# End timer
+end_time = time.time()
+
+# Calculate time taken
+time_taken = end_time - start_time
+print(f"Time taken to fetch data using PySpark: {time_taken} seconds")
+
+# Perform any additional processing here
+# ...
+
+# Export to Pandas DataFrame if needed
+pandas_df = parquet_df.toPandas()
+
+# Stop the Spark session
+spark.stop()
+```
+
+### Additional Details to Request from Your Colleague
+1. **Schema of the data:** Column names, data types, and details about which columns are arrays.
+2. **Volume and distribution of the data:** Number of rows and size of the data.
+3. **Sample data file:** In CSV format.
+4. **Paths or directories in the data lake:** Where the data can be stored and accessed.
+
+### Summary
+This guide provides PySpark code snippets to create an external Hive table from a CSV file with array columns, convert it to a Parquet table, and fetch the data using PySpark. This approach helps demonstrate the efficiency of using PySpark over Hue for data fetching.
