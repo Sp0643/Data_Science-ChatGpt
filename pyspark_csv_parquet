@@ -391,3 +391,247 @@ Here’s a consolidated workflow to ensure everything is correctly set up:
       ```
 
 By following these steps, you can ensure that the data is correctly loaded and can be queried both in PySpark and Hue without issues.
+
+
+### Step-by-Step Guide to Optimize Data Fetching from a Data Lake
+
+#### Step 1: Uploading the Sample CSV File to HDFS
+First, ensure you have access to HDFS and have installed the necessary tools to interact with it. Use the following command to upload your sample CSV file to HDFS.
+
+```bash
+hdfs dfs -put /local/path/to/sample.csv /hdfs/path/sample.csv
+```
+
+#### Step 2: Creating an External Table in Hive from the CSV File
+Next, create an external table in Hive to read the CSV file. You need to request the schema (column names and data types) from your colleague.
+
+Here’s an example HiveQL script:
+
+```sql
+CREATE EXTERNAL TABLE IF NOT EXISTS sample_csv_table (
+    column1 STRING,
+    column2 INT,
+    column3 DOUBLE
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION '/hdfs/path/sample.csv';
+```
+
+Replace `column1`, `column2`, `column3`, and their data types with the actual schema.
+
+#### Step 3: Creating a Parquet Table from the External Table
+Now, create a Parquet table and insert data from the CSV table into this Parquet table.
+
+```sql
+CREATE TABLE sample_parquet_table (
+    column1 STRING,
+    column2 INT,
+    column3 DOUBLE
+)
+STORED AS PARQUET;
+
+INSERT INTO TABLE sample_parquet_table
+SELECT * FROM sample_csv_table;
+```
+
+#### Step 4: Writing PySpark Code to Fetch and Process Data from the Parquet Table
+Use the following PySpark code to read data from the Parquet table and process it.
+
+```python
+from pyspark.sql import SparkSession
+
+# Initialize Spark session
+spark = SparkSession.builder \
+    .appName("Fetch Parquet Data") \
+    .enableHiveSupport() \
+    .getOrCreate()
+
+# Read data from Parquet table
+parquet_df = spark.sql("SELECT * FROM sample_parquet_table")
+
+# Show the data (for verification)
+parquet_df.show()
+
+# Perform any additional processing here
+# ...
+
+# Export to Pandas DataFrame if needed
+pandas_df = parquet_df.toPandas()
+
+# Stop the Spark session
+spark.stop()
+```
+
+#### Step 5: Comparing Performance of Fetching Data Using PySpark and Hue
+You can compare the performance by timing the data fetching process using both PySpark and Hue. Here’s an example of how to time the PySpark fetching process:
+
+```python
+import time
+from pyspark.sql import SparkSession
+
+# Initialize Spark session
+spark = SparkSession.builder \
+    .appName("Fetch Parquet Data") \
+    .enableHiveSupport() \
+    .getOrCreate()
+
+# Start timer
+start_time = time.time()
+
+# Read data from Parquet table
+parquet_df = spark.sql("SELECT * FROM sample_parquet_table")
+
+# Show the data (for verification)
+parquet_df.show()
+
+# End timer
+end_time = time.time()
+
+# Calculate time taken
+time_taken = end_time - start_time
+print(f"Time taken to fetch data using PySpark: {time_taken} seconds")
+
+# Stop the Spark session
+spark.stop()
+```
+
+### Additional Details to Request from Your Colleague
+1. **Schema of the data:** Column names and data types.
+2. **Volume and distribution of the data:** Number of rows and size of the data.
+3. **Sample data file:** In CSV format.
+4. **Paths or directories in the data lake:** Where the data can be stored and accessed.
+
+### Summary
+This guide provides a detailed process for uploading a CSV file to HDFS, creating external and Parquet tables in Hive, fetching and processing data using PySpark, and comparing the performance with Hue. By following these steps, you should be able to demonstrate the efficiency of using PySpark over Hue for data fetching.
+
+
+
+Sure! Here's the revised process and PySpark code snippets to create Hive tables directly from a CSV file and perform the necessary operations:
+
+### Step-by-Step Guide to Create Hive Table from CSV Using PySpark
+
+#### Step 1: Uploading the Sample CSV File to HDFS
+First, upload your sample CSV file to HDFS. Use the following command:
+
+```bash
+hdfs dfs -put /local/path/to/sample.csv /hdfs/path/sample.csv
+```
+
+#### Step 2: Creating an External Table in Hive from the CSV File Using PySpark
+Use PySpark to create an external table in Hive from the CSV file. Here's the PySpark code to achieve this:
+
+```python
+from pyspark.sql import SparkSession
+
+# Initialize Spark session
+spark = SparkSession.builder \
+    .appName("Create Hive Table from CSV") \
+    .enableHiveSupport() \
+    .getOrCreate()
+
+# Define the schema
+schema = "column1 STRING, column2 INT, column3 DOUBLE"
+
+# Create an external table in Hive
+spark.sql(f"""
+    CREATE EXTERNAL TABLE IF NOT EXISTS sample_csv_table (
+        {schema}
+    )
+    ROW FORMAT DELIMITED
+    FIELDS TERMINATED BY ','
+    STORED AS TEXTFILE
+    LOCATION '/hdfs/path/sample.csv'
+""")
+
+# Load the data into a DataFrame
+csv_df = spark.read.csv("/hdfs/path/sample.csv", header=True, inferSchema=True)
+
+# Show the data (for verification)
+csv_df.show()
+
+# Stop the Spark session
+spark.stop()
+```
+
+#### Step 3: Creating a Parquet Table from the External Table Using PySpark
+Next, create a Parquet table and insert data from the CSV table into this Parquet table using PySpark:
+
+```python
+# Initialize Spark session
+spark = SparkSession.builder \
+    .appName("Create Parquet Table from CSV Table") \
+    .enableHiveSupport() \
+    .getOrCreate()
+
+# Define the schema again if needed
+schema = "column1 STRING, column2 INT, column3 DOUBLE"
+
+# Create a Parquet table in Hive
+spark.sql(f"""
+    CREATE TABLE IF NOT EXISTS sample_parquet_table (
+        {schema}
+    )
+    STORED AS PARQUET
+""")
+
+# Insert data into the Parquet table from the CSV table
+spark.sql("""
+    INSERT INTO TABLE sample_parquet_table
+    SELECT * FROM sample_csv_table
+""")
+
+# Verify the data in the Parquet table
+parquet_df = spark.sql("SELECT * FROM sample_parquet_table")
+parquet_df.show()
+
+# Stop the Spark session
+spark.stop()
+```
+
+#### Step 4: Fetching and Processing Data from the Parquet Table Using PySpark
+Use the following PySpark code to read data from the Parquet table and process it:
+
+```python
+# Initialize Spark session
+spark = SparkSession.builder \
+    .appName("Fetch Parquet Data") \
+    .enableHiveSupport() \
+    .getOrCreate()
+
+# Start timer
+import time
+start_time = time.time()
+
+# Read data from the Parquet table
+parquet_df = spark.sql("SELECT * FROM sample_parquet_table")
+
+# Show the data (for verification)
+parquet_df.show()
+
+# End timer
+end_time = time.time()
+
+# Calculate time taken
+time_taken = end_time - start_time
+print(f"Time taken to fetch data using PySpark: {time_taken} seconds")
+
+# Perform any additional processing here
+# ...
+
+# Export to Pandas DataFrame if needed
+pandas_df = parquet_df.toPandas()
+
+# Stop the Spark session
+spark.stop()
+```
+
+### Additional Details to Request from Your Colleague
+1. **Schema of the data:** Column names and data types.
+2. **Volume and distribution of the data:** Number of rows and size of the data.
+3. **Sample data file:** In CSV format.
+4. **Paths or directories in the data lake:** Where the data can be stored and accessed.
+
+### Summary
+This guide provides PySpark code snippets to create an external Hive table from a CSV file, convert it to a Parquet table, and fetch the data using PySpark. This approach helps demonstrate the efficiency of using PySpark over Hue for data fetching.
