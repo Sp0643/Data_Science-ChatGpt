@@ -165,3 +165,229 @@ Creating a well-structured Parquet table from a CSV file involves several steps 
 - **Compression**: Parquet supports various compression codecs (like Snappy, Gzip). Consider using them to reduce storage space and improve query performance.
 
 By following these steps, you can ensure that your Parquet table is created correctly and can be efficiently queried in Hive.
+
+
+
+If you are encountering an issue where fetching a table in Hue results in rows that only contain column names, it suggests that there might be an issue with how the table was created or how the data was loaded into the table. Here are some steps to troubleshoot and resolve this issue:
+
+### Steps to Troubleshoot and Resolve
+
+1. **Check the CSV Data**:
+    - Verify that the CSV file used to create the table contains actual data rows, not just the header (column names).
+    - Open the CSV file and ensure it contains data.
+
+2. **Verify External Table Creation**:
+    - Ensure the external table was created correctly and is pointing to the right location in HDFS.
+    - Use the following command to describe the external table and check its properties:
+      ```sql
+      DESCRIBE FORMATTED csv_table;
+      ```
+
+3. **Review the Data Loading Process**:
+    - If the data was manually loaded, ensure that the correct file path was used and the data was successfully uploaded.
+    - Check if there were any errors during the data loading process.
+
+4. **Check for Correct Delimiters**:
+    - Verify that the correct delimiters were used when creating the table. Ensure the field and line delimiters match those in the CSV file.
+    - Example table creation statement with delimiters:
+      ```sql
+      CREATE EXTERNAL TABLE csv_table (
+          system_id STRING,
+          message_id STRING,
+          path STRING,
+          address STRING,
+          name STRING,
+          type STRING,
+          on_behalf_of STRING,
+          qualifier_name STRING,
+          qualifier_value STRING,
+          address_valid STRING,
+          bd_received_time STRING,
+          emplid STRING,
+          hrds_email_id STRING,
+          empl_status STRING,
+          work_country STRING,
+          worker_type STRING,
+          position_nbr STRING,
+          au STRING,
+          jobcode STRING,
+          job_title STRING,
+          sprvs_org_lvl_02_id STRING,
+          sprvs_org_lvl_02_name STRING,
+          sprvs_org_lvl_02_mgr_id STRING,
+          sprvs_org_lvl_03_id STRING,
+          sprvs_org_lvl_03_name STRING,
+          sprvs_org_lvl_03_mgr_id STRING,
+          sprvs_org_lvl_04_id STRING,
+          sprvs_org_lvl_04_name STRING,
+          sprvs_org_lvl_04_mgr_id STRING,
+          sprvs_org_lvl_05_id STRING,
+          sprvs_org_lvl_05_name STRING,
+          sprvs_org_lvl_05_mgr_id STRING,
+          sprvs_org_lvl_06_id STRING,
+          sprvs_org_lvl_06_name STRING,
+          sprvs_org_lvl_06_mgr_id STRING,
+          sprvs_org_lvl_07_id STRING,
+          sprvs_org_lvl_07_name STRING,
+          sprvs_org_lvl_07_mgr_id STRING,
+          sprvs_org_lvl_08_id STRING,
+          sprvs_org_lvl_08_name STRING,
+          sprvs_org_lvl_08_mgr_id STRING,
+          sprvs_org_lvl_09_id STRING,
+          sprvs_org_lvl_09_name STRING,
+          sprvs_org_lvl_09_mgr_id STRING,
+          last_modified STRING,
+          hr_rundate STRING,
+          load_timestamp STRING,
+          sprvs_org_lvl_02_mgr_name STRING,
+          sprvs_org_lvl_03_mgr_name STRING,
+          sprvs_org_lvl_04_mgr_name STRING,
+          sprvs_org_lvl_05_mgr_name STRING,
+          sprvs_org_lvl_06_mgr_name STRING,
+          sprvs_org_lvl_07_mgr_name STRING,
+          sprvs_org_lvl_08_mgr_name STRING,
+          sprvs_org_lvl_09_mgr_name STRING,
+          received_date STRING,
+          received_hour_of_day STRING,
+          classification STRING
+      )
+      ROW FORMAT DELIMITED
+      FIELDS TERMINATED BY ','
+      LINES TERMINATED BY '\n'
+      STORED AS TEXTFILE
+      LOCATION '/hdfs/path/to/csv/';
+      ```
+
+5. **Load Data Correctly**:
+    - If you are using `LOAD DATA INPATH`, ensure the data is correctly loaded into the table. Example:
+      ```sql
+      LOAD DATA INPATH '/hdfs/path/to/yourfile.csv' INTO TABLE csv_table;
+      ```
+
+6. **Verify Data in Hive**:
+    - Use a simple `SELECT` query in Hive to check if the data is correctly populated:
+      ```sql
+      SELECT * FROM csv_table LIMIT 10;
+      ```
+
+7. **Check Data in Hue**:
+    - After verifying that data is correctly loaded into Hive, check in Hue again to see if the issue persists.
+
+### Example Workflow
+
+Here’s a consolidated workflow to ensure everything is correctly set up:
+
+1. **Upload CSV to HDFS**:
+    ```bash
+    hdfs dfs -put /local/path/to/yourfile.csv /hdfs/path/to/yourfile.csv
+    ```
+
+2. **Create External Table in Hive**:
+    ```sql
+    CREATE EXTERNAL TABLE csv_table (
+        system_id STRING,
+        message_id STRING,
+        path STRING,
+        address STRING,
+        name STRING,
+        type STRING,
+        on_behalf_of STRING,
+        qualifier_name STRING,
+        qualifier_value STRING,
+        address_valid STRING,
+        bd_received_time STRING,
+        emplid STRING,
+        hrds_email_id STRING,
+        empl_status STRING,
+        work_country STRING,
+        worker_type STRING,
+        position_nbr STRING,
+        au STRING,
+        jobcode STRING,
+        job_title STRING,
+        sprvs_org_lvl_02_id STRING,
+        sprvs_org_lvl_02_name STRING,
+        sprvs_org_lvl_02_mgr_id STRING,
+        sprvs_org_lvl_03_id STRING,
+        sprvs_org_lvl_03_name STRING,
+        sprvs_org_lvl_03_mgr_id STRING,
+        sprvs_org_lvl_04_id STRING,
+        sprvs_org_lvl_04_name STRING,
+        sprvs_org_lvl_04_mgr_id STRING,
+        sprvs_org_lvl_05_id STRING,
+        sprvs_org_lvl_05_name STRING,
+        sprvs_org_lvl_05_mgr_id STRING,
+        sprvs_org_lvl_06_id STRING,
+        sprvs_org_lvl_06_name STRING,
+        sprvs_org_lvl_06_mgr_id STRING,
+        sprvs_org_lvl_07_id STRING,
+        sprvs_org_lvl_07_name STRING,
+        sprvs_org_lvl_07_mgr_id STRING,
+        sprvs_org_lvl_08_id STRING,
+        sprvs_org_lvl_08_name STRING,
+        sprvs_org_lvl_08_mgr_id STRING,
+        sprvs_org_lvl_09_id STRING,
+        sprvs_org_lvl_09_name STRING,
+        sprvs_org_lvl_09_mgr_id STRING,
+        last_modified STRING,
+        hr_rundate STRING,
+        load_timestamp STRING,
+        sprvs_org_lvl_02_mgr_name STRING,
+        sprvs_org_lvl_03_mgr_name STRING,
+        sprvs_org_lvl_04_mgr_name STRING,
+        sprvs_org_lvl_05_mgr_name STRING,
+        sprvs_org_lvl_06_mgr_name STRING,
+        sprvs_org_lvl_07_mgr_name STRING,
+        sprvs_org_lvl_08_mgr_name STRING,
+        sprvs_org_lvl_09_mgr_name STRING,
+        received_date STRING,
+        received_hour_of_day STRING,
+        classification STRING
+    )
+    ROW FORMAT DELIMITED
+    FIELDS TERMINATED BY ','
+    LINES TERMINATED BY '\n'
+    STORED AS TEXTFILE
+    LOCATION '/hdfs/path/to/csv/';
+    ```
+
+3. **Load Data** (if not already loaded):
+    ```sql
+    LOAD DATA INPATH '/hdfs/path/to/yourfile.csv' INTO TABLE csv_table;
+    ```
+
+4. **Create Parquet Table**:
+    ```sql
+    CREATE TABLE parquet_table AS
+    SELECT * FROM csv_table;
+    ```
+
+5. **Fetch Data with PySpark**:
+    ```python
+    from pyspark.sql import SparkSession
+    import time
+
+    spark = SparkSession.builder.appName("ParquetPerformanceTest").getOrCreate()
+
+    start_time = time.time()
+
+    parquet_df = spark.read.parquet("path/to/parquet_table")
+
+    row_count = parquet_df.count()
+
+    end_time = time.time()
+
+    time_taken = end_time - start_time
+    print(f"Time taken to fetch data using PySpark: {time_taken} seconds")
+    print(f"Row count: {row_count}")
+
+    spark.stop()
+    ```
+
+6. **Verify in Hue**:
+    - Run a simple query in Hue to ensure data is correctly populated:
+      ```sql
+      SELECT * FROM parquet_table LIMIT 10;
+      ```
+
+By following these steps, you can ensure that the data is correctly loaded and can be queried both in PySpark and Hue without issues.
