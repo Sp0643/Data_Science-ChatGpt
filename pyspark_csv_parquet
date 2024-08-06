@@ -1,0 +1,167 @@
+Creating a well-structured Parquet table from a CSV file involves several steps to ensure that the data is properly formatted, types are correctly defined, and the table can be efficiently queried in Hive. Here’s a step-by-step guide:
+
+### Steps to Create a Parquet Table from a CSV File in Hive
+
+1. **Upload the CSV File to HDFS**:
+    - Ensure your CSV file is accessible in HDFS. Use the following command to upload the file:
+      ```bash
+      hdfs dfs -put /local/path/to/yourfile.csv /hdfs/path/to/yourfile.csv
+      ```
+
+2. **Create an External Table for the CSV File**:
+    - Create an external table in Hive that points to your CSV file. This helps in reading the CSV data into Hive.
+      ```sql
+      CREATE EXTERNAL TABLE csv_table (
+          system_id STRING,
+          message_id STRING,
+          path STRING,
+          address STRING,
+          name STRING,
+          type STRING,
+          on_behalf_of STRING,
+          qualifier_name STRING,
+          qualifier_value STRING,
+          address_valid STRING,
+          bd_received_time STRING,
+          emplid STRING,
+          hrds_email_id STRING,
+          empl_status STRING,
+          work_country STRING,
+          worker_type STRING,
+          position_nbr STRING,
+          au STRING,
+          jobcode STRING,
+          job_title STRING,
+          sprvs_org_lvl_02_id STRING,
+          sprvs_org_lvl_02_name STRING,
+          sprvs_org_lvl_02_mgr_id STRING,
+          sprvs_org_lvl_03_id STRING,
+          sprvs_org_lvl_03_name STRING,
+          sprvs_org_lvl_03_mgr_id STRING,
+          sprvs_org_lvl_04_id STRING,
+          sprvs_org_lvl_04_name STRING,
+          sprvs_org_lvl_04_mgr_id STRING,
+          sprvs_org_lvl_05_id STRING,
+          sprvs_org_lvl_05_name STRING,
+          sprvs_org_lvl_05_mgr_id STRING,
+          sprvs_org_lvl_06_id STRING,
+          sprvs_org_lvl_06_name STRING,
+          sprvs_org_lvl_06_mgr_id STRING,
+          sprvs_org_lvl_07_id STRING,
+          sprvs_org_lvl_07_name STRING,
+          sprvs_org_lvl_07_mgr_id STRING,
+          sprvs_org_lvl_08_id STRING,
+          sprvs_org_lvl_08_name STRING,
+          sprvs_org_lvl_08_mgr_id STRING,
+          sprvs_org_lvl_09_id STRING,
+          sprvs_org_lvl_09_name STRING,
+          sprvs_org_lvl_09_mgr_id STRING,
+          last_modified STRING,
+          hr_rundate STRING,
+          load_timestamp STRING,
+          sprvs_org_lvl_02_mgr_name STRING,
+          sprvs_org_lvl_03_mgr_name STRING,
+          sprvs_org_lvl_04_mgr_name STRING,
+          sprvs_org_lvl_05_mgr_name STRING,
+          sprvs_org_lvl_06_mgr_name STRING,
+          sprvs_org_lvl_07_mgr_name STRING,
+          sprvs_org_lvl_08_mgr_name STRING,
+          sprvs_org_lvl_09_mgr_name STRING,
+          received_date STRING,
+          received_hour_of_day STRING,
+          classification STRING
+      )
+      ROW FORMAT DELIMITED
+      FIELDS TERMINATED BY ','
+      LINES TERMINATED BY '\n'
+      STORED AS TEXTFILE
+      LOCATION '/hdfs/path/to/csv/';
+      ```
+
+3. **Create the Parquet Table**:
+    - Create a new table in Hive to store the data in Parquet format.
+      ```sql
+      CREATE TABLE parquet_table (
+          system_id STRING,
+          message_id STRING,
+          path STRING,
+          address STRING,
+          name STRING,
+          type STRING,
+          on_behalf_of STRING,
+          qualifier_name STRING,
+          qualifier_value STRING,
+          address_valid STRING,
+          bd_received_time STRING,
+          emplid STRING,
+          hrds_email_id STRING,
+          empl_status STRING,
+          work_country STRING,
+          worker_type STRING,
+          position_nbr STRING,
+          au STRING,
+          jobcode STRING,
+          job_title STRING,
+          sprvs_org_lvl_02_id STRING,
+          sprvs_org_lvl_02_name STRING,
+          sprvs_org_lvl_02_mgr_id STRING,
+          sprvs_org_lvl_03_id STRING,
+          sprvs_org_lvl_03_name STRING,
+          sprvs_org_lvl_03_mgr_id STRING,
+          sprvs_org_lvl_04_id STRING,
+          sprvs_org_lvl_04_name STRING,
+          sprvs_org_lvl_04_mgr_id STRING,
+          sprvs_org_lvl_05_id STRING,
+          sprvs_org_lvl_05_name STRING,
+          sprvs_org_lvl_05_mgr_id STRING,
+          sprvs_org_lvl_06_id STRING,
+          sprvs_org_lvl_06_name STRING,
+          sprvs_org_lvl_06_mgr_id STRING,
+          sprvs_org_lvl_07_id STRING,
+          sprvs_org_lvl_07_name STRING,
+          sprvs_org_lvl_07_mgr_id STRING,
+          sprvs_org_lvl_08_id STRING,
+          sprvs_org_lvl_08_name STRING,
+          sprvs_org_lvl_08_mgr_id STRING,
+          sprvs_org_lvl_09_id STRING,
+          sprvs_org_lvl_09_name STRING,
+          sprvs_org_lvl_09_mgr_id STRING,
+          last_modified STRING,
+          hr_rundate STRING,
+          load_timestamp STRING,
+          sprvs_org_lvl_02_mgr_name STRING,
+          sprvs_org_lvl_03_mgr_name STRING,
+          sprvs_org_lvl_04_mgr_name STRING,
+          sprvs_org_lvl_05_mgr_name STRING,
+          sprvs_org_lvl_06_mgr_name STRING,
+          sprvs_org_lvl_07_mgr_name STRING,
+          sprvs_org_lvl_08_mgr_name STRING,
+          sprvs_org_lvl_09_mgr_name STRING,
+          received_date STRING,
+          received_hour_of_day STRING,
+          classification STRING
+      )
+      STORED AS PARQUET;
+      ```
+
+4. **Load Data from CSV Table to Parquet Table**:
+    - Use the `INSERT INTO` command to load data from the external CSV table to the Parquet table.
+      ```sql
+      INSERT INTO TABLE parquet_table
+      SELECT * FROM csv_table;
+      ```
+
+5. **Verify the Data**:
+    - Query the Parquet table to ensure data has been loaded correctly.
+      ```sql
+      SELECT * FROM parquet_table LIMIT 10;
+      ```
+
+### Additional Tips
+
+- **Schema Definition**: Make sure that the schema defined in the Parquet table matches exactly with the CSV data.
+- **Data Types**: If necessary, cast data types appropriately while creating the Parquet table.
+- **Partitioning**: If your data is large, consider partitioning the Parquet table for better query performance.
+- **Compression**: Parquet supports various compression codecs (like Snappy, Gzip). Consider using them to reduce storage space and improve query performance.
+
+By following these steps, you can ensure that your Parquet table is created correctly and can be efficiently queried in Hive.
