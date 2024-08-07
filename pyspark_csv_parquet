@@ -884,3 +884,118 @@ spark.stop()
 
 ### Summary
 This guide provides a detailed process and PySpark code snippets to read an Excel file containing schema details, create a schema from this information, and use it to read a CSV file and create an external Hive table.
+
+
+The error indicates that the CSV data source in Spark does not support reading columns directly as arrays. You'll need to read these columns as strings initially and then transform them into arrays.
+
+Here’s how you can handle this:
+
+1. **Read the data as strings.**
+2. **Transform the string columns into arrays using PySpark.**
+
+### Example Code
+
+```python
+import pandas as pd
+from pyspark.sql import SparkSession
+from pyspark.sql.types import *
+
+# Initialize Spark session
+spark = SparkSession.builder \
+    .appName("Create Schema from Excel") \
+    .enableHiveSupport() \
+    .getOrCreate()
+
+# Read the Excel file containing schema details
+schema_df = pd.read_excel('/path/to/schema_details.xlsx')
+
+# Function to map data types from Excel to PySpark, treating arrays as strings initially
+def map_data_type(data_type):
+    if data_type == 'STRING':
+        return StringType()
+    elif data_type == 'INT':
+        return IntegerType()
+    elif data_type == 'DOUBLE':
+        return DoubleType()
+    elif data_type == 'ARRAY<STRING>':
+        return StringType()  # Read array columns as strings initially
+    # Add more data type mappings as needed
+    else:
+        raise ValueError(f"Unsupported data type: {data_type}")
+
+# Create a list of StructField objects
+fields = [StructField(row['column_name'], map_data_type(row['data_type']), True) for index, row in schema_df.iterrows()]
+
+# Create a StructType schema
+schema = StructType(fields)
+
+# Load the data into a DataFrame using the created schema
+csv_df = spark.read.csv("/hdfs/path/sample.csv", header=True, schema=schema)
+
+# Transform string columns to arrays
+for index, row in schema_df.iterrows():
+    if row['data_type'] == 'ARRAY<STRING>':
+        csv_df = csv_df.withColumn(row['column_name'], split(csv_df[row['column_name']], ','))
+
+# Show the data (for verification)
+csv_df.show()
+
+# Register the DataFrame as a temporary view
+csv_df.createOrReplaceTempView("temp_csv_table")
+
+# Create an external table in Hive using the schema
+spark.sql("""
+    CREATE EXTERNAL TABLE IF NOT EXISTS sample_csv_table (
+        {}
+    )
+    ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+    STORED AS TEXTFILE
+    LOCATION '/hdfs/path/sample.csv'
+""".format(", ".join([f"{row['column_name']} {row['data_type']}" for index, row in schema_df.iterrows()])))
+
+# Stop the Spark session
+spark.stop()
+```
+
+### Explanation
+
+1. **Reading the Excel File:**
+   ```python
+   schema_df = pd.read_excel('/path/to/schema_details.xlsx')
+   ```
+   This reads the Excel file into a pandas DataFrame.
+
+2. **Mapping Data Types:**
+   The `map_data_type` function maps the data types from the Excel file to PySpark data types, treating arrays as strings initially.
+
+3. **Creating StructType Schema:**
+   ```python
+   fields = [StructField(row['column_name'], map_data_type(row['data_type']), True) for index, row in schema_df.iterrows()]
+   schema = StructType(fields)
+   ```
+   This creates a list of `StructField` objects and then creates a `StructType` schema from it.
+
+4. **Loading CSV Data:**
+   ```python
+   csv_df = spark.read.csv("/hdfs/path/sample.csv", header=True, schema=schema)
+   ```
+   This reads the CSV file into a PySpark DataFrame using the created schema.
+
+5. **Transforming String Columns to Arrays:**
+   ```python
+   for index, row in schema_df.iterrows():
+       if row['data_type'] == 'ARRAY<STRING>':
+           csv_df = csv_df.withColumn(row['column_name'], split(csv_df[row['column_name']], ','))
+   ```
+   This transforms columns that should be arrays from strings to arrays using the `split` function.
+
+6. **Creating External Hive Table:**
+   The Hive table creation SQL statement is dynamically constructed from the DataFrame containing schema details.
+
+### Additional Details to Request from Your Colleague
+- **Schema Excel File:** Contains column names and data types.
+- **Sample data file in CSV format.**
+- **Paths or directories in the data lake** where the data can be stored and accessed.
+
+### Summary
+This guide provides a detailed process and PySpark code snippets to read an Excel file containing schema details, create a schema from this information, read a CSV file as strings initially, transform necessary columns into arrays, and create an external Hive table. This approach ensures compatibility with Spark’s CSV data source limitations.
