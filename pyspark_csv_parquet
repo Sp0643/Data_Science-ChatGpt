@@ -1264,3 +1264,132 @@ print(table1.explode('division'))
 - **`apply` Method:** Applies a function to fetch and flatten lists, ensuring the correct number of rows with `explode`.
 
 Using `explode` is essential to ensure that each `userid` can correspond to multiple `division` values, thereby expanding the DataFrame as needed.
+
+
+To get the distinct `userid` with their corresponding `division` from `table2` and ensure each `userid` in `table1` maps correctly to its divisions, you can follow these corrected approaches:
+
+### Using `merge` (Correct Approach)
+```python
+import pandas as pd
+
+# Sample data
+table1 = pd.DataFrame({'userid': [1, 2, 3]})
+table2 = pd.DataFrame({
+    'userid': [1, 1, 2, 2, 3],
+    'sr': [101, 102, 201, 202, 301],
+    'division': ['A', 'B', 'C', 'D', 'E']
+})
+
+# Merge the DataFrames and drop duplicates
+result = pd.merge(table1, table2[['userid', 'division']], on='userid', how='left').drop_duplicates()
+
+print(result)
+```
+
+### Using SQL with pandas
+```python
+import pandas as pd
+import pandasql as psql
+
+# Sample data
+table1 = pd.DataFrame({'userid': [1, 2, 3]})
+table2 = pd.DataFrame({
+    'userid': [1, 1, 2, 2, 3],
+    'sr': [101, 102, 201, 202, 301],
+    'division': ['A', 'B', 'C', 'D', 'E']
+})
+
+# SQL query
+query = """
+SELECT DISTINCT table1.userid, table2.division
+FROM table1
+LEFT JOIN table2
+ON table1.userid = table2.userid
+"""
+
+# Execute the query
+result = psql.sqldf(query, locals())
+
+print(result)
+```
+
+### Using Python Dictionaries
+```python
+import pandas as pd
+
+# Sample data
+table1 = pd.DataFrame({'userid': [1, 2, 3]})
+table2 = pd.DataFrame({
+    'userid': [1, 1, 2, 2, 3],
+    'sr': [101, 102, 201, 202, 301],
+    'division': ['A', 'B', 'C', 'D', 'E']
+})
+
+# Create a dictionary mapping userid to division
+division_dict = table2.groupby('userid')['division'].apply(lambda x: x.unique().tolist()).to_dict()
+
+# Add division to table1
+table1['division'] = table1['userid'].map(division_dict)
+
+# Explode the DataFrame to separate multiple divisions into distinct rows
+result = table1.explode('division').drop_duplicates()
+
+print(result)
+```
+
+### Using List Comprehensions
+```python
+import pandas as pd
+
+# Sample data
+table1 = pd.DataFrame({'userid': [1, 2, 3]})
+table2 = pd.DataFrame({
+    'userid': [1, 1, 2, 2, 3],
+    'sr': [101, 102, 201, 202, 301],
+    'division': ['A', 'B', 'C', 'D', 'E']
+})
+
+# Fetch distinct divisions using list comprehension
+divisions = [table2[table2['userid'] == user]['division'].unique().tolist() for user in table1['userid']]
+
+# Add divisions to table1 and explode
+table1['division'] = divisions
+result = table1.explode('division').drop_duplicates()
+
+print(result)
+```
+
+### Using the `apply` Method in pandas
+```python
+import pandas as pd
+
+# Sample data
+table1 = pd.DataFrame({'userid': [1, 2, 3]})
+table2 = pd.DataFrame({
+    'userid': [1, 1, 2, 2, 3],
+    'sr': [101, 102, 201, 202, 301],
+    'division': ['A', 'B', 'C', 'D', 'E']
+})
+
+# Custom function to fetch distinct division
+def fetch_division(user):
+    return table2[table2['userid'] == user]['division'].unique().tolist()
+
+# Apply the custom function
+table1['division'] = table1['userid'].apply(fetch_division)
+
+# Explode the DataFrame to separate multiple divisions into distinct rows
+result = table1.explode('division').drop_duplicates()
+
+print(result)
+```
+
+### Summary
+
+- **`merge` Function:** Use `drop_duplicates()` to ensure distinct rows.
+- **SQL with pandas:** Use `DISTINCT` to ensure distinct rows.
+- **Python Dictionaries:** Use `unique()` to fetch distinct divisions and `explode` to separate into distinct rows.
+- **List Comprehensions:** Use `unique()` to fetch distinct divisions and `explode` to separate into distinct rows.
+- **`apply` Method:** Use `unique()` to fetch distinct divisions and `explode` to separate into distinct rows.
+
+These approaches ensure that the `userid` is mapped correctly to its distinct divisions from `table2`, and any duplicate rows are removed.
