@@ -1140,3 +1140,127 @@ print(table1)
 5. **`apply` Method in pandas**: Flexible for applying custom functions to DataFrame rows.
 
 Each of these methods has its strengths and can be chosen based on the specific requirements and familiarity with the tools.
+
+
+The error "ValueError: Length of values (5) does not match length of index (3)" occurs because the length of the values you're trying to assign to a column in a DataFrame does not match the number of rows in that DataFrame. This usually happens when trying to assign a list of values that has a different length than the number of rows in the DataFrame.
+
+Let's correct the approaches to ensure the length of the values matches the length of the index.
+
+### Using `merge` (Correct Approach)
+```python
+import pandas as pd
+
+# Sample data
+table1 = pd.DataFrame({'userid': [1, 2, 3]})
+table2 = pd.DataFrame({
+    'userid': [1, 1, 2, 2, 3],
+    'sr': [101, 102, 201, 202, 301],
+    'division': ['A', 'B', 'C', 'D', 'E']
+})
+
+# Merge the DataFrames
+result = pd.merge(table1, table2[['userid', 'division']], on='userid', how='left')
+
+print(result)
+```
+
+### Using SQL with pandas
+```python
+import pandas as pd
+import pandasql as psql
+
+# Sample data
+table1 = pd.DataFrame({'userid': [1, 2, 3]})
+table2 = pd.DataFrame({
+    'userid': [1, 1, 2, 2, 3],
+    'sr': [101, 102, 201, 202, 301],
+    'division': ['A', 'B', 'C', 'D', 'E']
+})
+
+# SQL query
+query = """
+SELECT table1.userid, table2.division
+FROM table1
+LEFT JOIN table2
+ON table1.userid = table2.userid
+"""
+
+# Execute the query
+result = psql.sqldf(query, locals())
+
+print(result)
+```
+
+### Using Python Dictionaries
+```python
+import pandas as pd
+
+# Sample data
+table1 = pd.DataFrame({'userid': [1, 2, 3]})
+table2 = pd.DataFrame({
+    'userid': [1, 1, 2, 2, 3],
+    'sr': [101, 102, 201, 202, 301],
+    'division': ['A', 'B', 'C', 'D', 'E']
+})
+
+# Create a dictionary mapping userid to division
+division_dict = table2.groupby('userid')['division'].apply(list).to_dict()
+
+# Flatten the lists and add division to table1
+table1['division'] = table1['userid'].map(lambda x: division_dict.get(x, []))
+
+print(table1.explode('division'))
+```
+
+### Using List Comprehensions
+```python
+import pandas as pd
+
+# Sample data
+table1 = pd.DataFrame({'userid': [1, 2, 3]})
+table2 = pd.DataFrame({
+    'userid': [1, 1, 2, 2, 3],
+    'sr': [101, 102, 201, 202, 301],
+    'division': ['A', 'B', 'C', 'D', 'E']
+})
+
+# Fetch divisions using list comprehension
+divisions = [table2[table2['userid'] == user]['division'].tolist() for user in table1['userid']]
+
+# Flatten the lists and add division to table1
+table1['division'] = [item for sublist in divisions for item in sublist]
+
+print(table1.explode('division'))
+```
+
+### Using the `apply` Method in pandas
+```python
+import pandas as pd
+
+# Sample data
+table1 = pd.DataFrame({'userid': [1, 2, 3]})
+table2 = pd.DataFrame({
+    'userid': [1, 1, 2, 2, 3],
+    'sr': [101, 102, 201, 202, 301],
+    'division': ['A', 'B', 'C', 'D', 'E']
+})
+
+# Custom function to fetch division
+def fetch_division(user):
+    return table2[table2['userid'] == user]['division'].tolist()
+
+# Apply the custom function
+table1['division'] = table1['userid'].apply(fetch_division)
+
+print(table1.explode('division'))
+```
+
+### Explanation
+
+- **`merge` Function:** Directly merges the DataFrames, maintaining the correct number of rows.
+- **SQL with pandas:** Uses SQL syntax to perform the join, which also maintains the correct row count.
+- **Python Dictionaries:** Uses dictionaries to map values and then flattens the lists using `explode`.
+- **List Comprehensions:** Fetches values and flattens the lists, using `explode` to handle lists properly.
+- **`apply` Method:** Applies a function to fetch and flatten lists, ensuring the correct number of rows with `explode`.
+
+Using `explode` is essential to ensure that each `userid` can correspond to multiple `division` values, thereby expanding the DataFrame as needed.
