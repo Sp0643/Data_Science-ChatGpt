@@ -999,3 +999,144 @@ spark.stop()
 
 ### Summary
 This guide provides a detailed process and PySpark code snippets to read an Excel file containing schema details, create a schema from this information, read a CSV file as strings initially, transform necessary columns into arrays, and create an external Hive table. This approach ensures compatibility with Spark’s CSV data source limitations.
+
+
+
+To fetch the `division` attribute for all users in `table1` from `table2` using Python, you can use various approaches. Here are five detailed methods to achieve this:
+
+### 1. **Using pandas `merge` Function**
+
+The `merge` function in pandas is a powerful way to join DataFrames. It allows you to specify the columns on which to join and the type of join.
+
+```python
+import pandas as pd
+
+# Sample data
+table1 = pd.DataFrame({'userid': [1, 2, 3]})
+table2 = pd.DataFrame({
+    'userid': [1, 1, 2, 2, 3],
+    'sr': [101, 102, 201, 202, 301],
+    'division': ['A', 'B', 'C', 'D', 'E']
+})
+
+# Merge the DataFrames
+result = pd.merge(table1, table2, on='userid', how='left')
+
+print(result)
+```
+
+### 2. **Using SQL with pandas**
+
+You can use SQL queries to perform the join operation using the `pandasql` library.
+
+```python
+import pandas as pd
+import pandasql as psql
+
+# Sample data
+table1 = pd.DataFrame({'userid': [1, 2, 3]})
+table2 = pd.DataFrame({
+    'userid': [1, 1, 2, 2, 3],
+    'sr': [101, 102, 201, 202, 301],
+    'division': ['A', 'B', 'C', 'D', 'E']
+})
+
+# SQL query
+query = """
+SELECT table1.userid, table2.division
+FROM table1
+LEFT JOIN table2
+ON table1.userid = table2.userid
+"""
+
+# Execute the query
+result = psql.sqldf(query, locals())
+
+print(result)
+```
+
+### 3. **Using Python Dictionaries**
+
+If the data is not too large, you can use dictionaries to map `userid` to `division`.
+
+```python
+import pandas as pd
+
+# Sample data
+table1 = pd.DataFrame({'userid': [1, 2, 3]})
+table2 = pd.DataFrame({
+    'userid': [1, 1, 2, 2, 3],
+    'sr': [101, 102, 201, 202, 301],
+    'division': ['A', 'B', 'C', 'D', 'E']
+})
+
+# Create a dictionary mapping userid to division
+division_dict = table2.groupby('userid')['division'].apply(list).to_dict()
+
+# Add division to table1
+table1['division'] = table1['userid'].map(division_dict)
+
+print(table1)
+```
+
+### 4. **Using List Comprehensions**
+
+This method involves iterating over the rows of `table1` and looking up the corresponding `division` in `table2`.
+
+```python
+import pandas as pd
+
+# Sample data
+table1 = pd.DataFrame({'userid': [1, 2, 3]})
+table2 = pd.DataFrame({
+    'userid': [1, 1, 2, 2, 3],
+    'sr': [101, 102, 201, 202, 301],
+    'division': ['A', 'B', 'C', 'D', 'E']
+})
+
+# Fetch divisions using list comprehension
+divisions = [table2[table2['userid'] == user]['division'].tolist() for user in table1['userid']]
+
+# Flatten the list and assign it to table1
+table1['division'] = [item for sublist in divisions for item in sublist]
+
+print(table1)
+```
+
+### 5. **Using the `apply` Method in pandas**
+
+You can use the `apply` method to apply a custom function to each row in `table1`.
+
+```python
+import pandas as pd
+
+# Sample data
+table1 = pd.DataFrame({'userid': [1, 2, 3]})
+table2 = pd.DataFrame({
+    'userid': [1, 1, 2, 2, 3],
+    'sr': [101, 102, 201, 202, 301],
+    'division': ['A', 'B', 'C', 'D', 'E']
+})
+
+# Custom function to fetch division
+def fetch_division(user):
+    return table2[table2['userid'] == user]['division'].tolist()
+
+# Apply the custom function
+table1['division'] = table1['userid'].apply(fetch_division)
+
+# Flatten the list and assign it to table1
+table1['division'] = [item for sublist in table1['division'] for item in sublist]
+
+print(table1)
+```
+
+### Summary of Methods
+
+1. **pandas `merge` Function**: Easy and efficient for large datasets.
+2. **SQL with pandas**: Familiar to those with SQL knowledge and useful for complex queries.
+3. **Python Dictionaries**: Efficient for lookups if the data fits in memory.
+4. **List Comprehensions**: Simple and straightforward for small datasets.
+5. **`apply` Method in pandas**: Flexible for applying custom functions to DataFrame rows.
+
+Each of these methods has its strengths and can be chosen based on the specific requirements and familiarity with the tools.
